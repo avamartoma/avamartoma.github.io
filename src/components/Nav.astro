@@ -2,7 +2,7 @@
 const links = [
   { href: '/#work', label: 'Work' },
   { href: '/#about', label: 'About' },
-  { href: '/resume', label: 'Resume' },
+  { href: '/resume', label: 'Resume', modal: true },
   { href: '/#contact', label: 'Contact' },
 ];
 ---
@@ -16,7 +16,7 @@ const links = [
 
     <nav class="nav__links" aria-label="Primary">
       {links.map((l) => (
-        <a href={l.href} class="nav__link">
+        <a href={l.href} class="nav__link" data-open-resume={l.modal ? '' : undefined}>
           <span class="nav__idx">/</span>{l.label}
         </a>
       ))}
