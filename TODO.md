@@ -53,7 +53,7 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       woodworking) were removed with the About section; fold into the iFAQ or
       elsewhere if wanted.
 
-- [ ] **10. Spotify "what I'm listening to" 🎧** — a clickable headphone icon
+- [x] **10. Spotify "what I'm listening to" 🎧** — headphone icon in the nav opens a popover with a Spotify embed (static, no backend). ⮕ Swap SPOTIFY_ID in `SpotifyPanel.astro` for your own playlist (your auto-updating "On Repeat" is ideal). Live auto "recently played" still needs a backend — later.
       that reveals recent/now-playing tracks from your Spotify.
       ⚠️ Needs the Spotify Web API (OAuth) + a small serverless function to keep
       tokens secret — *not* pure static. Simplest paths: a Netlify/Vercel
