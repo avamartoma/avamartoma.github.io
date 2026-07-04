@@ -6,8 +6,8 @@ date: 2025-02-09
 tags: ["Rust", "WASM", "SQLite", "UX"]
 repo: "https://github.com/avamartoma/ledger"
 demo: "https://example.com/ledger"
-accent: "#3d5afe"
-accentAlt: "#b6ff3c"
+accent: "#4361ee"
+accentAlt: "#ff5cc4"
 ---
 
 ## Why

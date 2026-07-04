@@ -60,7 +60,7 @@ const { count } = Astro.props;
   .hero__eyebrow { margin-bottom: 1.5rem; }
   .hero__title { margin-bottom: 1.75rem; }
   .hero__accent {
-    background: linear-gradient(100deg, var(--signal), var(--signal-2));
+    background: linear-gradient(105deg, var(--signal) 0%, var(--signal-2) 58%, var(--signal-3) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -108,7 +108,18 @@ const { count } = Astro.props;
     let h = 0;
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
     const GAP = 34;
-    let points: { x: number; y: number }[] = [];
+    let points: { x: number; y: number; c: string }[] = [];
+
+    // Holi color powder — mostly purple/blue, with hints of pink, green, yellow.
+    // Weighted so purple & blue dominate; the rest are festive sprinkles.
+    const PALETTE = [
+      '168,85,247', '168,85,247', '168,85,247', // violet (primary)
+      '67,97,238',  '67,97,238',  '67,97,238',  // blue (secondary)
+      '255,92,196',                              // pink hint
+      '92,230,160',                              // green hint
+      '255,210,63',                              // yellow hint
+    ];
+    const pick = () => PALETTE[(Math.random() * PALETTE.length) | 0];
 
     // Pointer, in CSS pixels. Start off-screen.
     const pointer = { x: -9999, y: -9999 };
@@ -126,7 +137,7 @@ const { count } = Astro.props;
       points = [];
       for (let y = GAP / 2; y < h; y += GAP) {
         for (let x = GAP / 2; x < w; x += GAP) {
-          points.push({ x, y });
+          points.push({ x, y, c: pick() });
         }
       }
     }
@@ -150,9 +161,9 @@ const { count } = Astro.props;
 
         ctx!.beginPath();
         ctx!.arc(px, py, size, 0, Math.PI * 2);
-        if (near > 0.35) {
-          // Blend toward the signal color when close.
-          ctx!.fillStyle = `rgba(255, 92, 57, ${alpha})`;
+        if (near > 0.3) {
+          // Burst into this dot's Holi color as the cursor nears.
+          ctx!.fillStyle = `rgba(${p.c}, ${alpha})`;
         } else {
           ctx!.fillStyle = `rgba(165, 161, 176, ${alpha})`;
         }

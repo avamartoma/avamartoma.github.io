@@ -1,8 +1,8 @@
 ---
 const year = new Date().getFullYear();
 const socials = [
-  { href: 'https://github.com/avamartoma', label: 'GitHub' },
   { href: 'https://www.linkedin.com/in/avamartoma/', label: 'LinkedIn' },
+  { href: 'https://github.com/avamartoma', label: 'GitHub' },
   { href: 'mailto:ava.martoma@gmail.com', label: 'Email' },
 ];
 ---
@@ -11,12 +11,17 @@ const socials = [
   <div class="wrap foot__inner">
     <div class="foot__lead">
       <p class="label">Say hello</p>
-      <a href="mailto:ava.martoma@gmail.com" class="foot__mail">ava.martoma@gmail.com</a>
+      <p class="foot__mail">Let's make<br />something.</p>
     </div>
 
-    <nav class="foot__socials" aria-label="Social links">
+    <nav class="foot__socials" aria-label="Contact links">
       {socials.map((s) => (
-        <a href={s.href} class="arrow-link" target="_blank" rel="noopener">
+        <a
+          href={s.href}
+          class="arrow-link"
+          target={s.href.startsWith('mailto:') ? undefined : '_blank'}
+          rel="noopener"
+        >
           {s.label} <span>↗</span>
         </a>
       ))}

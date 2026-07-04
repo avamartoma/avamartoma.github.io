@@ -6,8 +6,8 @@ date: 2025-11-02
 tags: ["WebGL", "TypeScript", "Audio", "Shaders"]
 repo: "https://github.com/avamartoma/aurora"
 demo: "https://example.com/aurora"
-accent: "#ff5c39"
-accentAlt: "#3d5afe"
+accent: "#a855f7"
+accentAlt: "#4361ee"
 featured: true
 ---
 
