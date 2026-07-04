@@ -15,13 +15,6 @@ const projects = (await getCollection('projects'))
 // Homepage shows a selection; the full, filterable list lives on /work.
 const selection = projects.slice(0, 6);
 
-// Real skills (from resume).
-const stack = [
-  'Python', 'R', 'JavaScript', 'Arduino',
-  'Fusion 360', '3D Printing', 'Laser Cutting',
-  'Photoshop', 'Illustrator', 'Woodworking',
-];
-
 // A selection of honors (non-private).
 const honors = [
   'Amazon Future Engineer Scholar',
@@ -93,56 +86,6 @@ const publications = [
   <hr class="divider" />
 
   <Experience />
-
-  <hr class="divider" />
-
-  <!-- ============ ABOUT ============ -->
-  <section class="section" id="about">
-    <div class="wrap about">
-      <div class="about__intro" data-reveal>
-        <p class="label">About</p>
-        <h2 class="about__lead">
-          Half designer, half engineer,
-          <span class="about__hi">fully curious.</span>
-        </h2>
-        <p class="about__cred">Hardware Engineer @ Amazon Leo · UPenn M&amp;T · MechE × Wharton</p>
-      </div>
-
-      <div class="about__col" data-reveal data-reveal-delay="120ms">
-        <p>
-          I'm a <strong>Mechanical Engineering &amp; Economics</strong> student at
-          the University of Pennsylvania, in the <strong>Jerome Fisher Program in
-          Management &amp; Technology (M&amp;T)</strong>. I build at the seam
-          between hardware and design — circuit boards, brushless drivetrains,
-          CAD and fabrication, woodworking, and the occasional generative-art
-          rabbit hole.
-        </p>
-        <p>
-          Right now I'm a <strong>Hardware Development Engineer</strong> intern on
-          Amazon's Project Kuiper (Leo). Before Penn I co-founded a nonprofit for
-          children of incarcerated parents and spent years in research and
-          justice work. I care about the texture of things — how they feel, move,
-          and hold up — whether that's software or a hand-veneered desk.
-        </p>
-        <p class="about__play">Off the clock: skiing, squash, golf, running, and woodworking.</p>
-
-        <div class="stack">
-          <p class="label">Education</p>
-          <p class="about__edu">
-            University of Pennsylvania — B.S. Mechanical Engineering &amp; B.S.
-            Economics, Jerome Fisher M&amp;T Program. <span>Expected 2029.</span>
-          </p>
-        </div>
-
-        <div class="stack">
-          <p class="label">Tools I reach for</p>
-          <ul class="stack__list">
-            {stack.map((s) => <li>{s}</li>)}
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <hr class="divider" />
 

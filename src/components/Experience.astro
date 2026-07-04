@@ -162,6 +162,24 @@ const experiences: Exp[] = [
       </div>
     </div>
   </div>
+
+  <div class="wrap">
+    <div class="exp__edu" data-reveal>
+      <p class="label exp__edu-label">Education</p>
+      <div class="exp__edu-row">
+        <div class="exp__edu-card">
+          <p class="exp__date label">2025 — 2029 (expected)</p>
+          <h3 class="exp__org">University of Pennsylvania</h3>
+          <p class="exp__role">B.S. Mechanical Engineering &amp; B.S. Economics · Jerome Fisher M&amp;T Program</p>
+        </div>
+        <div class="exp__edu-card">
+          <p class="exp__date label">Class of 2025</p>
+          <h3 class="exp__org">The Lawrenceville School</h3>
+          <p class="exp__role">Lawrenceville, NJ</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <style>
@@ -237,6 +255,29 @@ const experiences: Exp[] = [
     position: absolute;
     left: 0;
     color: var(--signal-2);
+  }
+
+  /* Education boxes under the timeline */
+  .exp__edu { margin-top: 2.5rem; }
+  .exp__edu-label { margin-bottom: 1rem; }
+  .exp__edu-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+  }
+  .exp__edu-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.25rem;
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .exp__edu-card:hover {
+    border-color: color-mix(in srgb, var(--signal) 60%, var(--line));
+    transform: translateY(-4px);
+  }
+  @media (max-width: 640px) {
+    .exp__edu-row { grid-template-columns: 1fr; }
   }
 </style>
 
