@@ -1,0 +1,48 @@
+# Deploy the site to GitHub Pages on every push to main.
+#
+# One-time setup: in your repo, go to Settings → Pages → "Build and
+# deployment" → Source: "GitHub Actions".
+#
+# NOTE ON URLs: A GitHub *project* page is served from
+# https://<user>.github.io/personal-website/ — a sub-path. The official
+# withastro/action below reads your astro.config `site`/`base` for you, so
+# set them there if you use Pages (see README). If you deploy to Netlify,
+# Vercel, or a custom root domain instead, you don't need a base path.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build with Astro
+        uses: withastro/action@v3
+        # with:
+        #   node-version: 20
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

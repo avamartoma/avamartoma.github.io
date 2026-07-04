@@ -1,0 +1,151 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+// Load projects, drop drafts, newest first.
+const projects = (await getCollection('projects'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const stack = [
+  'TypeScript', 'Python', 'Rust', 'WebGL / Canvas',
+  'Astro', 'Three.js', 'Figma', 'Fabrication',
+];
+---
+
+<Layout>
+  <Hero count={projects.length} />
+
+  <!-- ============ WORK ============ -->
+  <section class="section" id="work">
+    <div class="wrap">
+      <header class="sec-head" data-reveal>
+        <h2>Selected work</h2>
+        <p class="label">{projects.length} projects — a curated mess</p>
+      </header>
+
+      {projects.length === 0 ? (
+        <p class="empty">
+          No projects yet. Add a Markdown file to
+          <code>src/content/projects/</code> and it shows up here.
+        </p>
+      ) : (
+        <div class="grid">
+          {projects.map((p, i) => (
+            <ProjectCard
+              href={`/projects/${p.id}/`}
+              title={p.data.title}
+              blurb={p.data.blurb}
+              tags={p.data.tags}
+              date={p.data.date}
+              accent={p.data.accent}
+              accentAlt={p.data.accentAlt}
+              cover={p.data.cover}
+              index={i}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="about">
+    <div class="wrap about">
+      <div class="about__intro" data-reveal>
+        <p class="label">About</p>
+        <h2 class="about__lead">
+          Half designer, half engineer,
+          <span class="about__hi">fully curious.</span>
+        </h2>
+      </div>
+
+      <div class="about__col" data-reveal data-reveal-delay="120ms">
+        <p>
+          I make things that sit between the studio and the terminal —
+          interfaces, generative visuals, small tools, and physical builds.
+          I care about the texture of software: how it feels, moves, and
+          responds, not just what it does.
+        </p>
+        <p>
+          This site is a living notebook. Some entries are polished, some
+          are experiments I never finished. That's the point.
+        </p>
+
+        <div class="stack">
+          <p class="label">Tools I reach for</p>
+          <ul class="stack__list">
+            {stack.map((s) => <li>{s}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: var(--gap);
+  }
+
+  .empty {
+    color: var(--ink-soft);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+  .empty code {
+    color: var(--signal);
+    font-family: var(--font-mono);
+  }
+
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+  .about__lead { margin-top: 0.75rem; }
+  .about__hi {
+    color: var(--signal);
+  }
+  .about__col p { margin-bottom: 1.25rem; color: var(--ink-soft); }
+
+  .stack { margin-top: 2rem; }
+  .stack__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin-top: 0.75rem;
+  }
+  .stack__list li {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.4em 0.8em;
+    color: var(--ink);
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  .stack__list li:hover { border-color: var(--signal); color: var(--signal); }
+
+  @media (max-width: 760px) {
+    .about { grid-template-columns: 1fr; }
+  }
+</style>

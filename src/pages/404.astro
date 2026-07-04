@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 — lost in the noise">
+  <section class="nf">
+    <canvas class="nf__canvas" aria-hidden="true"></canvas>
+    <div class="wrap nf__inner">
+      <p class="label" data-reveal>Error 404 · signal lost</p>
+      <h1 class="nf__code" data-reveal data-reveal-delay="80ms">4<span class="nf__spin">◐</span>4</h1>
+      <p class="nf__msg" data-reveal data-reveal-delay="160ms">
+        This page wandered off the grid. It might be an experiment I deleted,
+        a typo, or a link that aged badly.
+      </p>
+      <div class="nf__cta" data-reveal data-reveal-delay="240ms">
+        <a href="/" class="btn btn--solid">← Back to safety</a>
+        <a href="/#work" class="btn">See the work</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .nf {
+    position: relative;
+    min-height: 82vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .nf__canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .nf__inner { position: relative; z-index: 1; text-align: center; }
+  .nf__code {
+    font-size: clamp(5rem, 22vw, 16rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-block: 0.5rem 1.5rem;
+  }
+  .nf__spin {
+    display: inline-block;
+    color: var(--signal);
+    animation: spin 6s linear infinite;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .nf__msg { color: var(--ink-soft); margin-inline: auto; margin-bottom: 2rem; }
+  .nf__cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+</style>
+
+<script>
+  // Drifting static — a field of characters that jitter like lost signal.
+  const canvas = document.querySelector<HTMLCanvasElement>('.nf__canvas');
+  const ctx = canvas?.getContext('2d');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (canvas && ctx) {
+    const glyphs = '01<>/\\{}[]#*·—+=';
+    let w = 0, h = 0;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let cells: { x: number; y: number; c: string; a: number }[] = [];
+    const GAP = 26;
+
+    function build() {
+      const rect = canvas!.getBoundingClientRect();
+      w = rect.width; h = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas!.width = Math.floor(w * dpr);
+      canvas!.height = Math.floor(h * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx!.font = '12px "JetBrains Mono", monospace';
+
+      cells = [];
+      for (let y = GAP; y < h; y += GAP) {
+        for (let x = GAP; x < w; x += GAP) {
+          cells.push({
+            x, y,
+            c: glyphs[Math.floor(Math.random() * glyphs.length)],
+            a: Math.random() * 0.25,
+          });
+        }
+      }
+    }
+
+    let t = 0;
+    function draw() {
+      ctx!.clearRect(0, 0, w, h);
+      t += 0.02;
+      for (const cell of cells) {
+        // occasionally flip a glyph
+        if (Math.random() < 0.01) {
+          cell.c = glyphs[Math.floor(Math.random() * glyphs.length)];
+        }
+        const flicker = cell.a + Math.sin(t + cell.x) * 0.08;
+        ctx!.fillStyle = `rgba(165, 161, 176, ${Math.max(0.04, flicker)})`;
+        ctx!.fillText(cell.c, cell.x, cell.y);
+      }
+      if (!reduce) requestAnimationFrame(draw);
+    }
+
+    let rt: number;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(rt);
+      rt = window.setTimeout(() => { build(); if (reduce) draw(); }, 150);
+    });
+
+    build();
+    draw();
+  }
+</script>

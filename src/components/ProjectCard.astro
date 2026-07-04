@@ -1,0 +1,176 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  blurb: string;
+  tags?: string[];
+  date: Date;
+  accent?: string;
+  accentAlt?: string;
+  cover?: string;
+  index: number;
+}
+
+const {
+  href,
+  title,
+  blurb,
+  tags = [],
+  date,
+  accent = '#ff5c39',
+  accentAlt = '#3d5afe',
+  cover,
+  index,
+} = Astro.props;
+
+const num = String(index + 1).padStart(2, '0');
+const year = date.getFullYear();
+---
+
+<a
+  class="card"
+  href={href}
+  data-reveal
+  data-reveal-delay={`${(index % 3) * 80}ms`}
+  style={`--a:${accent};--b:${accentAlt}`}
+>
+  <div class="card__art" aria-hidden="true">
+    {cover ? (
+      <img src={cover} alt="" loading="lazy" class="card__img" />
+    ) : (
+      <div class="card__gen">
+        <span class="card__blob card__blob--1"></span>
+        <span class="card__blob card__blob--2"></span>
+        <span class="card__grid"></span>
+      </div>
+    )}
+    <span class="card__num label">{num}</span>
+  </div>
+
+  <div class="card__body">
+    <div class="card__head">
+      <h3 class="card__title">{title}</h3>
+      <span class="card__go" aria-hidden="true">→</span>
+    </div>
+    <p class="card__blurb">{blurb}</p>
+    <div class="card__foot">
+      <ul class="card__tags">
+        {tags.slice(0, 3).map((t) => <li>{t}</li>)}
+      </ul>
+      <span class="label">{year}</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.4s var(--ease), transform 0.4s var(--ease);
+  }
+  .card:hover {
+    border-color: color-mix(in srgb, var(--a) 70%, var(--line));
+    transform: translateY(-6px);
+  }
+
+  .card__art {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--bg-soft);
+  }
+  .card__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease), filter 0.6s var(--ease);
+    filter: saturate(0.9) contrast(1.02);
+  }
+  .card:hover .card__img { transform: scale(1.04); }
+
+  /* Generative fallback artwork built from the accent pair */
+  .card__gen { position: absolute; inset: 0; }
+  .card__blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(28px);
+    opacity: 0.85;
+    transition: transform 0.8s var(--ease);
+  }
+  .card__blob--1 {
+    width: 60%; aspect-ratio: 1;
+    background: var(--a);
+    top: -12%; left: -8%;
+  }
+  .card__blob--2 {
+    width: 55%; aspect-ratio: 1;
+    background: var(--b);
+    bottom: -18%; right: -6%;
+  }
+  .card:hover .card__blob--1 { transform: translate(14%, 10%); }
+  .card:hover .card__blob--2 { transform: translate(-12%, -8%); }
+  .card__grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 12%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 12%, transparent) 1px, transparent 1px);
+    background-size: 26px 26px;
+    mix-blend-mode: overlay;
+  }
+  .card__num {
+    position: absolute;
+    top: 0.9rem; right: 1rem;
+    color: var(--ink);
+    mix-blend-mode: difference;
+  }
+
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.4rem 1.4rem 1.5rem;
+    flex: 1;
+  }
+  .card__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .card__title { font-size: 1.35rem; }
+  .card__go {
+    font-family: var(--font-display);
+    color: var(--muted);
+    transition: transform 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .card:hover .card__go { color: var(--a); transform: translateX(5px); }
+
+  .card__blurb { color: var(--ink-soft); font-size: 0.92rem; }
+
+  .card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+  .card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+  }
+  .card__tags li {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.2em 0.7em;
+  }
+</style>

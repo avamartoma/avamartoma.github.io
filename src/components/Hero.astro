@@ -1,0 +1,186 @@
+---
+interface Props {
+  count: number;
+}
+const { count } = Astro.props;
+---
+
+<section class="hero" id="top">
+  <canvas class="hero__canvas" aria-hidden="true"></canvas>
+
+  <div class="wrap hero__inner">
+    <p class="label hero__eyebrow" data-reveal>
+      Ava Martoma · Artsy Engineer · {count} projects & counting
+    </p>
+
+    <h1 class="hero__title" data-reveal data-reveal-delay="80ms">
+      I build<br />
+      <span class="hero__accent">strange, useful</span><br />
+      things.
+    </h1>
+
+    <p class="hero__lede" data-reveal data-reveal-delay="160ms">
+      A catalogue of experiments living at the seam between design and
+      engineering — tools, toys, generative art, and the occasional
+      beautiful mistake.
+    </p>
+
+    <div class="hero__cta" data-reveal data-reveal-delay="240ms">
+      <a href="#work" class="btn btn--solid">View the work ↓</a>
+      <a href="#about" class="btn">About me</a>
+    </div>
+  </div>
+
+  <div class="hero__scroll label" aria-hidden="true">
+    <span>scroll</span>
+    <span class="hero__scroll-line"></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .hero__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    padding-block: 6rem;
+  }
+  .hero__eyebrow { margin-bottom: 1.5rem; }
+  .hero__title { margin-bottom: 1.75rem; }
+  .hero__accent {
+    background: linear-gradient(100deg, var(--signal), var(--signal-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero__lede {
+    color: var(--ink-soft);
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    margin-bottom: 2.25rem;
+  }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: 1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    z-index: 1;
+  }
+  .hero__scroll-line {
+    width: 1px;
+    height: 42px;
+    background: linear-gradient(var(--muted), transparent);
+    animation: drop 2s var(--ease) infinite;
+  }
+  @keyframes drop {
+    0% { transform: scaleY(0); transform-origin: top; }
+    40% { transform: scaleY(1); transform-origin: top; }
+    60% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+</style>
+
+<script>
+  // Cursor-reactive dot field. Vanilla canvas — no dependencies.
+  const canvas = document.querySelector<HTMLCanvasElement>('.hero__canvas');
+  const ctx = canvas?.getContext('2d');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (canvas && ctx) {
+    let w = 0;
+    let h = 0;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const GAP = 34;
+    let points: { x: number; y: number }[] = [];
+
+    // Pointer, in CSS pixels. Start off-screen.
+    const pointer = { x: -9999, y: -9999 };
+    const R = 130; // influence radius
+
+    function build() {
+      const rect = canvas!.getBoundingClientRect();
+      w = rect.width;
+      h = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas!.width = Math.floor(w * dpr);
+      canvas!.height = Math.floor(h * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      points = [];
+      for (let y = GAP / 2; y < h; y += GAP) {
+        for (let x = GAP / 2; x < w; x += GAP) {
+          points.push({ x, y });
+        }
+      }
+    }
+
+    function draw() {
+      ctx!.clearRect(0, 0, w, h);
+      for (const p of points) {
+        const dx = p.x - pointer.x;
+        const dy = p.y - pointer.y;
+        const dist = Math.hypot(dx, dy);
+        const near = Math.max(0, 1 - dist / R);
+
+        // Push dots away from the cursor + brighten them.
+        const push = near * 16;
+        const ang = Math.atan2(dy, dx);
+        const px = p.x + Math.cos(ang) * push;
+        const py = p.y + Math.sin(ang) * push;
+
+        const size = 1 + near * 2.4;
+        const alpha = 0.16 + near * 0.7;
+
+        ctx!.beginPath();
+        ctx!.arc(px, py, size, 0, Math.PI * 2);
+        if (near > 0.35) {
+          // Blend toward the signal color when close.
+          ctx!.fillStyle = `rgba(255, 92, 57, ${alpha})`;
+        } else {
+          ctx!.fillStyle = `rgba(165, 161, 176, ${alpha})`;
+        }
+        ctx!.fill();
+      }
+      if (!reduce) requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      const rect = canvas!.getBoundingClientRect();
+      pointer.x = e.clientX - rect.left;
+      pointer.y = e.clientY - rect.top;
+    });
+    window.addEventListener('mouseleave', () => {
+      pointer.x = -9999;
+      pointer.y = -9999;
+    });
+
+    let resizeTimer: number;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        build();
+        if (reduce) draw();
+      }, 150);
+    });
+
+    build();
+    draw(); // renders at least one frame even with reduced motion
+  }
+</script>

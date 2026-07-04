@@ -1,0 +1,62 @@
+---
+const year = new Date().getFullYear();
+const socials = [
+  { href: 'https://github.com/avamartoma', label: 'GitHub' },
+  { href: 'mailto:hello@example.com', label: 'Email' },
+];
+---
+
+<footer class="foot" id="contact">
+  <div class="wrap foot__inner">
+    <div class="foot__lead">
+      <p class="label">Say hello</p>
+      <a href="mailto:hello@example.com" class="foot__mail">hello@example.com</a>
+    </div>
+
+    <nav class="foot__socials" aria-label="Social links">
+      {socials.map((s) => (
+        <a href={s.href} class="arrow-link" target="_blank" rel="noopener">
+          {s.label} <span>↗</span>
+        </a>
+      ))}
+    </nav>
+  </div>
+
+  <div class="wrap foot__meta">
+    <span class="label">© {year} Ava Martoma</span>
+    <span class="label">Built with Astro · designed & broken by hand</span>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    border-top: 1px solid var(--line);
+    padding-block: clamp(3rem, 8vh, 5rem) 2rem;
+    margin-top: 4rem;
+  }
+  .foot__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .foot__mail {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 6vw, 3.5rem);
+    letter-spacing: -0.02em;
+    margin-top: 0.4rem;
+    transition: color 0.3s var(--ease);
+  }
+  .foot__mail:hover { color: var(--signal); }
+  .foot__socials { display: flex; gap: 1.75rem; }
+  .foot__meta {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+</style>

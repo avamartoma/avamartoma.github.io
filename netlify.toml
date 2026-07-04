@@ -1,0 +1,18 @@
+# Netlify deploy config.
+# Connect this repo at https://app.netlify.com → "Add new site" → "Import
+# from Git", and Netlify will read this file automatically.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Nice-to-have security headers for a static site.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
