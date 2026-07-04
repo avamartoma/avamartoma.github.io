@@ -48,6 +48,11 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [ ] **8. Your own drawings / illustration pass** — bring your art; Kiro builds
       an original interactive layer around it (Koberger *spirit*, not a clone).
 
+- [ ] **8b. "Living" page 📷** — a `/living` photo gallery of you out living life;
+      hovering a photo reveals a new place / experience (caption swap). Add
+      annotations + animation later. A more personal, non-work counterpart to
+      the work grid.
+
 - [ ] **9. Restore leftover About bits (optional)** — the nonprofit/justice
       paragraph and off-the-clock interests (skiing, squash, golf, running,
       woodworking) were removed with the About section; fold into the iFAQ or
