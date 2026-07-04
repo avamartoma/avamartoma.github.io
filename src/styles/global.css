@@ -25,6 +25,7 @@
   /* Type */
   --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-bubble: 'Fredoka', 'Baloo 2', var(--font-display); /* big goofy bubbly name */
 
   /* Rhythm */
   --maxw: 1180px;
