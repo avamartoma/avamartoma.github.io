@@ -17,11 +17,11 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       `cad-projects`, `marquetry-desk`, `marquetry-flower-press`,
       `marquetry-clock`, `architecture`, `linkedin-hackathon`.
 
-- [ ] **2. Turn on real resume/contact delivery (Web3Forms).** Get a free key at
-      web3forms.com (enter ava.martoma@gmail.com), paste into
-      `WEB3FORMS_ACCESS_KEY` in **three** files: `ResumeModal.astro`,
-      `resume.astro`, `Footer.astro`. Until then forms show "Sent ✦" but don't
-      deliver.
+- [x] **2. ✅ Real resume/contact delivery live (Web3Forms, 2026-07-04).** Access
+      key registered to `hello@avamartoma.com` (→ forwards to Gmail) and set in all
+      three forms (`Footer.astro`, `ResumeModal.astro`, `resume.astro`). Contact +
+      both resume forms tested working on the live site. Distinct subject lines
+      per form; submitter's email is the reply-to.
 
 - [ ] **3. Fill in real details for a few entries.**
   - **Amazon (Kuiper)** experience — real bullets (currently a neutral
@@ -130,3 +130,8 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [x] **Honors** + **Publications** sections
 - [x] Resume popup + footer contact form (Web3Forms, pending key); LinkedIn linked
 - [x] Email kept private; LinkedIn data export gitignored
+- [x] **Custom domain live** — https://avamartoma.com (Cloudflare Registrar +
+      GitHub Pages, HTTPS enforced, www→apex redirect)
+- [x] **Email receiving** — `hello@avamartoma.com` + catch-all → Gmail (Cloudflare
+      Email Routing)
+- [x] **Forms deliver** — Web3Forms key live in all three forms (→ hello@)
