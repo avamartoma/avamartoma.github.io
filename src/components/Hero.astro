@@ -61,27 +61,27 @@ const { count } = Astro.props;
   }
   .hero__eyebrow { margin-bottom: 1.25rem; }
 
-  /* Big goofy bubbly name — the star of the page */
+  /* Big handwritten name — the star of the page */
   .hero__name {
     font-family: var(--font-bubble);
-    font-weight: 700;
-    line-height: 0.86;
-    letter-spacing: -0.01em;
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: 0;
     margin-bottom: 1.5rem;
     text-transform: lowercase;
   }
   .hero__name span {
     display: block;
-    font-size: clamp(3.75rem, 16vw, 13rem);
+    font-size: clamp(3.25rem, 14vw, 11rem);
+    padding: 0.08em 0.04em; /* room for script flourishes so they don't clip */
     background: linear-gradient(105deg, var(--signal) 0%, var(--signal-2) 52%, var(--signal-3) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    /* playful drop so the letters feel like they pop off the page */
-    filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
     transition: transform 0.35s var(--ease);
   }
-  .hero__name span:nth-child(2) { margin-left: 0.06em; }
+  .hero__name span:nth-child(2) { margin-left: 0.12em; margin-top: -0.18em; }
   .hero__name:hover span:nth-child(1) { transform: rotate(-1.5deg) translateY(-2px); }
   .hero__name:hover span:nth-child(2) { transform: rotate(1.5deg) translateX(6px); }
 
