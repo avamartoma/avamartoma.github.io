@@ -27,8 +27,9 @@ you go. (Deeper context for any item lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [ ] **3. Turn on real resume delivery (Web3Forms).**
   - Go to https://web3forms.com, enter **ava.martoma@gmail.com**, get a free
     Access Key by email.
-  - Paste it into `WEB3FORMS_ACCESS_KEY` in **both**
-    `src/components/ResumeModal.astro` and `src/pages/resume.astro`.
+  - Paste it into `WEB3FORMS_ACCESS_KEY` in **three** files:
+    `src/components/ResumeModal.astro`, `src/pages/resume.astro`, and
+    `src/components/Footer.astro` (the footer contact form).
   - Until then the popup shows "Sent ✦" but nothing is actually delivered
     (intentional placeholder — not urgent).
 
