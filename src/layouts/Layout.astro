@@ -1,0 +1,115 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Ava Martoma — Projects",
+  description = "A catalogue of things I've designed, built, and broken. Artsy engineer, occasional troublemaker.",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Type: Space Grotesk (display) + JetBrains Mono (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Custom cursor -->
+    <div class="cursor-ring" aria-hidden="true"></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // --- Custom cursor (lerped ring + snappy dot) ---
+      const dot = document.querySelector<HTMLElement>('.cursor-dot');
+      const ring = document.querySelector<HTMLElement>('.cursor-ring');
+      const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+      if (dot && ring && fine) {
+        let mx = window.innerWidth / 2;
+        let my = window.innerHeight / 2;
+        let rx = mx;
+        let ry = my;
+
+        window.addEventListener('mousemove', (e) => {
+          mx = e.clientX;
+          my = e.clientY;
+          dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+        });
+
+        const loop = () => {
+          rx += (mx - rx) * 0.18;
+          ry += (my - ry) * 0.18;
+          ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+
+        // Grow the ring over interactive elements
+        const grow = () => ring.classList.add('is-active');
+        const shrink = () => ring.classList.remove('is-active');
+        document
+          .querySelectorAll('a, button, .btn, [data-cursor="grow"]')
+          .forEach((el) => {
+            el.addEventListener('mouseenter', grow);
+            el.addEventListener('mouseleave', shrink);
+          });
+      }
+
+      // --- Scroll reveal via IntersectionObserver ---
+      const reveals = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                (entry.target as HTMLElement).style.transitionDelay =
+                  (entry.target as HTMLElement).dataset.revealDelay || '0ms';
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: '0px 0px -8% 0px' }
+        );
+        reveals.forEach((el) => io.observe(el));
+      } else {
+        reveals.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

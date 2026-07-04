@@ -1,0 +1,202 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).filter(
+    (p) => !p.data.draft
+  );
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+
+const dateLabel = d.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+});
+---
+
+<Layout title={`${d.title} — Ava Martoma`} description={d.description ?? d.blurb}>
+  <article class="proj" style={`--a:${d.accent};--b:${d.accentAlt}`}>
+    <!-- Banner -->
+    <header class="proj__hero">
+      <div class="proj__banner" aria-hidden="true">
+        {d.cover ? (
+          <img src={d.cover} alt="" class="proj__cover" />
+        ) : (
+          <div class="proj__gen">
+            <span class="proj__blob proj__blob--1"></span>
+            <span class="proj__blob proj__blob--2"></span>
+            <span class="proj__gridlines"></span>
+          </div>
+        )}
+      </div>
+
+      <div class="wrap proj__head">
+        <a href="/#work" class="arrow-link proj__back">
+          <span>←</span> All work
+        </a>
+        <h1 class="proj__title">{d.title}</h1>
+        <p class="proj__blurb">{d.blurb}</p>
+
+        <div class="proj__meta">
+          <span class="label">{dateLabel}</span>
+          {d.tags.length > 0 && (
+            <ul class="proj__tags">
+              {d.tags.map((t) => <li>{t}</li>)}
+            </ul>
+          )}
+          <div class="proj__links">
+            {d.repo && (
+              <a href={d.repo} class="btn" target="_blank" rel="noopener">
+                Source ↗
+              </a>
+            )}
+            {d.demo && (
+              <a href={d.demo} class="btn btn--solid" target="_blank" rel="noopener">
+                Live demo ↗
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Body: rendered Markdown -->
+    <div class="wrap">
+      <div class="prose" data-reveal>
+        <Content />
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .proj__hero { position: relative; }
+  .proj__banner {
+    position: relative;
+    height: clamp(220px, 38vh, 420px);
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .proj__cover { width: 100%; height: 100%; object-fit: cover; }
+  .proj__gen { position: absolute; inset: 0; background: var(--bg-soft); }
+  .proj__blob {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.8;
+  }
+  .proj__blob--1 { width: 45%; aspect-ratio: 1; background: var(--a); top: -15%; left: 5%; }
+  .proj__blob--2 { width: 40%; aspect-ratio: 1; background: var(--b); bottom: -20%; right: 8%; }
+  .proj__gridlines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 10%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 10%, transparent) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mix-blend-mode: overlay;
+  }
+
+  .proj__head { padding-block: clamp(2rem, 5vw, 3.5rem); }
+  .proj__back { margin-bottom: 1.5rem; }
+  .proj__title { margin-bottom: 1rem; }
+  .proj__blurb {
+    color: var(--ink-soft);
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    max-width: 60ch;
+  }
+  .proj__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .proj__tags { display: flex; flex-wrap: wrap; gap: 0.45rem; list-style: none; }
+  .proj__tags li {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.25em 0.75em;
+    color: var(--ink-soft);
+  }
+  .proj__links { display: flex; gap: 0.75rem; margin-left: auto; }
+
+  /* --- Prose / Markdown styling --- */
+  .prose {
+    max-width: 68ch;
+    margin-block: clamp(2.5rem, 7vw, 4.5rem);
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: var(--ink-soft);
+  }
+  .prose :global(h2) {
+    color: var(--ink);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  .prose :global(h3) {
+    color: var(--ink);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose :global(p) { margin-bottom: 1.25rem; max-width: 68ch; }
+  .prose :global(a) {
+    color: var(--signal);
+    border-bottom: 1px solid color-mix(in srgb, var(--signal) 40%, transparent);
+  }
+  .prose :global(a:hover) { border-color: var(--signal); }
+  .prose :global(ul),
+  .prose :global(ol) { margin: 0 0 1.25rem 1.25rem; }
+  .prose :global(li) { margin-bottom: 0.5rem; }
+  .prose :global(blockquote) {
+    border-left: 2px solid var(--signal);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0.1em 0.4em;
+    color: var(--signal-3);
+  }
+  .prose :global(pre) {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+  .prose :global(pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--ink);
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    margin-block: 1.5rem;
+  }
+  .prose :global(hr) {
+    border: 0;
+    height: 1px;
+    background: var(--line);
+    margin: 2.5rem 0;
+  }
+</style>
