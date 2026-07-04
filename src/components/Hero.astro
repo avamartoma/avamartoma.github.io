@@ -10,7 +10,7 @@ const { count } = Astro.props;
 
   <div class="wrap hero__inner">
     <p class="label hero__eyebrow" data-reveal>
-      Artsy engineer · {count} projects &amp; counting
+      Artsy engineer · {count} project{count === 1 ? '' : 's'} &amp; counting
     </p>
 
     <h1 class="hero__name" data-reveal data-reveal-delay="60ms">ava martoma</h1>
