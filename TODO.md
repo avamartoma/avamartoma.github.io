@@ -1,93 +1,89 @@
 # ✅ TODO — personal-website
 
-Ordered by priority / the sequence they should be tackled in. Check items off as
-you go. (Deeper context for any item lives in [`HANDOVER.md`](./HANDOVER.md).)
+Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 ---
 
 ## 🟢 Now / next
 
-- [ ] **1. Serve at the root `https://avamartoma.github.io/`** (renaming from the
-      `/personal-website/` project URL).
-  - On GitHub: repo **Settings → General → Repository name** → rename to
-    **`avamartoma.github.io`**.
-  - Update the local remote:
-    `git remote set-url origin git@github.com:avamartoma/avamartoma.github.io.git`
-  - `git push` (config already switched to root paths — `base` removed).
-  - Pages settings + workflow carry over; site goes live at
-    **https://avamartoma.github.io/** in ~1–2 min.
-  - ✅ Already deployed once at the project URL; this just moves it to the root.
+- [ ] **1. Add project photos.** Every project currently uses generative
+      artwork. Pull images from your Google Docs (File → Download → Web Page
+      .html, zipped), drop them in the matching `public/images/<slug>/` folder,
+      and tell Kiro the filenames — it wires the cover + inline shots.
+      Slugs: `rc-car`, `penn-electric-racing`, `wooden-car`, `cad-bridge`,
+      `cad-projects`, `marquetry-desk`, `marquetry-flower-press`,
+      `marquetry-clock`, `architecture`, `linkedin-hackathon`.
 
-- [ ] **2. Add your real projects.**
-  - Each project = one Markdown file in `src/content/projects/`.
-  - Replace the 3 samples (`aurora`, `plotter-poems`, `ledger`).
-  - Give the details to Kiro and it'll write them, or copy the template in
-    `README.md`.
+- [ ] **2. Turn on real resume/contact delivery (Web3Forms).** Get a free key at
+      web3forms.com (enter ava.martoma@gmail.com), paste into
+      `WEB3FORMS_ACCESS_KEY` in **three** files: `ResumeModal.astro`,
+      `resume.astro`, `Footer.astro`. Until then forms show "Sent ✦" but don't
+      deliver.
 
-- [ ] **3. Turn on real resume delivery (Web3Forms).**
-  - Go to https://web3forms.com, enter **ava.martoma@gmail.com**, get a free
-    Access Key by email.
-  - Paste it into `WEB3FORMS_ACCESS_KEY` in **three** files:
-    `src/components/ResumeModal.astro`, `src/pages/resume.astro`, and
-    `src/components/Footer.astro` (the footer contact form).
-  - Until then the popup shows "Sent ✦" but nothing is actually delivered
-    (intentional placeholder — not urgent).
+- [ ] **3. Fill in real details for a few entries.**
+  - **Amazon (Kuiper)** experience — real bullets (currently a neutral
+    placeholder).
+  - **LinkedIn Hackathon** — add a demo/live link if there is one.
+  - Confirm estimated dates: **CAD Bridge**, **CAD & Woodworking Studies**, and
+    the 3 marquetry pieces.
 
 ---
 
 ## 🟡 Personality & polish
 
-- [ ] **4. Hand-write your name** and swap it in.
-  - Write "ava martoma" on paper / tablet, send the photo to Kiro → it becomes
-    a crisp SVG signature (can animate as if being drawn). Replaces the current
-    bubble font in the hero + nav.
+- [ ] **4. iFAQ section** (Elly-style playful Q&A) — **goes where the old About
+      section was** (About now lives in the hero). High impact, low effort.
 
-- [ ] **4b. Make a personal logo.**
-  - Design your own mark to replace the placeholder ◐ glyph (nav + favicon).
-    Can be hand-drawn (Procreate → SVG) or code-generated. Would also become
-    the browser tab icon and social-share image.
+- [ ] **5. Highlight the volunteering / service.** Options brainstormed: a
+      dedicated "Service & Impact" section, an impact-stats strip, or
+      color-coding the service roles in the timeline. (Kesem is already in the
+      timeline.)
 
-- [ ] **5. Add personality sections.**
-  - An Elly-style **"iFAQ"** (playful Q&A) — high impact, low effort. **Goes where the old About section was** (About content now lives in the hero).
-  - A first-person voice pass across the About/hero copy.
+- [ ] **6. Hand-write your name** → Kiro turns the photo into a crisp SVG
+      signature (can animate as if drawn); replaces the bubble font.
 
-- [ ] **6. Your own drawings / illustration pass.**
-  - Bring your art; Kiro builds an original interactive layer around it
-    (Koberger *spirit*, not a clone). Keep the clean grid as a fallback.
+- [ ] **7. Make a personal logo** to replace the placeholder ◐ (nav + favicon +
+      social share image).
+
+- [ ] **8. Your own drawings / illustration pass** — bring your art; Kiro builds
+      an original interactive layer around it (Koberger *spirit*, not a clone).
+
+- [ ] **9. Restore leftover About bits (optional)** — the nonprofit/justice
+      paragraph and off-the-clock interests (skiing, squash, golf, running,
+      woodworking) were removed with the About section; fold into the iFAQ or
+      elsewhere if wanted.
 
 ---
 
 ## 🔵 Later / infrastructure
 
-- [ ] **7. Buy a custom domain and host there** (planned).
-  - ✅ Fully supported. Buy a domain (e.g. from Namecheap/Cloudflare/Google).
-  - Point it at GitHub Pages (repo → Settings → Pages → Custom domain) **or**
-    at Netlify.
-  - Then in `astro.config.mjs` set `site: 'https://yourdomain.com'` and
-    `base: '/'` (or delete `base`). Links use `BASE_URL`, so nothing else
-    needs to change.
+- [ ] **10. Buy a custom domain** and point it at GitHub Pages (or Netlify).
+      Then set `site` + `base: '/'` in `astro.config.mjs` — links use
+      `BASE_URL`, so nothing else changes.
 
-- [ ] **8. Consider switching hosting to Netlify** (optional).
-  - Pros: nicer dashboard, built-in Netlify Forms, easy previews. Free tier.
-  - `netlify.toml` is already in the repo. If you switch, you can move the
-    resume form back to Netlify Forms, or keep Web3Forms (works anywhere).
+- [ ] **11. Maybe switch hosting to Netlify** (optional; `netlify.toml` ready).
 
-- [ ] **9. AI "bot"** trained on your content (Ignacio-style) — *much later*.
-  - Needs a serverless function + an LLM API key (not pure static). Your
-    project Markdown becomes its knowledge base.
+- [ ] **12. AI "bot"** trained on your content (Ignacio-style) — needs a
+      serverless function + LLM key. Your project Markdown is its knowledge base.
 
-- [ ] **10. Optional: upgrade to Astro 7** when ready to handle breaking changes
-  (currently pinned to patched 5.x; fine for a static site).
+- [ ] **13. Optional: upgrade to Astro 7** (currently on patched 5.x).
+
+- [ ] **14. Animated hand-drawn sprites** (Elly-style hover animation) — draw
+      2–4 frames in Procreate; Kiro wires the frame-swap on hover.
 
 ---
 
 ## ✔️ Done
 
-- [x] Scaffold Astro site + artsy-engineer design system
+- [x] Scaffold Astro site + artsy-engineer design system; Holi palette
 - [x] Interactive hero (Holi color-powder cursor dots), custom cursor, grain
-- [x] Project grid + per-project pages + playful 404
-- [x] Real headshot (auto-optimized) in About
-- [x] Resume popup (anchored, minimalist) + LinkedIn; email kept private
-- [x] Holi purple→blue palette with pink/green/yellow hints
-- [x] Big bubbly one-line name "ava martoma"
-- [x] Web3Forms wired + configured for GitHub Pages deploy
+- [x] **Live at root** https://avamartoma.github.io/ (GitHub Pages, auto-deploy)
+- [x] Bubbly overlapping one-line name + headshot **sticker** in a two-column hero
+- [x] Hero carries the "about" (tagline, bio, Tools I reach for, credential)
+- [x] **10 real projects** added (samples hidden as drafts)
+- [x] Work: homepage selection + `/work` page with multi-select tag filter
+- [x] Full "Month Day, Year" dates on cards + detail pages
+- [x] **Experience** horizontal-scroll timeline (12 roles incl. Kesem) + Education boxes
+- [x] **Honors** + **Publications** sections
+- [x] Resume popup + footer contact form (Web3Forms, pending key); LinkedIn linked
+- [x] Email kept private; LinkedIn data export gitignored
