@@ -1,0 +1,277 @@
+---
+// Horizontal-scroll experience timeline (newest → oldest, scroll/drag right).
+// Data inlined here; edit freely. `end` can be "Present".
+interface Exp {
+  org: string;
+  role: string;
+  location?: string;
+  start: string;
+  end: string;
+  highlights: string[];
+}
+
+const experiences: Exp[] = [
+  {
+    org: 'Amazon — Project Kuiper (Leo)',
+    role: 'Hardware Development Engineer',
+    location: 'Redmond, WA',
+    start: 'May 2026',
+    end: 'Aug 2026',
+    highlights: [
+      'Hardware development on Amazon\u2019s Project Kuiper satellite program.',
+      'Amazon Future Engineer scholar + internship.',
+    ],
+  },
+  {
+    org: 'KidsMates Inc.',
+    role: 'Co-Founder · KidsSTEAM Project Manager · Web Developer',
+    location: 'Boca Raton, FL',
+    start: 'Jun 2018',
+    end: 'Aug 2025',
+    highlights: [
+      'Co-founded a 501(c)(3) nonprofit for children of incarcerated parents.',
+      'Ran a literacy project distributing books across 23 of 36 states with federal prisons.',
+      'Founded KidsSTEAM — free STEAM classes + 1:1 tutoring (ages 7\u201314).',
+    ],
+  },
+  {
+    org: 'MITES (MIT)',
+    role: 'Summer Scholar',
+    location: 'Cambridge, MA',
+    start: 'Jun 2024',
+    end: 'Jul 2024',
+    highlights: [
+      'Daily classes in linear algebra, chemistry, physics, and architecture.',
+      'Presented a capstone architecture project at MIT; awarded the MITES Director\u2019s Award.',
+    ],
+  },
+  {
+    org: 'Duke University',
+    role: 'Student Researcher — Prof. Zbigniew Kabala',
+    location: 'Remote',
+    start: 'Jun 2024',
+    end: 'Jul 2024',
+    highlights: [
+      'Fluid-mechanics research in ANSYS Fluent analyzing drag across car body designs.',
+      'Proposed more fuel-efficient car models from the CFD results.',
+    ],
+  },
+  {
+    org: 'NYU Family-Based Justice Advisory Board',
+    role: 'Steering Committee Advisory',
+    location: 'Remote',
+    start: 'Aug 2023',
+    end: 'Jun 2024',
+    highlights: [
+      'Advised on family-based alternative sentencing that keeps families united during community-served sentences.',
+    ],
+  },
+  {
+    org: 'Osborne Association',
+    role: 'Youth Fellow',
+    location: 'Remote',
+    start: 'Jun 2020',
+    end: 'Jun 2024',
+    highlights: [
+      'Ran month-long national awareness campaigns on the Youth Steering Committee.',
+      'Lobbied for legislation including NY\u2019s \u201CProximity Bill\u201D to keep incarcerated parents closer to family.',
+    ],
+  },
+  {
+    org: 'Harvard/MIT Langer/Traverso Lab',
+    role: 'Research Intern — Dr. Shriya Srinivasan',
+    location: 'Remote',
+    start: 'Jan 2023',
+    end: 'Nov 2023',
+    highlights: [
+      'Designed novel surgical stents to treat autonomic dysreflexia.',
+      'Compiled research on endovascular baroreflex amplification.',
+    ],
+  },
+  {
+    org: 'Ross Math Program',
+    role: 'Summer Scholar',
+    location: 'Columbus, OH',
+    start: 'Jun 2023',
+    end: 'Jul 2023',
+    highlights: [
+      'Six-week residential program in number theory and topology, taught by university faculty.',
+    ],
+  },
+  {
+    org: 'OSU Belief in Engineering Groups Lab',
+    role: 'Research Intern — Dr. Emily Dringenberg',
+    location: 'Remote',
+    start: 'Jun 2023',
+    end: 'Jul 2023',
+    highlights: [
+      'Contributed to a paper on race and gender inequities in engineering.',
+      'Studied causal reasoning; built an annotated bibliography for publication.',
+    ],
+  },
+  {
+    org: 'Put Me In!',
+    role: 'Summer Intern',
+    location: 'Remote',
+    start: 'Jun 2022',
+    end: 'Aug 2022',
+    highlights: [
+      'Evaluated e-commerce opportunities for a children\u2019s sports nonprofit.',
+      'Built financial models + a Porter\u2019s Five Forces competitive analysis.',
+    ],
+  },
+  {
+    org: 'Worth Rises',
+    role: 'Criminal Justice Intern',
+    location: 'Remote',
+    start: 'Mar 2021',
+    end: 'Jun 2021',
+    highlights: [
+      'Year-long fellowship on the prison industry.',
+      'Produced a thesis on the architectural challenges of prison design.',
+    ],
+  },
+];
+---
+
+<section class="exp section" id="experience">
+  <div class="wrap">
+    <header class="exp__head" data-reveal>
+      <div>
+        <p class="label">Experience</p>
+        <h2>Where I've been</h2>
+      </div>
+      <p class="exp__hint label">drag / scroll →</p>
+    </header>
+  </div>
+
+  <div class="wrap">
+    <div class="exp__scroll" data-reveal tabindex="0" aria-label="Experience timeline, scroll horizontally">
+      <div class="exp__track">
+        {experiences.map((e) => (
+          <article class="exp__card">
+            <span class="exp__node" aria-hidden="true"></span>
+            <p class="exp__date label">{e.start} — {e.end}</p>
+            <h3 class="exp__org">{e.org}</h3>
+            <p class="exp__role">{e.role}{e.location ? ` · ${e.location}` : ''}</p>
+            <ul class="exp__list">
+              {e.highlights.map((h) => <li>{h}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .exp__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .exp__hint { white-space: nowrap; }
+
+  .exp__scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 1rem;
+    cursor: grab;
+  }
+  .exp__scroll::-webkit-scrollbar { display: none; }
+  .exp__scroll.is-dragging { cursor: grabbing; }
+  .exp__scroll:focus-visible { outline: 1px solid var(--signal); outline-offset: 4px; }
+
+  .exp__track {
+    display: flex;
+    gap: 1.1rem;
+    width: max-content;
+    padding-top: 1.75rem;
+    /* the timeline line */
+    background: linear-gradient(var(--line), var(--line)) no-repeat;
+    background-size: 100% 2px;
+    background-position: 0 6px;
+  }
+
+  .exp__card {
+    position: relative;
+    flex: 0 0 auto;
+    width: min(78vw, 320px);
+    scroll-snap-align: start;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.25rem 1.35rem;
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .exp__card:hover { border-color: color-mix(in srgb, var(--signal) 60%, var(--line)); transform: translateY(-4px); }
+
+  .exp__node {
+    position: absolute;
+    top: -1.75rem;
+    left: 1.25rem;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+
+  .exp__date { margin-bottom: 0.5rem; color: var(--signal); }
+  .exp__org { font-size: 1.1rem; line-height: 1.15; margin-bottom: 0.25rem; }
+  .exp__role { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 0.9rem; }
+  .exp__list { list-style: none; display: grid; gap: 0.5rem; }
+  .exp__list li {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    padding-left: 0.9rem;
+    position: relative;
+  }
+  .exp__list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--signal-2);
+  }
+</style>
+
+<script>
+  // Drag-to-scroll (desktop) + shift/vertical wheel → horizontal. Native touch
+  // scroll works on its own; this just makes the mouse feel nice.
+  const scroller = document.querySelector<HTMLElement>('.exp__scroll');
+  if (scroller) {
+    let down = false, startX = 0, startLeft = 0, moved = false;
+
+    scroller.addEventListener('pointerdown', (e) => {
+      down = true; moved = false;
+      startX = e.clientX;
+      startLeft = scroller.scrollLeft;
+      scroller.classList.add('is-dragging');
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 3) moved = true;
+      scroller.scrollLeft = startLeft - dx;
+    });
+    window.addEventListener('pointerup', () => {
+      down = false;
+      scroller.classList.remove('is-dragging');
+    });
+    // Prevent a drag from also triggering clicks inside cards
+    scroller.addEventListener('click', (e) => { if (moved) e.preventDefault(); }, true);
+
+    // Vertical wheel scrolls the timeline horizontally when hovering it
+    scroller.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        scroller.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, { passive: false });
+  }
+</script>
