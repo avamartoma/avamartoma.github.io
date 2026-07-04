@@ -58,7 +58,13 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       woodworking) were removed with the About section; fold into the iFAQ or
       elsewhere if wanted.
 
-- [x] **10. Spotify "what I'm listening to" 🎧** — headphone icon in the nav opens a popover with a Spotify embed (static, no backend). ⮕ Swap SPOTIFY_ID in `SpotifyPanel.astro` for your own playlist (your auto-updating "On Repeat" is ideal). Live auto "recently played" still needs a backend — later.
+- [ ] **10. Spotify "what I'm listening to" 🎧** — a headphone icon that shows
+      songs you've actually been playing lately (live "recently played" vibe).
+      Needs the Spotify Web API (OAuth) + a small backend to hide tokens — *not*
+      pure static. Path A: a free serverless function (Vercel/Netlify/Cloudflare)
+      the Pages site fetches from (truly live). Path B: a scheduled GitHub Action
+      that bakes recent tracks in (~hourly, stays on Pages). A working static
+      embed version was prototyped then removed pending the real connection.
 - [ ] **11. "Clubs & activities at Penn" strip** — showcase the things you do at
       Penn: Women's Club Squash (Co-Captain), Penn Electric Racing, Kesem, etc.
       Could be a small tag/badge row, a mini-card strip, or folded into the
