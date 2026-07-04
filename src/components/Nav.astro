@@ -10,8 +10,23 @@ const links = [
 
 <header class="nav">
   <div class="wrap nav__inner">
-    <a href={base} class="nav__mark" aria-label="Home">
-      <span class="nav__glyph">◐</span>
+    <a href={base} class="nav__mark" aria-label="Home — Ava Martoma">
+      <svg class="nav__logo" viewBox="0 0 64 48" width="36" height="27" aria-hidden="true">
+        <defs>
+          <linearGradient id="aaGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#a855f7" />
+            <stop offset="0.55" stop-color="#4361ee" />
+            <stop offset="1" stop-color="#ff5cc4" />
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#aaGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+          <!-- two A's whose inner legs touch → also reads as an M -->
+          <path d="M5 44 L19 5 L33 44" />
+          <path d="M11.5 29 H26.5" />
+          <path d="M31 44 L45 5 L59 44" />
+          <path d="M37.5 29 H52.5" />
+        </g>
+      </svg>
       <span class="nav__name">ava<em>martoma</em></span>
     </a>
 
@@ -50,12 +65,12 @@ const links = [
     font-size: 1.2rem;
     text-transform: lowercase;
   }
-  .nav__glyph {
-    color: var(--signal);
-    display: inline-block;
-    animation: spin 9s linear infinite;
+  .nav__logo {
+    display: block;
+    flex: 0 0 auto;
+    transition: transform 0.35s var(--ease);
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .nav__mark:hover .nav__logo { transform: translateY(-2px) rotate(-3deg); }
   .nav__name em { color: var(--muted); font-style: normal; }
 
   .nav__links { display: flex; gap: clamp(1rem, 3vw, 2.25rem); }
