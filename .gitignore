@@ -21,3 +21,6 @@ pnpm-debug.log*
 # Never commit personal data exports
 *.zip
 Basic_LinkedInDataExport*
+
+# Personal assistant design notes (private)
+personal_assistant.md
