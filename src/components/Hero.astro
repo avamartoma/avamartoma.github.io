@@ -10,6 +10,12 @@ const { count } = Astro.props;
 // Split the name into letters so they can overlap and each carry a color.
 const nameLetters = [...'ava martoma'];
 const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--signal-4)', 'var(--signal-5)'];
+
+const stack = [
+  'Python', 'R', 'JavaScript', 'Arduino',
+  'Fusion 360', '3D Printing', 'Laser Cutting',
+  'Photoshop', 'Illustrator', 'Woodworking',
+];
 ---
 
 <section class="hero" id="top">
@@ -17,8 +23,8 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
 
   <div class="wrap hero__inner">
     <div class="hero__text">
-      <p class="label hero__eyebrow" data-reveal>
-        Artsy engineer · {count} project{count === 1 ? '' : 's'} &amp; counting
+      <p class="hero__eyebrow" data-reveal>
+        Hardware Engineer @ Amazon Leo · UPenn M&amp;T: MechE × Wharton
       </p>
 
       <h1 class="hero__name" data-reveal data-reveal-delay="60ms" aria-label="ava martoma">
@@ -30,18 +36,25 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
       </h1>
 
       <p class="hero__tagline" data-reveal data-reveal-delay="140ms">
-        design <span class="hero__x">×</span> engineering <span class="hero__x">×</span> maker
+        Half designer, half engineer, <span class="hero__accent">fully curious.</span>
       </p>
 
       <p class="hero__lede" data-reveal data-reveal-delay="200ms">
-        A catalogue of experiments living at the seam between design and
-        engineering — tools, toys, generative art, and the occasional
-        beautiful mistake.
+        Mechanical Engineering &amp; Economics at Penn (M&amp;T), building at the
+        seam between hardware and design — circuit boards, drivetrains, CAD, and
+        woodworking.
       </p>
 
-      <div class="hero__cta" data-reveal data-reveal-delay="260ms">
+      <div class="hero__tools" data-reveal data-reveal-delay="240ms">
+        <p class="hero__tools-label">Tools I reach for</p>
+        <ul class="hero__chips">
+          {stack.map((s) => <li>{s}</li>)}
+        </ul>
+      </div>
+
+      <div class="hero__cta" data-reveal data-reveal-delay="280ms">
         <a href="#work" class="btn btn--solid">View the work ↓</a>
-        <a href="#about" class="btn">About me</a>
+        <a href="#experience" class="btn">Experience</a>
       </div>
     </div>
 
@@ -91,7 +104,17 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
     gap: clamp(1.5rem, 4vw, 3.5rem);
     align-items: center;
   }
-  .hero__eyebrow { margin-bottom: 1.25rem; }
+  .hero__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.1rem;
+    white-space: nowrap;
+  }
+  @media (max-width: 520px) {
+    .hero__eyebrow { white-space: normal; }
+  }
 
   /* Big goofy bubbly name — letters overlap, each carved out with a bg outline */
   .hero__name {
@@ -103,7 +126,7 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
     line-height: 0.95;
     margin-bottom: 1.5rem;
     text-transform: lowercase;
-    font-size: clamp(1.9rem, 6.3vw, 5.5rem);
+    font-size: clamp(2.1rem, 6.8vw, 6rem);
     filter: drop-shadow(0 5px 0 rgba(0, 0, 0, 0.22));
     transition: transform 0.35s var(--ease);
   }
@@ -124,7 +147,7 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
   .hero__photo {
     position: relative;
     justify-self: center;
-    max-width: 270px;
+    max-width: 310px;
     transform: rotate(2.5deg);
     filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45));
     transition: transform 0.4s var(--ease);
@@ -158,8 +181,30 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
     color: var(--ink-soft);
     font-size: clamp(1rem, 1.6vw, 1.15rem);
     margin-bottom: 2.25rem;
+    max-width: 52ch;
   }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+  .hero__tools { margin-bottom: 2rem; }
+  .hero__tools-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .hero__chips { display: flex; flex-wrap: wrap; gap: 0.45rem; list-style: none; }
+  .hero__chips li {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.35em 0.7em;
+    color: var(--ink);
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  .hero__chips li:hover { border-color: var(--signal); color: var(--signal); }
 
   .hero__scroll {
     position: absolute;

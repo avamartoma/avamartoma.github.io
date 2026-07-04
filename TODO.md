@@ -48,7 +48,7 @@ you go. (Deeper context for any item lives in [`HANDOVER.md`](./HANDOVER.md).)
     the browser tab icon and social-share image.
 
 - [ ] **5. Add personality sections.**
-  - An Elly-style **"iFAQ"** (playful Q&A) — high impact, low effort.
+  - An Elly-style **"iFAQ"** (playful Q&A) — high impact, low effort. **Goes where the old About section was** (About content now lives in the hero).
   - A first-person voice pass across the About/hero copy.
 
 - [ ] **6. Your own drawings / illustration pass.**
