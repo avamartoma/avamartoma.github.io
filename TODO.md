@@ -7,12 +7,16 @@ you go. (Deeper context for any item lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 ## 🟢 Now / next
 
-- [ ] **1. Deploy to GitHub Pages (make it public).**
-  - `git push` (publishes the commits already made locally).
-  - On github.com → repo **Settings → Pages → Build and deployment →
-    Source: GitHub Actions**.
-  - Site goes live at **https://avamartoma.github.io/personal-website/**
-    (build+deploy takes ~1–2 min; auto-redeploys on every push).
+- [ ] **1. Serve at the root `https://avamartoma.github.io/`** (renaming from the
+      `/personal-website/` project URL).
+  - On GitHub: repo **Settings → General → Repository name** → rename to
+    **`avamartoma.github.io`**.
+  - Update the local remote:
+    `git remote set-url origin git@github.com:avamartoma/avamartoma.github.io.git`
+  - `git push` (config already switched to root paths — `base` removed).
+  - Pages settings + workflow carry over; site goes live at
+    **https://avamartoma.github.io/** in ~1–2 min.
+  - ✅ Already deployed once at the project URL; this just moves it to the root.
 
 - [ ] **2. Add your real projects.**
   - Each project = one Markdown file in `src/content/projects/`.

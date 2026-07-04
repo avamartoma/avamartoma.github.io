@@ -196,6 +196,12 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
+- **2026-07-04 (10)** — Switched to **root user-page** serving: removed `base`
+  from astro.config (site stays `avamartoma.github.io`); all links now root-
+  relative via BASE_URL. Requires renaming the GitHub repo to
+  `avamartoma.github.io` + updating the remote + push. Local dev back at
+  http://localhost:4321/. (Site had gone live earlier at the /personal-website/
+  project URL.)
 - **2026-07-04 (9)** — Reverted name to **bubble font (Fredoka)**, now on **one
   line**. Switched resume delivery to **Web3Forms** (works on GitHub Pages; paste
   free access key into `ResumeModal.astro` + `resume.astro`). **Configured for
