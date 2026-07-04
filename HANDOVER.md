@@ -148,6 +148,26 @@ Push to `main` → GitHub Actions builds & deploys → live at
 https://avamartoma.github.io/ in ~1–2 min. Custom domain later: set `site` +
 `base:'/'` in `astro.config.mjs` (links use `BASE_URL`, so nothing else changes).
 
+### Custom domain plan — **Cloudflare Registrar** (decided 2026-07-04)
+
+Rationale: buy the domain *at* Cloudflare so a future self-hosted form/API
+backend (Cloudflare Workers/Pages Functions, free serverless) lives in the same
+account — no migration. Site stays on GitHub Pages for now. (The contact form is
+independent of this — it uses Web3Forms and works regardless of registrar.)
+
+Steps when Ava buys the domain:
+1. **Buy** at dash.cloudflare.com → Domain Registration → Register Domains
+   (auto WHOIS privacy + auto-renew; DNS already on Cloudflare nameservers).
+2. **DNS → Records** (apex primary + www redirect):
+   - 4× `A` `@` → `185.199.108.153`, `.109.153`, `.110.153`, `.111.153`
+   - 1× `CNAME` `www` → `avamartoma.github.io`
+   - ⚠️ Set all to **"DNS only" (grey cloud)**, NOT proxied (orange) — orange-cloud
+     proxy conflicts with GitHub Pages' own HTTPS cert (redirect loops).
+3. **Code (agent):** set `site:'https://<domain>'` in `astro.config.mjs`; create
+   `public/CNAME` containing `<domain>`; `npm run build`; commit.
+4. **GitHub → Settings → Pages → Custom domain** → enter `<domain>` → Save.
+5. Tick **Enforce HTTPS** once the cert provisions (mins–~1h).
+
 ---
 
 ## 8. Design directions & inspiration
