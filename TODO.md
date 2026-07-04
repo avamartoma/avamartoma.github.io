@@ -6,11 +6,8 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 ## 🟢 Now / next
 
-- [ ] **0. ⏰ CHECK BACK (~18:35, 2026-07-04): enable Enforce HTTPS.** DNS for
-      `avamartoma.com` is verified; waiting on GitHub to issue the TLS cert. Once
-      the "Enforce HTTPS" checkbox in GitHub → Settings → Pages is clickable, tick
-      it, then confirm https://avamartoma.com loads. If still greyed out after a
-      couple hours, remove + re-add the custom domain to re-trigger the cert.
+- [x] **0. ✅ Enforce HTTPS enabled (2026-07-04).** DNS verified, GitHub issued
+      the TLS cert, Enforce HTTPS on; https://avamartoma.com serves over HTTPS.
 
 - [ ] **1. Add project photos.** Every project currently uses generative
       artwork. Pull images from your Google Docs (File → Download → Web Page
@@ -80,17 +77,32 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 ## 🔵 Later / infrastructure
 
-- [ ] **10. Custom domain — `avamartoma.com`** (bought via Cloudflare Registrar,
-      2026-07-04). `astro.config.mjs` `site` + `public/CNAME` already set (committed).
-      Remaining: add GitHub Pages DNS records (4× A grey-cloud + www CNAME) in
-      Cloudflare, push, set custom domain in GitHub → Settings → Pages, enforce HTTPS.
+- [x] **10. Custom domain — `avamartoma.com`** (bought via Cloudflare Registrar,
+      2026-07-04). `astro.config.mjs` `site` + `public/CNAME` set; DNS (4× A grey +
+      www CNAME) added; GitHub Pages custom domain + Enforce HTTPS on. **Live at
+      https://avamartoma.com** (www → apex + http → https redirects verified).
 
-- [ ] **10a. Free `hello@avamartoma.com` email routing.** Look into a free way to
-      receive (and ideally send) mail on the domain. Cloudflare **Email Routing**
-      is free for *forwarding* (auto-adds MX + SPF) → forwards to Gmail; add a
-      DMARC TXT record too. Sending *from* the address needs more (Gmail "send as"
-      + SMTP relay like Resend free tier, or a paid mailbox). Evaluate the truly-
-      free send path vs. just forwarding.
+- [ ] **10a. Email SENDING — send-as `hello@avamartoma.com` via free SMTP relay.**
+      ✅ RECEIVING done: Cloudflare Email Routing live — `hello@avamartoma.com`
+      + catch-all forward to `ava.martoma@gmail.com` (tested, working). Cloudflare
+      manages/locks the MX + SPF + DKIM records.
+      ⏳ REMAINING (deferred) — reply *from* `hello@` inside Gmail. Cloudflare
+      can't send (receive/forward only), so this needs a free SMTP relay:
+        1. Create free relay: **Brevo** (300/day) or **SMTP2GO** (1,000/mo).
+        2. Authenticate `avamartoma.com` in the relay → add its **DKIM** records in
+           Cloudflare DNS; if it needs SPF, MERGE into one record
+           (`v=spf1 include:_spf.mx.cloudflare.net include:spf.brevo.com ~all`).
+        3. **Relax the existing DMARC** first: `_dmarc` is currently
+           `p=reject; sp=reject; adkim=s; aspf=s` (strict) — set to
+           `v=DMARC1; p=none; rua=mailto:hello@avamartoma.com` until DKIM/SPF
+           alignment is confirmed, then tighten back up.
+        4. Gmail → Settings → Accounts → **"Send mail as"** → add
+           `hello@avamartoma.com` with the relay's SMTP host/port/login/key; click
+           the verification link (arrives via Email Routing).
+      Note: during domain onboarding Cloudflare auto-added anti-spoofing lockdown
+      records (`v=spf1 -all`, wildcard null `*._domainkey`) that blocked Email
+      Routing — both were DELETED 2026-07-04. Strict `_dmarc p=reject` still lives
+      in DNS and must be loosened (step 3) before send-as will deliver reliably.
 
 - [ ] **11. Maybe switch hosting to Netlify** (optional; `netlify.toml` ready).
 
