@@ -13,18 +13,18 @@ const links = [
     <a href={base} class="nav__mark" aria-label="Home — Ava Martoma">
       <svg class="nav__logo" viewBox="0 0 64 48" width="36" height="27" aria-hidden="true">
         <defs>
-          <linearGradient id="aaGrad" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id="aaGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="64" y2="48">
             <stop offset="0" stop-color="#a855f7" />
             <stop offset="0.55" stop-color="#4361ee" />
             <stop offset="1" stop-color="#ff5cc4" />
           </linearGradient>
         </defs>
         <g fill="none" stroke="url(#aaGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
-          <!-- two A's whose inner legs touch → also reads as an M -->
-          <path d="M5 44 L19 5 L33 44" />
-          <path d="M11.5 29 H26.5" />
-          <path d="M31 44 L45 5 L59 44" />
-          <path d="M37.5 29 H52.5" />
+          <!-- two A's meeting at the base → also reads as an M, crossbars visible -->
+          <path d="M4 44 L16 5 L32 44" />
+          <path d="M8 31 H27" />
+          <path d="M32 44 L48 5 L60 44" />
+          <path d="M37 31 H56" />
         </g>
       </svg>
       <span class="nav__name">ava<em>martoma</em></span>
