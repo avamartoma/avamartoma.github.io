@@ -6,6 +6,10 @@ aesthetic. Static site built with [Astro](https://astro.build), no backend.
 Projects are just Markdown files, so adding to the catalogue is quick and the
 whole thing deploys for free.
 
+> 📋 **Project status & full context:** see [`HANDOVER.md`](./HANDOVER.md) — a
+> living dashboard of current state, decisions, and backlog (also used to
+> re-onboard a fresh Kiro/agent session).
+
 ---
 
 ## Quick start
