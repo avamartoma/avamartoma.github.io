@@ -1,0 +1,157 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+
+const projects = (await getCollection('projects'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Tags across all projects, most-common first, for the filter bar.
+const tagCounts = new Map<string, number>();
+for (const p of projects) {
+  for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+}
+const allTags = [...tagCounts.entries()]
+  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  .map(([t]) => t);
+---
+
+<Layout title="All Work — Ava Martoma" description="The full catalogue of Ava Martoma's projects.">
+  <section class="section work">
+    <div class="wrap">
+      <a href={`${base}#work`} class="arrow-link work__back" data-reveal>
+        <span>←</span> Home
+      </a>
+      <header class="work__head" data-reveal>
+        <h1>All work</h1>
+        <p class="label">{projects.length} projects · pick tags to filter</p>
+      </header>
+
+      {allTags.length > 0 && (
+        <div class="filters" data-reveal role="group" aria-label="Filter projects by tag">
+          <button class="filter is-active" data-filter="all" aria-pressed="true">
+            All <span class="filter__n">{projects.length}</span>
+          </button>
+          {allTags.map((t) => (
+            <button class="filter" data-filter={t} aria-pressed="false">
+              {t} <span class="filter__n">{tagCounts.get(t)}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <p class="work__empty" data-empty hidden>No projects match those tags.</p>
+
+      <div class="grid">
+        {projects.map((p, i) => (
+          <ProjectCard
+            href={`${base}projects/${p.id}/`}
+            title={p.data.title}
+            blurb={p.data.blurb}
+            tags={p.data.tags}
+            date={p.data.date}
+            accent={p.data.accent}
+            accentAlt={p.data.accentAlt}
+            cover={p.data.cover}
+            index={i}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .work__back { margin-bottom: 1.5rem; }
+  .work__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  /* Multi-select tag filter bar */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+  .filter {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.45em 0.9em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease),
+      background 0.25s var(--ease);
+  }
+  .filter:hover { border-color: var(--signal); color: var(--ink); }
+  .filter__n { font-size: 0.62rem; color: var(--muted); transition: color 0.25s var(--ease); }
+  .filter.is-active {
+    color: var(--bg);
+    background: var(--signal);
+    border-color: var(--signal);
+  }
+  .filter.is-active .filter__n { color: var(--bg); opacity: 0.7; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: var(--gap);
+  }
+  .card[hidden] { display: none; }
+  .work__empty { color: var(--ink-soft); }
+</style>
+
+<script>
+  // Multi-select tag filter (union / OR): a card shows if it carries ANY of the
+  // selected tags. "All" clears the selection and shows everything.
+  const filterEls = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter'));
+  const allBtn = document.querySelector<HTMLButtonElement>('.filter[data-filter="all"]');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.grid .card'));
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  const selected = new Set<string>();
+
+  function apply() {
+    const none = selected.size === 0;
+    // Button states
+    filterEls.forEach((b) => {
+      const tag = b.dataset.filter!;
+      const active = tag === 'all' ? none : selected.has(tag);
+      b.classList.toggle('is-active', active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    // Card visibility (OR across selected tags)
+    let shown = 0;
+    cards.forEach((card) => {
+      const tags = (card.dataset.tags || '').split(',');
+      const show = none || tags.some((t) => selected.has(t));
+      card.hidden = !show;
+      if (show) shown++;
+    });
+    if (empty) empty.hidden = shown !== 0;
+  }
+
+  filterEls.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.filter!;
+      if (tag === 'all') selected.clear();
+      else if (selected.has(tag)) selected.delete(tag);
+      else selected.add(tag);
+      apply();
+    });
+  });
+</script>

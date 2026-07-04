@@ -18,14 +18,8 @@ const stack = [
   'Astro', 'Three.js', 'Figma', 'Fabrication',
 ];
 
-// Unique tags across all visible projects, most-common first, for the filter bar.
-const tagCounts = new Map<string, number>();
-for (const p of projects) {
-  for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
-}
-const allTags = [...tagCounts.entries()]
-  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-  .map(([t]) => t);
+// Homepage shows a selection; the full, filterable list lives on /work.
+const selection = projects.slice(0, 6);
 ---
 
 <Layout>
@@ -39,40 +33,37 @@ const allTags = [...tagCounts.entries()]
         <p class="label">{projects.length} project{projects.length === 1 ? '' : 's'} — a curated mess</p>
       </header>
 
-      {allTags.length > 0 && (
-        <div class="filters" data-reveal role="group" aria-label="Filter projects by tag">
-          <button class="filter is-active" data-filter="all" aria-pressed="true">
-            All <span class="filter__n">{projects.length}</span>
-          </button>
-          {allTags.map((t) => (
-            <button class="filter" data-filter={t} aria-pressed="false">
-              {t} <span class="filter__n">{tagCounts.get(t)}</span>
-            </button>
-          ))}
-        </div>
-      )}
-
       {projects.length === 0 ? (
         <p class="empty">
           No projects yet. Add a Markdown file to
           <code>src/content/projects/</code> and it shows up here.
         </p>
       ) : (
-        <div class="grid">
-          {projects.map((p, i) => (
-            <ProjectCard
-              href={`${base}projects/${p.id}/`}
-              title={p.data.title}
-              blurb={p.data.blurb}
-              tags={p.data.tags}
-              date={p.data.date}
-              accent={p.data.accent}
-              accentAlt={p.data.accentAlt}
-              cover={p.data.cover}
-              index={i}
-            />
-          ))}
-        </div>
+        <>
+          <div class="grid">
+            {selection.map((p, i) => (
+              <ProjectCard
+                href={`${base}projects/${p.id}/`}
+                title={p.data.title}
+                blurb={p.data.blurb}
+                tags={p.data.tags}
+                date={p.data.date}
+                accent={p.data.accent}
+                accentAlt={p.data.accentAlt}
+                cover={p.data.cover}
+                index={i}
+              />
+            ))}
+          </div>
+
+          {projects.length > selection.length && (
+            <div class="work-more" data-reveal>
+              <a href={`${base}work/`} class="btn btn--solid">
+                See all {projects.length} projects →
+              </a>
+            </div>
+          )}
+        </>
       )}
     </div>
   </section>
@@ -135,47 +126,14 @@ const allTags = [...tagCounts.entries()]
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: clamp(1.5rem, 3vw, 2rem);
-  }
-
-  /* Tag filter bar */
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
     margin-bottom: clamp(2rem, 5vw, 3rem);
   }
-  .filter {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    color: var(--ink-soft);
-    background: transparent;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 0.45em 0.9em;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5em;
-    transition: border-color 0.25s var(--ease), color 0.25s var(--ease),
-      background 0.25s var(--ease);
-  }
-  .filter:hover { border-color: var(--signal); color: var(--ink); }
-  .filter__n {
-    font-size: 0.62rem;
-    color: var(--muted);
-    transition: color 0.25s var(--ease);
-  }
-  .filter.is-active {
-    color: var(--bg);
-    background: var(--signal);
-    border-color: var(--signal);
-  }
-  .filter.is-active .filter__n { color: var(--bg); opacity: 0.7; }
 
-  /* Cards hidden by the active filter */
-  .card[hidden] { display: none; }
+  .work-more {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(2rem, 5vw, 3rem);
+  }
 
   .grid {
     display: grid;
@@ -246,28 +204,3 @@ const allTags = [...tagCounts.entries()]
     .about { grid-template-columns: 1fr; }
   }
 </style>
-
-<script>
-  // Tag filtering for the work grid. Clicking a tag shows only cards that
-  // carry it; "All" resets. Pure client-side, works on the static page.
-  const filters = document.querySelectorAll<HTMLButtonElement>('.filter');
-  const cards = document.querySelectorAll<HTMLElement>('.grid .card');
-
-  filters.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const want = btn.dataset.filter;
-
-      filters.forEach((b) => {
-        const active = b === btn;
-        b.classList.toggle('is-active', active);
-        b.setAttribute('aria-pressed', String(active));
-      });
-
-      cards.forEach((card) => {
-        const tags = (card.dataset.tags || '').split(',');
-        const show = want === 'all' || tags.includes(want as string);
-        card.hidden = !show;
-      });
-    });
-  });
-</script>
