@@ -17,3 +17,7 @@ pnpm-debug.log*
 # editor
 .vscode/
 .idea/
+
+# Never commit personal data exports
+*.zip
+Basic_LinkedInDataExport*
