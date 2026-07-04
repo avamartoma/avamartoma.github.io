@@ -150,8 +150,6 @@ Cover images go in `public/images/` and are referenced as `/images/name.jpg`.
 - [ ] **Add real projects** (replace samples aurora/plotter-poems/ledger)
 - [ ] **Resume:** deploy to Netlify + set Forms email notification so requests
       reach Ava (Site settings → Forms → Form notifications). Alt: Formspree.
-- [ ] **Add real photo:** replace `public/images/ava-portrait.svg` with a real
-      photo and update `src` in `index.astro` (see `public/images/README.md`)
 - [ ] Decide on illustration/interaction direction (see §11) — Ava to draw;
       synthesize, do NOT clone Koberger
 - [ ] `git push` to publish commits to GitHub (owner action)
@@ -196,6 +194,10 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
+- **2026-07-04 (3)** — Added real headshot. Moved `ava_headshot.jpeg` →
+  `src/assets/ava-headshot.jpeg`; wired into About via `astro:assets` `<Image>`
+  (auto-resized responsive WebP, ~20–56 KB from 3.2 MB). Removed placeholder
+  SVG; updated image guide. Build verified.
 - **2026-07-04 (2)** — Added `/resume` email-capture page (Netlify Forms +
   progressive-enhancement AJAX inline success), added Resume to nav, added
   About-section portrait with on-brand placeholder (`public/images/ava-portrait.svg`)
