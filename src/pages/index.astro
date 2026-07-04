@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import Experience from '../components/Experience.astro';
 import headshot from '../assets/ava-headshot.jpeg';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
@@ -67,6 +68,10 @@ const selection = projects.slice(0, 6);
       )}
     </div>
   </section>
+
+  <hr class="divider" />
+
+  <Experience />
 
   <hr class="divider" />
 
