@@ -196,6 +196,13 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
+- **2026-07-04 (9)** — Reverted name to **bubble font (Fredoka)**, now on **one
+  line**. Switched resume delivery to **Web3Forms** (works on GitHub Pages; paste
+  free access key into `ResumeModal.astro` + `resume.astro`). **Configured for
+  GitHub Pages:** `site=avamartoma.github.io`, `base=/personal-website`; all
+  internal links normalized via `import.meta.env.BASE_URL` (Nav/Layout/index/
+  slug/404/resume). Local dev now at **/personal-website/**. Added ordered
+  **`TODO.md`**. Build verified (dist hrefs all `/personal-website/...`).
 - **2026-07-04 (8)** — Made the name prominent: added bubbly rounded font (Fredoka, `--font-bubble`); hero now leads with a giant lowercase Holi-gradient **ava martoma** (playful hover tilt), with 'I build strange, useful things.' demoted to tagline; nav brand uses the bubbly font too.
 
 - **2026-07-04 (7)** — Slimmed footer: removed the "Say hello / Let's make something." lead; now a compact single row (LinkedIn · GitHub · Email + copyright).
