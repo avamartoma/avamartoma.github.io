@@ -12,6 +12,8 @@ featured: true
 
 ## Overview
 
+*Built with Audrey Tseng and Sofia Padilla Regules.*
+
 For my work with **Penn Electric Racing (PER)** this year, I contributed to
 various vehicle subsystems — designing **mounting tabs**, **manufacturing
 jigs**, and generating **production-ready technical drawings**.
