@@ -1,0 +1,186 @@
+---
+// Minimalist resume-request popup, available site-wide (included in Layout).
+// Any element with [data-open-resume] opens it. Uses the native <dialog> for
+// free focus-trapping, Esc-to-close, and a backdrop.
+//
+// EMAIL DELIVERY: this posts to Netlify Forms (form name "resume-request").
+// To make requests land in ava.martoma@gmail.com, deploy on Netlify and set:
+//   Site settings → Forms → Form notifications → Email notification
+//   → send to: ava.martoma@gmail.com
+// The notification email includes the requester's address, i.e.
+// "<their email> is requesting a resume". No backend/server code needed.
+// (Prefer another host? Swap the form for Formspree — see HANDOVER §Resume.)
+---
+
+<dialog id="resume-dialog" class="rm" aria-labelledby="rm-title">
+  <button class="rm__close" data-close-resume aria-label="Close">✕</button>
+
+  <form
+    name="resume-request"
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    class="rm__form"
+  >
+    <input type="hidden" name="form-name" value="resume-request" />
+    <p class="rm__hp"><label>Leave blank: <input name="bot-field" /></label></p>
+
+    <p class="label rm__eyebrow">Resume</p>
+    <h2 id="rm-title" class="rm__title">Drop your email, get my resume.</h2>
+    <p class="rm__sub">Type your email, hit the arrow — I'll send a copy over.</p>
+
+    <div class="rm__row">
+      <input
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        placeholder="you@email.com"
+        aria-label="Your email"
+        class="rm__input"
+      />
+      <button type="submit" class="rm__go" aria-label="Send request">
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </form>
+
+  <div class="rm__done" data-resume-done hidden>
+    <h2>Sent. ✦</h2>
+    <p>Thanks — I'll email the resume your way shortly.</p>
+    <button class="btn" data-close-resume>Close</button>
+  </div>
+</dialog>
+
+<style>
+  .rm {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 10px;
+    padding: 2.25rem 2rem 2rem;
+    width: min(30rem, calc(100vw - 2rem));
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    position: relative;
+    overflow: hidden;
+  }
+  /* subtle accent wash at the top edge */
+  .rm::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--signal), var(--signal-2));
+  }
+  .rm[open] { animation: rm-in 0.32s var(--ease); }
+  @keyframes rm-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
+  }
+  .rm::backdrop {
+    background: rgba(8, 7, 10, 0.62);
+    backdrop-filter: blur(3px);
+  }
+
+  .rm__close {
+    position: absolute;
+    top: 0.75rem; right: 0.85rem;
+    background: none; border: 0; cursor: pointer;
+    color: var(--muted); font-size: 0.95rem; line-height: 1;
+    transition: color 0.2s var(--ease);
+  }
+  .rm__close:hover { color: var(--ink); }
+
+  .rm__eyebrow { margin-bottom: 0.75rem; }
+  .rm__title {
+    font-size: clamp(1.4rem, 4vw, 1.85rem);
+    line-height: 1.1;
+    margin-bottom: 0.6rem;
+  }
+  .rm__sub { color: var(--ink-soft); font-size: 0.9rem; margin-bottom: 1.6rem; }
+
+  .rm__row {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  .rm__input {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.85em 1em;
+    transition: border-color 0.25s var(--ease);
+  }
+  .rm__input:focus { outline: none; border-color: var(--signal); }
+  .rm__input::placeholder { color: var(--muted); }
+
+  .rm__go {
+    flex: 0 0 auto;
+    width: 3.1rem;
+    border: 1px solid var(--signal);
+    background: var(--signal);
+    color: var(--bg);
+    border-radius: var(--radius);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: transform 0.25s var(--ease), background 0.25s var(--ease);
+  }
+  .rm__go:hover { background: var(--ink); border-color: var(--ink); }
+  .rm__go:hover span { display: inline-block; transform: translateX(3px); }
+
+  .rm__hp { position: absolute; left: -9999px; opacity: 0; }
+
+  .rm__done h2 { margin-bottom: 0.6rem; }
+  .rm__done p { color: var(--ink-soft); margin-bottom: 1.5rem; }
+</style>
+
+<script>
+  const dialog = document.getElementById('resume-dialog') as HTMLDialogElement | null;
+  if (dialog) {
+    const form = dialog.querySelector<HTMLFormElement>('.rm__form');
+    const done = dialog.querySelector<HTMLElement>('[data-resume-done]');
+
+    const open = (e?: Event) => {
+      e?.preventDefault();
+      // reset to the form view each time it opens
+      if (form) form.hidden = false;
+      if (done) done.hidden = true;
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+    };
+    const close = () => dialog.close();
+
+    // Any [data-open-resume] element opens the popup (falls back to /resume with no JS)
+    document
+      .querySelectorAll('[data-open-resume]')
+      .forEach((el) => el.addEventListener('click', open));
+
+    // Close via the ✕, any [data-close-resume], or clicking the backdrop
+    dialog
+      .querySelectorAll('[data-close-resume]')
+      .forEach((el) => el.addEventListener('click', close));
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) close(); // click on backdrop area
+    });
+
+    // Submit via fetch so the visitor stays put and sees the thank-you inline.
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(data as any).toString(),
+        });
+      } catch {
+        // Local dev has no Netlify backend; still show success for the UX.
+      }
+      if (form) form.hidden = true;
+      if (done) done.hidden = false;
+    });
+  }
+</script>

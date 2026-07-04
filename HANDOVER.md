@@ -148,8 +148,9 @@ Cover images go in `public/images/` and are referenced as `/images/name.jpg`.
 ## 8. Open items / backlog
 
 - [ ] **Add real projects** (replace samples aurora/plotter-poems/ledger)
-- [ ] **Resume:** deploy to Netlify + set Forms email notification so requests
-      reach Ava (Site settings → Forms → Form notifications). Alt: Formspree.
+- [ ] **Resume:** deploy to Netlify + set the "resume-request" Forms email
+      notification to **ava.martoma@gmail.com** (Site settings → Forms →
+      Notifications) so requests reach her inbox. Alt host: Formspree.
 - [ ] Decide on illustration/interaction direction (see §11) — Ava to draw;
       synthesize, do NOT clone Koberger
 - [ ] `git push` to publish commits to GitHub (owner action)
@@ -194,6 +195,15 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
+- **2026-07-04 (4)** — Reworked resume into a **minimalist popup** (native
+  `<dialog>` `ResumeModal.astro`, injected site-wide via Layout; email + arrow,
+  Esc/backdrop/✕ close, AJAX inline success). Nav "Resume" opens it
+  (`data-open-resume`), `/resume` page kept as no-JS fallback. Linked **LinkedIn**
+  (linkedin.com/in/avamartoma) and set real contact email **ava.martoma@gmail.com**
+  in footer (mailto + socials). Build verified.
+  ⚠️ **Action for Ava:** in Netlify → Site settings → Forms → Notifications, set
+  the "resume-request" email notification to **ava.martoma@gmail.com** so
+  requests actually reach her inbox (includes the requester's email).
 - **2026-07-04 (3)** — Added real headshot. Moved `ava_headshot.jpeg` →
   `src/assets/ava-headshot.jpeg`; wired into About via `astro:assets` `<Image>`
   (auto-resized responsive WebP, ~20–56 KB from 3.2 MB). Removed placeholder
