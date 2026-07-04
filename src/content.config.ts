@@ -21,8 +21,8 @@ const projects = defineCollection({
     // Optional cover image path (relative to /public) e.g. "/images/foo.jpg".
     cover: z.string().optional(),
     // A two-color accent pair drives the card's generative artwork.
-    accent: z.string().default('#ff5c39'),
-    accentAlt: z.string().default('#3d5afe'),
+    accent: z.string().default('#a855f7'),
+    accentAlt: z.string().default('#4361ee'),
     // Set true to feature prominently / hide from the grid.
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),

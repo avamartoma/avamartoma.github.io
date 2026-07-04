@@ -86,8 +86,9 @@ netlify.toml                Netlify deploy config
 ## 5. Design system (source of truth: `src/styles/global.css`)
 
 - **Palette** — near-black warm bg (`--bg:#0d0c0f`), off-white ink
-  (`--ink:#f4f1ea`), signal accents: orange `#ff5c39`, blue `#3d5afe`,
-  acid green `#b6ff3c`.
+  (`--ink:#f4f1ea`). **Holi accents (mainly purple→blue, festive hints):**
+  violet `--signal:#a855f7`, blue `--signal-2:#4361ee`, pink `--signal-3:#ff5cc4`,
+  green `--signal-4:#5ce6a0`, yellow `--signal-5:#ffd23f`.
 - **Type** — Space Grotesk (display) + JetBrains Mono (body), via Google Fonts
   in `Layout.astro`.
 - **Signature touches** — film-grain overlay (`body::after`, inline SVG noise),
@@ -195,15 +196,21 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
-- **2026-07-04 (4)** — Reworked resume into a **minimalist popup** (native
-  `<dialog>` `ResumeModal.astro`, injected site-wide via Layout; email + arrow,
-  Esc/backdrop/✕ close, AJAX inline success). Nav "Resume" opens it
-  (`data-open-resume`), `/resume` page kept as no-JS fallback. Linked **LinkedIn**
-  (linkedin.com/in/avamartoma) and set real contact email **ava.martoma@gmail.com**
-  in footer (mailto + socials). Build verified.
-  ⚠️ **Action for Ava:** in Netlify → Site settings → Forms → Notifications, set
-  the "resume-request" email notification to **ava.martoma@gmail.com** so
-  requests actually reach her inbox (includes the requester's email).
+- **2026-07-04 (6)** — **Holi color theme.** Kept the black base; retuned accents
+  from orange/blue to a purple→blue core with pink/green/yellow hints
+  (`--signal`..`--signal-5` in `global.css`). Hero canvas dots now burst into
+  multi-color "color powder" near the cursor (weighted toward purple/blue).
+  Updated gradients (hero/resume accents), prose code → green, project sample
+  accents, favicon → violet. Replaced footer line with "Let's make something."
+  Build verified.
+- **2026-07-04 (5)** — Resume popup reworked into an **anchored popover** (opens
+  just under the nav "Resume" link, no dimming backdrop — page stays visible).
+  Removed subtext; heading is now "Drop your email & I'll send it to you." +
+  email field. Privacy: removed the big public email headline; email is now only
+  a small footer link (mailto:ava.martoma@gmail.com) alongside LinkedIn + GitHub.
+  Footer centerpiece is now a non-email line. Build verified.
+  (Netlify free tier: hosting + 100 form submissions/month, no card needed.)
+- **2026-07-04 (4)** — Reworked resume into a popup (native `<dialog>`); later
 - **2026-07-04 (3)** — Added real headshot. Moved `ava_headshot.jpeg` →
   `src/assets/ava-headshot.jpeg`; wired into About via `astro:assets` `<Image>`
   (auto-resized responsive WebP, ~20–56 KB from 3.2 MB). Removed placeholder

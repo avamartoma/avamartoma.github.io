@@ -15,10 +15,12 @@
   --ink-soft:  #a5a1 b0;
   --muted:     #6f6b7a;
 
-  /* Signal accents */
-  --signal:    #ff5c39;   /* warm orange-red */
-  --signal-2:  #3d5afe;   /* electric blue */
-  --signal-3:  #b6ff3c;   /* acid green */
+  /* Signal accents — Holi palette: mainly purple→blue, hints of pink/green/yellow */
+  --signal:    #a855f7;   /* violet — primary */
+  --signal-2:  #4361ee;   /* electric blue — secondary */
+  --signal-3:  #ff5cc4;   /* pink — hint */
+  --signal-4:  #5ce6a0;   /* green — hint */
+  --signal-5:  #ffd23f;   /* yellow — hint */
 
   /* Type */
   --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;

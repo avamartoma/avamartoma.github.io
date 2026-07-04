@@ -5,8 +5,8 @@ description: "A generative typography project pairing a grammar-based poem gener
 date: 2025-06-18
 tags: ["Python", "Generative", "Fabrication"]
 repo: "https://github.com/avamartoma/plotter-poems"
-accent: "#b6ff3c"
-accentAlt: "#ff5c39"
+accent: "#a855f7"
+accentAlt: "#5ce6a0"
 featured: true
 ---
 
