@@ -2,7 +2,7 @@
 title: "Penn Electric Racing"
 blurb: "Mounting tabs, manufacturing jigs, and production-ready drawings for Penn's electric race car — plus composite airfoil layups."
 description: "My work with Penn Electric Racing (PER): designing mounting tabs and jigs, generating production SolidWorks drawings, and hands-on composite manufacturing for the aero airfoils."
-date: 2025-04-01
+date: 2025-12-31
 tags: ["SolidWorks", "Composites", "Manufacturing", "Technical Drawing"]
 accent: "#a855f7"
 accentAlt: "#4361ee"
