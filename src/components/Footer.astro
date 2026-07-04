@@ -5,48 +5,155 @@ const socials = [
   { href: 'https://github.com/avamartoma', label: 'GitHub' },
   { href: 'mailto:ava.martoma@gmail.com', label: 'Email' },
 ];
+
+// Same free Web3Forms key as the resume popup — get one at web3forms.com
+// (enter ava.martoma@gmail.com) and paste it here + in ResumeModal.astro.
+const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
 ---
 
 <footer class="foot" id="contact">
-  <div class="wrap foot__inner">
-    <nav class="foot__socials" aria-label="Contact links">
-      {socials.map((s) => (
-        <a
-          href={s.href}
-          class="arrow-link"
-          target={s.href.startsWith('mailto:') ? undefined : '_blank'}
-          rel="noopener"
-        >
-          {s.label} <span>↗</span>
-        </a>
-      ))}
-    </nav>
-
-    <div class="foot__meta">
-      <span class="label">© {year} Ava Martoma</span>
-      <span class="label">Built with Astro</span>
+  <div class="wrap foot__top">
+    <div class="foot__intro">
+      <p class="label">Contact</p>
+      <h2 class="foot__title">Say hi 👋</h2>
+      <p class="foot__blurb">
+        Questions, collabs, or just want to talk shop? Drop me a line.
+      </p>
+      <nav class="foot__socials" aria-label="Contact links">
+        {socials.map((s) => (
+          <a
+            href={s.href}
+            class="arrow-link"
+            target={s.href.startsWith('mailto:') ? undefined : '_blank'}
+            rel="noopener"
+          >
+            {s.label} <span>↗</span>
+          </a>
+        ))}
+      </nav>
     </div>
+
+    <form class="foot__form">
+      <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+      <input type="hidden" name="subject" value="New message from your website" />
+      <input type="hidden" name="from_name" value="Contact form — avamartoma.github.io" />
+      <input type="checkbox" name="botcheck" class="foot__hp" tabindex="-1" autocomplete="off" />
+
+      <div class="foot__row">
+        <label class="foot__field">
+          <span>Name</span>
+          <input type="text" name="name" autocomplete="name" placeholder="Your name" />
+        </label>
+        <label class="foot__field">
+          <span>Email</span>
+          <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" />
+        </label>
+      </div>
+
+      <label class="foot__field">
+        <span>Message</span>
+        <textarea name="message" rows="3" required placeholder="What's on your mind?"></textarea>
+      </label>
+
+      <button type="submit" class="btn btn--solid foot__submit">Send it →</button>
+
+      <p class="foot__sent" data-contact-done hidden>Sent. ✦ Thanks — I'll get back to you.</p>
+    </form>
+  </div>
+
+  <div class="wrap foot__meta">
+    <span class="label">© {year} Ava Martoma</span>
+    <span class="label">Built with Astro</span>
   </div>
 </footer>
 
 <style>
   .foot {
     border-top: 1px solid var(--line);
-    padding-block: 1.5rem;
+    padding-block: clamp(2.5rem, 6vh, 4rem) 1.5rem;
     margin-top: 3rem;
   }
-  .foot__inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem 2rem;
-    justify-content: space-between;
-    align-items: center;
+  .foot__top {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: start;
   }
-  .foot__socials { display: flex; gap: 1.5rem; }
+  .foot__title { margin: 0.6rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+  .foot__blurb { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 1.5rem; max-width: 34ch; }
+  .foot__socials { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+
+  .foot__form { display: grid; gap: 0.85rem; }
+  .foot__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+  .foot__field { display: grid; gap: 0.35rem; }
+  .foot__field span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+  .foot__field input,
+  .foot__field textarea {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.7em 0.85em;
+    transition: border-color 0.25s var(--ease);
+    resize: vertical;
+    width: 100%;
+  }
+  .foot__field input:focus,
+  .foot__field textarea:focus { outline: none; border-color: var(--signal); }
+  .foot__field input::placeholder,
+  .foot__field textarea::placeholder { color: var(--muted); }
+
+  .foot__submit { justify-self: start; margin-top: 0.25rem; }
+  .foot__sent { color: var(--signal-4); font-size: 0.9rem; }
+  .foot__hp { position: absolute; left: -9999px; opacity: 0; }
+
   .foot__meta {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     gap: 0.5rem 1.5rem;
     align-items: center;
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 700px) {
+    .foot__top { grid-template-columns: 1fr; }
+    .foot__row { grid-template-columns: 1fr; }
   }
 </style>
+
+<script>
+  // Contact form → Web3Forms (works on GitHub Pages). Progressive enhancement:
+  // submit via fetch and show an inline confirmation. Needs a real access key
+  // (see the WEB3FORMS_ACCESS_KEY note above) to actually deliver.
+  const form = document.querySelector<HTMLFormElement>('.foot__form');
+  const done = document.querySelector<HTMLElement>('[data-contact-done]');
+  if (form && done) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      try {
+        await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(data as any)),
+        });
+      } catch {
+        // Offline / blocked — still confirm so the UX stays intact.
+      }
+      form.querySelectorAll('input, textarea, button').forEach((el) => {
+        (el as HTMLElement).setAttribute('disabled', 'true');
+      });
+      done.hidden = false;
+    });
+  }
+</script>
