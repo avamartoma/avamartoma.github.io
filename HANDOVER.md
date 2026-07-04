@@ -196,6 +196,7 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
+- **2026-07-04 (7)** — Slimmed footer: removed the "Say hello / Let's make something." lead; now a compact single row (LinkedIn · GitHub · Email + copyright).
 - **2026-07-04 (6)** — **Holi color theme.** Kept the black base; retuned accents
   from orange/blue to a purple→blue core with pink/green/yellow hints
   (`--signal`..`--signal-5` in `global.css`). Hero canvas dots now burst into
