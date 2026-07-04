@@ -152,11 +152,14 @@ Cover images go in `public/images/` and are referenced as `/images/name.jpg`.
       reach Ava (Site settings → Forms → Form notifications). Alt: Formspree.
 - [ ] **Add real photo:** replace `public/images/ava-portrait.svg` with a real
       photo and update `src` in `index.astro` (see `public/images/README.md`)
-- [ ] Decide on **Koberger-style illustrated homepage** (see §11) — Ava to draw
+- [ ] Decide on illustration/interaction direction (see §11) — Ava to draw;
+      synthesize, do NOT clone Koberger
 - [ ] `git push` to publish commits to GitHub (owner action)
 - [ ] Set real `site:` URL in `astro.config.mjs` before deploying
 - [ ] Connect a deploy (Netlify recommended — `netlify.toml` is ready)
 - [ ] Optional: iFAQ personality section (Elly-inspired)
+- [ ] **LATER:** terminal-style AI bot trained on Ava's content (Ignacio-inspired;
+      needs serverless function + LLM key — not pure static)
 - [ ] Optional: decide on Astro 7 upgrade
 - [ ] If deploying to a GitHub *project* page, set `base: '/personal-website'`
 
@@ -206,22 +209,33 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 11. Design directions & inspiration
 
-Friends' sites Ava likes (studied 2026-07-04):
-- **gkoberger.com** — ⭐ Ava LOVES this homepage. It's a hand-drawn, explorable
-  illustrated scene: clickable objects open overlay panels ("Stuff I've Built",
-  "Timeline", "100 Things I Love", etc.), `esc` closes. Whimsical, doodle-heavy,
-  deeply personal microcopy. Ava can produce the drawings herself.
-- **ellypeng.com** (Ava's fave of the four friends) — personality-forward, artsy.
-  Signature element: **"iFAQ" (infrequently asked questions)** — playful personal
-  Q&A. Big repeated name typography, warm first-person voice, art gallery.
-- **riasaheta.com** — clean engineer structure: Work / Journal / About / Resume;
-  project cards with status + year + tags; a build-notes "Journal".
+> **Guiding principle (Ava, 2026-07-04):** *Synthesize, don't copy.* These are
+> inspirations to draw from — NOT templates to clone. Especially: do **not**
+> build a Koberger clone. The goal is a site that's distinctly Ava's, blending
+> what she likes from several places into one cohesive artsy-engineer identity.
+
+Sites Ava likes, and the *specific ingredient* worth borrowing from each:
+- **gkoberger.com** — the **explorable, hand-drawn homepage** feeling: content
+  revealed by interacting with an illustration; whimsy; intensely personal
+  microcopy. Borrow the *spirit* (playful, illustrated, exploratory), invent
+  our own scene/interaction. Ava can draw her own art.
+- **ellypeng.com** — **personality density**: the "iFAQ" playful Q&A, warm
+  first-person voice, big-type name treatment, art gallery.
+- **ignaciofigueroa.dev** — a **terminal-styled AI "bot"** that answers
+  questions about the person/their work (LLM + retrieval over their content).
+  ⏳ *LATER, not now.* Needs a backend/serverless function + LLM API key; feed
+  it the project Markdown as its knowledge base. Terminal UI aesthetic fits.
+- **riasaheta.com** — clean engineer structure (Work / Journal / About /
+  Resume), project cards with status + year + tags, a build-notes "Journal".
 - **sirobles.com** — maker energy: Projects, Build Logs, Download Resume, Hobbies.
 - **ronaksuchindra.com** — JS SPA, couldn't scrape; revisit manually.
 
-**Proposed personality levers (not yet built):**
-1. Koberger-style **illustrated explorable homepage** — biggest idea. Build an
-   interactive hotspot layer over Ava's drawing(s) + overlay panels. Would be a
-   new homepage variant; keep current grid as `/work` fallback.
-2. **iFAQ section** — low-effort, high-personality; content in Markdown/data.
-3. First-person voice pass + big-type name treatment.
+**Synthesis target (Ava's own blend, to evolve):**
+- Keep the current *engineered* base (interactive canvas, custom cursor, grain).
+- Add *personality* (Elly): first-person voice, an iFAQ, big-type name.
+- Add *exploration/illustration* (Koberger spirit): Ava's own drawings as an
+  interactive, playful layer — original scene, not a copy.
+- Later: an *AI bot* (Ignacio) trained on her project content.
+
+**Build-order thinking:** real content + photos first → personality (iFAQ,
+voice) → illustration/interaction pass → bot (last, needs backend).
