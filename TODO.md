@@ -6,6 +6,12 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 ## 🟢 Now / next
 
+- [ ] **0. ⏰ CHECK BACK (~18:35, 2026-07-04): enable Enforce HTTPS.** DNS for
+      `avamartoma.com` is verified; waiting on GitHub to issue the TLS cert. Once
+      the "Enforce HTTPS" checkbox in GitHub → Settings → Pages is clickable, tick
+      it, then confirm https://avamartoma.com loads. If still greyed out after a
+      couple hours, remove + re-add the custom domain to re-trigger the cert.
+
 - [ ] **1. Add project photos.** Every project currently uses generative
       artwork. Pull images from your Google Docs (File → Download → Web Page
       .html, zipped), drop them in the matching `public/images/<slug>/` folder,
@@ -74,9 +80,17 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 ## 🔵 Later / infrastructure
 
-- [ ] **10. Buy a custom domain** and point it at GitHub Pages (or Netlify).
-      Then set `site` + `base: '/'` in `astro.config.mjs` — links use
-      `BASE_URL`, so nothing else changes.
+- [ ] **10. Custom domain — `avamartoma.com`** (bought via Cloudflare Registrar,
+      2026-07-04). `astro.config.mjs` `site` + `public/CNAME` already set (committed).
+      Remaining: add GitHub Pages DNS records (4× A grey-cloud + www CNAME) in
+      Cloudflare, push, set custom domain in GitHub → Settings → Pages, enforce HTTPS.
+
+- [ ] **10a. Free `hello@avamartoma.com` email routing.** Look into a free way to
+      receive (and ideally send) mail on the domain. Cloudflare **Email Routing**
+      is free for *forwarding* (auto-adds MX + SPF) → forwards to Gmail; add a
+      DMARC TXT record too. Sending *from* the address needs more (Gmail "send as"
+      + SMTP relay like Resend free tier, or a paid mailbox). Evaluate the truly-
+      free send path vs. just forwarding.
 
 - [ ] **11. Maybe switch hosting to Netlify** (optional; `netlify.toml` ready).
 
