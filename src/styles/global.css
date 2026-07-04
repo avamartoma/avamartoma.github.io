@@ -115,6 +115,10 @@ p { max-width: 62ch; }
 
 .section { padding-block: clamp(4rem, 12vh, 9rem); }
 
+/* Anchored sections (#work, #about, #contact, #top) should land below the
+   sticky nav (~68px tall) instead of hiding beneath it. */
+:where(section, footer)[id] { scroll-margin-top: 88px; }
+
 .divider {
   height: 1px;
   background: var(--line);
