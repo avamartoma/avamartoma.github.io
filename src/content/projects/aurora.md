@@ -3,6 +3,7 @@ title: "Aurora"
 blurb: "A real-time generative art engine that turns sound into flowing light fields in the browser."
 description: "Aurora is a WebGL-based audio-reactive visualizer that renders GPU particle flow fields responding to live microphone or track input."
 date: 2025-11-02
+draft: true
 tags: ["WebGL", "TypeScript", "Audio", "Shaders"]
 repo: "https://github.com/avamartoma/aurora"
 demo: "https://example.com/aurora"

@@ -27,7 +27,7 @@ const stack = [
     <div class="wrap">
       <header class="sec-head" data-reveal>
         <h2>Selected work</h2>
-        <p class="label">{projects.length} projects — a curated mess</p>
+        <p class="label">{projects.length} project{projects.length === 1 ? '' : 's'} — a curated mess</p>
       </header>
 
       {projects.length === 0 ? (

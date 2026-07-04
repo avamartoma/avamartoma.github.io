@@ -3,6 +3,7 @@ title: "Plotter Poems"
 blurb: "Generative poetry drawn by a pen plotter — code that writes verse, then physically draws it."
 description: "A generative typography project pairing a grammar-based poem generator with G-code output for an AxiDraw pen plotter."
 date: 2025-06-18
+draft: true
 tags: ["Python", "Generative", "Fabrication"]
 repo: "https://github.com/avamartoma/plotter-poems"
 accent: "#a855f7"

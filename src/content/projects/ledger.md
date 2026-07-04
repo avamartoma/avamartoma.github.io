@@ -3,6 +3,7 @@ title: "Ledger"
 blurb: "A tiny, keyboard-first expense tracker with local-first storage and zero accounts."
 description: "Ledger is a fast, offline-first personal finance tracker built as a Rust + WASM app with an SQLite-in-the-browser backend."
 date: 2025-02-09
+draft: true
 tags: ["Rust", "WASM", "SQLite", "UX"]
 repo: "https://github.com/avamartoma/ledger"
 demo: "https://example.com/ledger"
