@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import headshot from '../assets/ava-headshot.jpeg';
+import headshot from '../assets/ava_headshot_sticker.png';
 
 interface Props {
   count: number;
@@ -51,10 +51,11 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
         src={headshot}
         alt="Ava Martoma"
         width={520}
-        height={780}
+        height={802}
         widths={[320, 520]}
-        sizes="(max-width: 860px) 60vw, 340px"
-        quality={82}
+        sizes="(max-width: 860px) 55vw, 340px"
+        quality={90}
+        format="png"
         loading="eager"
       />
     </figure>
@@ -95,13 +96,14 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
   /* Big goofy bubbly name — letters overlap, each carved out with a bg outline */
   .hero__name {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    white-space: nowrap;
     font-family: var(--font-bubble);
     font-weight: 700;
     line-height: 0.95;
     margin-bottom: 1.5rem;
     text-transform: lowercase;
-    font-size: clamp(2.6rem, 10vw, 8.5rem);
+    font-size: clamp(1.9rem, 6.3vw, 5.5rem);
     filter: drop-shadow(0 5px 0 rgba(0, 0, 0, 0.22));
     transition: transform 0.35s var(--ease);
   }
@@ -132,7 +134,6 @@ const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--s
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 14px;
   }
 
   .hero__tagline {
