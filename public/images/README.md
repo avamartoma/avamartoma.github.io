@@ -10,10 +10,19 @@ with a **leading slash** (the `public/` part is dropped in the URL):
 
 ## Photos of yourself
 
-- **About-section portrait:** replace `ava-portrait.svg` here (or add
-  `ava-portrait.jpg`) and update the `src` in `src/pages/index.astro`
-  (search for `ava-portrait`). One line to change.
-- Aim for roughly **1200×1440px**, portrait orientation, for the about photo.
+- **About-section portrait:** the real headshot lives at
+  `src/assets/ava-headshot.jpeg` and is wired into `src/pages/index.astro` via
+  Astro's `<Image>` component, which **auto-optimizes** it at build time
+  (resizes + converts to WebP; the 3 MB original ships as ~20–56 KB).
+- To swap it: replace `src/assets/ava-headshot.jpeg` (keep the name) or update
+  the `import headshot from '../assets/...'` line in `index.astro`.
+- Big source files are fine here — Astro optimizes them. Aim for a portrait
+  orientation photo at least ~1200px on the short side.
+
+> **public/ vs src/assets/:** images in `src/assets/` (imported + used with
+> `<Image>`) are optimized automatically. Images in `public/` (below) are
+> served as-is with **no** optimization — use `public/` only for things that
+> must keep an exact path/filename (favicons, social share images, PDFs).
 
 ## Project cover images
 

@@ -1,8 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import headshot from '../assets/ava-headshot.jpeg';
 
 // Load projects, drop drafts, newest first.
 const projects = (await getCollection('projects'))
@@ -63,14 +65,17 @@ const stack = [
           <span class="about__hi">fully curious.</span>
         </h2>
 
-        <!-- PORTRAIT: swap /images/ava-portrait.svg for your real photo
-             (e.g. /images/me.jpg). See public/images/README.md -->
+        <!-- Real headshot, optimized at build time by astro:assets
+             (auto-resized + WebP). Source lives in src/assets/. -->
         <figure class="about__photo">
-          <img
-            src="/images/ava-portrait.svg"
+          <Image
+            src={headshot}
             alt="Ava Martoma"
-            width="600"
-            height="720"
+            width={720}
+            height={1080}
+            widths={[360, 720]}
+            sizes="(max-width: 760px) 80vw, 360px"
+            quality={80}
             loading="lazy"
           />
         </figure>
