@@ -53,6 +53,19 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       woodworking) were removed with the About section; fold into the iFAQ or
       elsewhere if wanted.
 
+- [ ] **10. Spotify "what I'm listening to" 🎧** — a clickable headphone icon
+      that reveals recent/now-playing tracks from your Spotify.
+      ⚠️ Needs the Spotify Web API (OAuth) + a small serverless function to keep
+      tokens secret — *not* pure static. Simplest paths: a Netlify/Vercel
+      function hitting Spotify's "recently played" endpoint, or a hosted helper
+      (e.g. a "now playing" API). Alternatively, a no-backend fallback: embed a
+      favorite playlist. Pairs well with moving to Netlify/Vercel (see later).
+
+- [ ] **11. "Clubs & activities at Penn" strip** — showcase the things you do at
+      Penn: Women's Club Squash (Co-Captain), Penn Electric Racing, Kesem, etc.
+      Could be a small tag/badge row, a mini-card strip, or folded into the
+      Experience section. (PER is also a project; Kesem is in the timeline.)
+
 ---
 
 ## 🔵 Later / infrastructure
