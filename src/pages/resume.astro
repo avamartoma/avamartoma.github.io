@@ -1,5 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+// No-JS fallback page for the resume popup. Uses Web3Forms (works on GitHub
+// Pages). Paste your access key here too — see src/components/ResumeModal.astro
+// for how to get one (free, from web3forms.com with ava.martoma@gmail.com).
+const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
 
 <Layout
@@ -17,32 +23,18 @@ import Layout from '../layouts/Layout.astro';
         spam — just me, a PDF, and probably a friendly note.
       </p>
 
-      <!--
-        This form uses Netlify Forms (works once deployed on Netlify — see
-        HANDOVER.md §Resume). Netlify detects the form at build time from the
-        static HTML and captures every submission; set an email notification in
-        Netlify → Site settings → Forms so you get pinged. Then you reply with
-        the PDF. No backend or server code required.
-
-        Prefer a different host (Vercel/Pages)? Swap this for Formspree:
-          <form action="https://formspree.io/f/XXXX" method="POST">
-        and remove the netlify attributes.
-      -->
       <form
-        name="resume-request"
+        action="https://api.web3forms.com/submit"
         method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
         class="resume__form"
         data-reveal
         data-reveal-delay="240ms"
       >
-        <!-- Netlify needs this hidden input to match submissions to the form -->
-        <input type="hidden" name="form-name" value="resume-request" />
-        <!-- Honeypot: humans leave this empty; bots fill it -->
-        <p class="resume__hp">
-          <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-        </p>
+        <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+        <input type="hidden" name="subject" value="Someone requested your resume" />
+        <input type="hidden" name="from_name" value="Resume page — avamartoma.com" />
+        <!-- Web3Forms honeypot -->
+        <input type="checkbox" name="botcheck" class="resume__hp" tabindex="-1" autocomplete="off" />
 
         <div class="field">
           <label for="name">Name <span class="opt">(optional)</span></label>
@@ -76,7 +68,7 @@ import Layout from '../layouts/Layout.astro';
         <h2>Got it. ✦</h2>
         <p>
           Thanks — your request landed. I'll get the resume to your inbox soon.
-          In the meantime, <a href="/#work" class="arrow-link">see the work <span>→</span></a>
+          In the meantime, <a href={`${base}#work`} class="arrow-link">see the work <span>→</span></a>
         </p>
       </div>
     </div>
@@ -132,9 +124,9 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-  // Progressive enhancement: submit via fetch so the visitor stays on the page
-  // and sees an inline thank-you. Without JS, the form posts normally to
-  // Netlify (which shows its own success page), so nothing breaks.
+  // Progressive enhancement: submit via fetch (to Web3Forms) so the visitor
+  // stays on the page and sees an inline thank-you. Without JS, the form posts
+  // normally to Web3Forms, which shows its own success page — nothing breaks.
   const form = document.querySelector<HTMLFormElement>('.resume__form');
   const done = document.querySelector<HTMLElement>('[data-done]');
 
@@ -143,14 +135,13 @@ import Layout from '../layouts/Layout.astro';
       e.preventDefault();
       const data = new FormData(form);
       try {
-        await fetch('/', {
+        await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(data as any).toString(),
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(data as any)),
         });
       } catch {
-        // If the fetch fails (e.g. running locally without Netlify), still
-        // show the thank-you so the UX is intact during development.
+        // Offline / blocked — still show the thank-you so the UX is intact.
       }
       form.hidden = true;
       done.hidden = false;

@@ -3,24 +3,23 @@
 // [data-open-resume] element was clicked (the nav "Resume" link), leaving the
 // whole page visible behind it — no dimming backdrop.
 //
-// EMAIL DELIVERY: posts to Netlify Forms (form name "resume-request").
-// To make requests land in ava.martoma@gmail.com, deploy on Netlify and set:
-//   Site settings → Forms → Form notifications → Email notification
-//   → send to: ava.martoma@gmail.com
-// The notification includes the requester's address ("<email> is requesting a
-// resume"). No backend/server code needed. (Other host? Swap for Formspree.)
+// EMAIL DELIVERY — Web3Forms (works on GitHub Pages, no backend needed):
+//   1. Go to https://web3forms.com, enter ava.martoma@gmail.com, and you'll be
+//      emailed a free Access Key.
+//   2. Paste that key into WEB3FORMS_ACCESS_KEY below (replace the placeholder).
+// After that, every submission emails ava.martoma@gmail.com with the requester's
+// address (reply-to is set to them, so you can reply with the PDF directly).
+// Until the real key is added, the popup shows the thank-you but does NOT send.
+const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
 ---
 
 <div id="resume-pop" class="rm" role="dialog" aria-label="Request my resume" hidden>
-  <form
-    name="resume-request"
-    method="POST"
-    data-netlify="true"
-    netlify-honeypot="bot-field"
-    class="rm__form"
-  >
-    <input type="hidden" name="form-name" value="resume-request" />
-    <p class="rm__hp"><label>Leave blank: <input name="bot-field" /></label></p>
+  <form class="rm__form">
+    <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+    <input type="hidden" name="subject" value="Someone requested your resume" />
+    <input type="hidden" name="from_name" value="Resume popup — avamartoma.com" />
+    <!-- Web3Forms honeypot: bots fill this, humans can't see it -->
+    <input type="checkbox" name="botcheck" class="rm__hp" tabindex="-1" autocomplete="off" />
 
     <h2 class="rm__title">Drop your email &amp; I'll send it to you.</h2>
 
@@ -179,13 +178,19 @@
       e.preventDefault();
       const data = new FormData(form);
       try {
-        await fetch('/', {
+        await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(data as any).toString(),
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(Object.fromEntries(data as any)),
         });
+        // We show the thank-you regardless of the response so the UX stays
+        // smooth. Delivery only actually happens once a real Web3Forms access
+        // key is set in ResumeModal.astro (WEB3FORMS_ACCESS_KEY).
       } catch {
-        // Local dev has no Netlify backend; still show success for the UX.
+        // Offline / blocked — still show success for the UX.
       }
       if (form) form.hidden = true;
       if (done) done.hidden = false;
