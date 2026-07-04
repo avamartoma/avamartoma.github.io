@@ -10,7 +10,7 @@
 | **Status** | 🟢 Building clean · dev server verified · committed, **not pushed** |
 | **Repo** | `git@github.com:avamartoma/personal-website.git` (personal GitHub) |
 | **Branch** | `main` |
-| **Last commit** | `69b355e` — feat: Build artsy-engineer project catalogue site |
+| **Last commit** | `docs`/`feat` on 2026-07-04 — resume capture + photo setup (see §10) |
 | **Stack** | Astro 5.18.2 (static), vanilla JS/CSS, no runtime deps |
 | **Local dev** | http://localhost:4321/ |
 | **Last updated** | 2026-07-04 |
@@ -147,12 +147,16 @@ Cover images go in `public/images/` and are referenced as `/images/name.jpg`.
 
 ## 8. Open items / backlog
 
-- [ ] `git push` to publish the commit to GitHub (owner action)
+- [ ] **Add real projects** (replace samples aurora/plotter-poems/ledger)
+- [ ] **Resume:** deploy to Netlify + set Forms email notification so requests
+      reach Ava (Site settings → Forms → Form notifications). Alt: Formspree.
+- [ ] **Add real photo:** replace `public/images/ava-portrait.svg` with a real
+      photo and update `src` in `index.astro` (see `public/images/README.md`)
+- [ ] Decide on **Koberger-style illustrated homepage** (see §11) — Ava to draw
+- [ ] `git push` to publish commits to GitHub (owner action)
 - [ ] Set real `site:` URL in `astro.config.mjs` before deploying
 - [ ] Connect a deploy (Netlify recommended — `netlify.toml` is ready)
-- [ ] Replace sample projects with real ones
-- [ ] Add real cover images (or keep generative artwork)
-- [ ] Optional: Figma moodboard → refine palette/type/layout
+- [ ] Optional: iFAQ personality section (Elly-inspired)
 - [ ] Optional: decide on Astro 7 upgrade
 - [ ] If deploying to a GitHub *project* page, set `base: '/personal-website'`
 
@@ -189,7 +193,35 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
+- **2026-07-04 (2)** — Added `/resume` email-capture page (Netlify Forms +
+  progressive-enhancement AJAX inline success), added Resume to nav, added
+  About-section portrait with on-brand placeholder (`public/images/ava-portrait.svg`)
+  and `public/images/README.md` photo guide. Build verified.
 - **2026-07-04** — Initial build. Scaffolded Astro site; design system; hero
   canvas; project cards + detail pages; 404; sample projects; Netlify + Pages
   deploy configs; README. Bumped Astro 5.13.0 → 5.18.2. Committed `69b355e`.
   Dev server verified. This handover doc created.
+
+---
+
+## 11. Design directions & inspiration
+
+Friends' sites Ava likes (studied 2026-07-04):
+- **gkoberger.com** — ⭐ Ava LOVES this homepage. It's a hand-drawn, explorable
+  illustrated scene: clickable objects open overlay panels ("Stuff I've Built",
+  "Timeline", "100 Things I Love", etc.), `esc` closes. Whimsical, doodle-heavy,
+  deeply personal microcopy. Ava can produce the drawings herself.
+- **ellypeng.com** (Ava's fave of the four friends) — personality-forward, artsy.
+  Signature element: **"iFAQ" (infrequently asked questions)** — playful personal
+  Q&A. Big repeated name typography, warm first-person voice, art gallery.
+- **riasaheta.com** — clean engineer structure: Work / Journal / About / Resume;
+  project cards with status + year + tags; a build-notes "Journal".
+- **sirobles.com** — maker energy: Projects, Build Logs, Download Resume, Hobbies.
+- **ronaksuchindra.com** — JS SPA, couldn't scrape; revisit manually.
+
+**Proposed personality levers (not yet built):**
+1. Koberger-style **illustrated explorable homepage** — biggest idea. Build an
+   interactive hotspot layer over Ava's drawing(s) + overlay panels. Would be a
+   new homepage variant; keep current grid as `/work` fallback.
+2. **iFAQ section** — low-effort, high-personality; content in Markdown/data.
+3. First-person voice pass + big-type name treatment.
