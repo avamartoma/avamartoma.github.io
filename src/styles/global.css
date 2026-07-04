@@ -105,6 +105,33 @@ p { max-width: 62ch; }
   color: var(--muted);
 }
 
+/* ---- In-progress banner ------------------------------------- */
+.site-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: linear-gradient(90deg, var(--signal), var(--signal-2), var(--signal-3));
+  padding: 0.55em 1rem;
+  text-align: center;
+}
+.site-banner__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bg);
+  animation: banner-pulse 1.6s ease-in-out infinite;
+}
+@keyframes banner-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+
 /* ---- Layout helpers ----------------------------------------- */
 .wrap {
   width: 100%;
