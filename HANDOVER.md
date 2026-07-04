@@ -196,6 +196,8 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
+- **2026-07-04 (8)** — Made the name prominent: added bubbly rounded font (Fredoka, `--font-bubble`); hero now leads with a giant lowercase Holi-gradient **ava martoma** (playful hover tilt), with 'I build strange, useful things.' demoted to tagline; nav brand uses the bubbly font too.
+
 - **2026-07-04 (7)** — Slimmed footer: removed the "Say hello / Let's make something." lead; now a compact single row (LinkedIn · GitHub · Email + copyright).
 - **2026-07-04 (6)** — **Holi color theme.** Kept the black base; retuned accents
   from orange/blue to a purple→blue core with pink/green/yellow hints

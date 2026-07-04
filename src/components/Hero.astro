@@ -10,22 +10,24 @@ const { count } = Astro.props;
 
   <div class="wrap hero__inner">
     <p class="label hero__eyebrow" data-reveal>
-      Ava Martoma · Artsy Engineer · {count} projects & counting
+      Artsy engineer · {count} projects &amp; counting
     </p>
 
-    <h1 class="hero__title" data-reveal data-reveal-delay="80ms">
-      I build<br />
-      <span class="hero__accent">strange, useful</span><br />
-      things.
+    <h1 class="hero__name" data-reveal data-reveal-delay="60ms">
+      <span>ava</span><span>martoma</span>
     </h1>
 
-    <p class="hero__lede" data-reveal data-reveal-delay="160ms">
+    <p class="hero__tagline" data-reveal data-reveal-delay="140ms">
+      I build <span class="hero__accent">strange, useful</span> things.
+    </p>
+
+    <p class="hero__lede" data-reveal data-reveal-delay="200ms">
       A catalogue of experiments living at the seam between design and
       engineering — tools, toys, generative art, and the occasional
       beautiful mistake.
     </p>
 
-    <div class="hero__cta" data-reveal data-reveal-delay="240ms">
+    <div class="hero__cta" data-reveal data-reveal-delay="260ms">
       <a href="#work" class="btn btn--solid">View the work ↓</a>
       <a href="#about" class="btn">About me</a>
     </div>
@@ -57,8 +59,39 @@ const { count } = Astro.props;
     z-index: 1;
     padding-block: 6rem;
   }
-  .hero__eyebrow { margin-bottom: 1.5rem; }
-  .hero__title { margin-bottom: 1.75rem; }
+  .hero__eyebrow { margin-bottom: 1.25rem; }
+
+  /* Big goofy bubbly name — the star of the page */
+  .hero__name {
+    font-family: var(--font-bubble);
+    font-weight: 700;
+    line-height: 0.86;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    text-transform: lowercase;
+  }
+  .hero__name span {
+    display: block;
+    font-size: clamp(3.75rem, 16vw, 13rem);
+    background: linear-gradient(105deg, var(--signal) 0%, var(--signal-2) 52%, var(--signal-3) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* playful drop so the letters feel like they pop off the page */
+    filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.25));
+    transition: transform 0.35s var(--ease);
+  }
+  .hero__name span:nth-child(2) { margin-left: 0.06em; }
+  .hero__name:hover span:nth-child(1) { transform: rotate(-1.5deg) translateY(-2px); }
+  .hero__name:hover span:nth-child(2) { transform: rotate(1.5deg) translateX(6px); }
+
+  .hero__tagline {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.35rem, 3.2vw, 2.1rem);
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
   .hero__accent {
     background: linear-gradient(105deg, var(--signal) 0%, var(--signal-2) 58%, var(--signal-3) 100%);
     -webkit-background-clip: text;
