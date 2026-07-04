@@ -62,6 +62,18 @@ const stack = [
           Half designer, half engineer,
           <span class="about__hi">fully curious.</span>
         </h2>
+
+        <!-- PORTRAIT: swap /images/ava-portrait.svg for your real photo
+             (e.g. /images/me.jpg). See public/images/README.md -->
+        <figure class="about__photo">
+          <img
+            src="/images/ava-portrait.svg"
+            alt="Ava Martoma"
+            width="600"
+            height="720"
+            loading="lazy"
+          />
+        </figure>
       </div>
 
       <div class="about__col" data-reveal data-reveal-delay="120ms">
@@ -124,6 +136,23 @@ const stack = [
   .about__hi {
     color: var(--signal);
   }
+  .about__photo {
+    margin-top: 2rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    max-width: 360px;
+    aspect-ratio: 5 / 6;
+  }
+  .about__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.95) contrast(1.02);
+    transition: transform 0.6s var(--ease);
+  }
+  .about__photo:hover img { transform: scale(1.03); }
   .about__col p { margin-bottom: 1.25rem; color: var(--ink-soft); }
 
   .stack { margin-top: 2rem; }

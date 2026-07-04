@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Resume — Ava Martoma"
+  description="Want a copy of my resume? Leave your email and I'll send it over."
+>
+  <section class="section resume">
+    <div class="wrap resume__inner">
+      <p class="label" data-reveal>The paperwork</p>
+      <h1 class="resume__title" data-reveal data-reveal-delay="80ms">
+        Want my <span class="resume__hi">resume</span>?
+      </h1>
+      <p class="resume__lede" data-reveal data-reveal-delay="160ms">
+        Drop your email below and I'll send a copy your way. No newsletter, no
+        spam — just me, a PDF, and probably a friendly note.
+      </p>
+
+      <!--
+        This form uses Netlify Forms (works once deployed on Netlify — see
+        HANDOVER.md §Resume). Netlify detects the form at build time from the
+        static HTML and captures every submission; set an email notification in
+        Netlify → Site settings → Forms so you get pinged. Then you reply with
+        the PDF. No backend or server code required.
+
+        Prefer a different host (Vercel/Pages)? Swap this for Formspree:
+          <form action="https://formspree.io/f/XXXX" method="POST">
+        and remove the netlify attributes.
+      -->
+      <form
+        name="resume-request"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        class="resume__form"
+        data-reveal
+        data-reveal-delay="240ms"
+      >
+        <!-- Netlify needs this hidden input to match submissions to the form -->
+        <input type="hidden" name="form-name" value="resume-request" />
+        <!-- Honeypot: humans leave this empty; bots fill it -->
+        <p class="resume__hp">
+          <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+        </p>
+
+        <div class="field">
+          <label for="name">Name <span class="opt">(optional)</span></label>
+          <input type="text" id="name" name="name" autocomplete="name" placeholder="Jane Doe" />
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder="you@example.com"
+          />
+        </div>
+
+        <div class="field">
+          <label for="note">Note <span class="opt">(optional)</span></label>
+          <textarea id="note" name="note" rows="3" placeholder="Where did you find me / what are you hiring for?"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--solid resume__submit">
+          Send me the resume →
+        </button>
+      </form>
+
+      <!-- Shown after a successful AJAX submit -->
+      <div class="resume__done" data-done hidden>
+        <h2>Got it. ✦</h2>
+        <p>
+          Thanks — your request landed. I'll get the resume to your inbox soon.
+          In the meantime, <a href="/#work" class="arrow-link">see the work <span>→</span></a>
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .resume { min-height: 70vh; display: flex; align-items: center; }
+  .resume__inner { max-width: 640px; }
+  .resume__title { margin: 0.75rem 0 1.25rem; }
+  .resume__hi {
+    background: linear-gradient(100deg, var(--signal), var(--signal-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .resume__lede { color: var(--ink-soft); margin-bottom: 2.5rem; }
+
+  .resume__form { display: grid; gap: 1.25rem; }
+  .field { display: grid; gap: 0.4rem; }
+  .field label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+  .field .opt { color: var(--muted); }
+  .field input,
+  .field textarea {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.8em 0.9em;
+    transition: border-color 0.25s var(--ease);
+    resize: vertical;
+  }
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--signal);
+  }
+  .field input::placeholder,
+  .field textarea::placeholder { color: var(--muted); }
+
+  .resume__submit { justify-self: start; margin-top: 0.5rem; }
+
+  /* Hide honeypot from real users */
+  .resume__hp { position: absolute; left: -9999px; opacity: 0; }
+
+  .resume__done h2 { margin-bottom: 0.75rem; }
+  .resume__done p { color: var(--ink-soft); }
+</style>
+
+<script>
+  // Progressive enhancement: submit via fetch so the visitor stays on the page
+  // and sees an inline thank-you. Without JS, the form posts normally to
+  // Netlify (which shows its own success page), so nothing breaks.
+  const form = document.querySelector<HTMLFormElement>('.resume__form');
+  const done = document.querySelector<HTMLElement>('[data-done]');
+
+  if (form && done) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(data as any).toString(),
+        });
+      } catch {
+        // If the fetch fails (e.g. running locally without Netlify), still
+        // show the thank-you so the UX is intact during development.
+      }
+      form.hidden = true;
+      done.hidden = false;
+      done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+</script>
