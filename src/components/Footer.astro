@@ -3,11 +3,11 @@ const year = new Date().getFullYear();
 const socials = [
   { href: 'https://www.linkedin.com/in/avamartoma/', label: 'LinkedIn' },
   { href: 'https://github.com/avamartoma', label: 'GitHub' },
-  { href: 'mailto:ava.martoma@gmail.com', label: 'Email' },
+  { href: 'mailto:hello@avamartoma.com', label: 'Email' },
 ];
 
 // Same free Web3Forms key as the resume popup — get one at web3forms.com
-// (enter ava.martoma@gmail.com) and paste it here + in ResumeModal.astro.
+// (register with hello@avamartoma.com) and paste it here + in ResumeModal.astro.
 const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
 ---
 
@@ -36,7 +36,7 @@ const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
     <form class="foot__form">
       <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
       <input type="hidden" name="subject" value="New message from your website" />
-      <input type="hidden" name="from_name" value="Contact form — avamartoma.github.io" />
+      <input type="hidden" name="from_name" value="Contact form — avamartoma.com" />
       <input type="checkbox" name="botcheck" class="foot__hp" tabindex="-1" autocomplete="off" />
 
       <div class="foot__row">
