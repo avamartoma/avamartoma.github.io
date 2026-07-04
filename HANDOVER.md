@@ -196,6 +196,12 @@ any Amazon internal tooling. Treat it as a normal open-source-style repo.
 
 ## 10. Changelog
 
+- **2026-07-04 (11)** — Wrote LinkedIn Career Discovery project from the local
+  LinkedinProject docs (Explore page + full-flow integration; Next/FastAPI/Claude;
+  dated 2026-06-24). Added multi-select (OR) tag filter on a new **/work** page
+  showing all projects; homepage now shows a 6-project selection + "See all N →".
+  Full "Month Day, Year" dates on cards/detail pages.
+
 - **2026-07-04 (10)** — Switched to **root user-page** serving: removed `base`
   from astro.config (site stays `avamartoma.github.io`); all links now root-
   relative via BASE_URL. Requires renaming the GitHub repo to
