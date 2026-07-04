@@ -14,13 +14,36 @@ const projects = (await getCollection('projects'))
   .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const stack = [
-  'TypeScript', 'Python', 'Rust', 'WebGL / Canvas',
-  'Astro', 'Three.js', 'Figma', 'Fabrication',
-];
-
 // Homepage shows a selection; the full, filterable list lives on /work.
 const selection = projects.slice(0, 6);
+
+// Real skills (from resume).
+const stack = [
+  'Python', 'R', 'JavaScript', 'Arduino',
+  'Fusion 360', '3D Printing', 'Laser Cutting',
+  'Photoshop', 'Illustrator', 'Woodworking',
+];
+
+// A selection of honors (non-private).
+const honors = [
+  'Amazon Future Engineer Scholar',
+  'LinkedIn Scholar',
+  'Coca-Cola Scholar',
+  'Chick-fil-A Scholar',
+  'NCWIT Aspirations in Computing — NJ Affiliate Winner',
+  'Calvin Coolidge Senator',
+  'MITES Director\u2019s Award',
+  'T-Mobile Changemaker Challenge — Grand Prize',
+];
+
+const publications = [
+  { title: 'Drag on Passenger Cars: CFD Analysis of Body Design Using ANSYS Fluent', venue: 'Fluids', year: 'In progress' },
+  { title: 'Epidemiologic Analysis of a Postelimination Measles Outbreak in Central Ohio, 2022\u20132023', venue: 'JAMA Network', year: '2024' },
+  { title: 'The Puzzle of a Silent American Epidemic (graphic)', venue: 'AAP Pediatrics in Review', year: '2022' },
+  { title: 'Caring for Children of Incarcerated Parents (graphic)', venue: 'AAP Pediatrics in Review', year: '2022' },
+  { title: 'Quarantine Fatigue vs. Escalating Prison Lockdowns', venue: 'Prison Legal News', year: '2020' },
+  { title: 'Tips for a Successful Visit with Your Incarcerated Parent', venue: 'Rise News', year: '2019' },
+];
 ---
 
 <Layout>
@@ -84,6 +107,7 @@ const selection = projects.slice(0, 6);
           Half designer, half engineer,
           <span class="about__hi">fully curious.</span>
         </h2>
+        <p class="about__cred">Hardware Engineer @ Amazon Leo · UPenn M&amp;T · MechE × Wharton</p>
 
         <!-- Real headshot, optimized at build time by astro:assets
              (auto-resized + WebP). Source lives in src/assets/. -->
@@ -103,15 +127,29 @@ const selection = projects.slice(0, 6);
 
       <div class="about__col" data-reveal data-reveal-delay="120ms">
         <p>
-          I make things that sit between the studio and the terminal —
-          interfaces, generative visuals, small tools, and physical builds.
-          I care about the texture of software: how it feels, moves, and
-          responds, not just what it does.
+          I'm a <strong>Mechanical Engineering &amp; Economics</strong> student at
+          the University of Pennsylvania, in the <strong>Jerome Fisher Program in
+          Management &amp; Technology (M&amp;T)</strong>. I build at the seam
+          between hardware and design — circuit boards, brushless drivetrains,
+          CAD and fabrication, woodworking, and the occasional generative-art
+          rabbit hole.
         </p>
         <p>
-          This site is a living notebook. Some entries are polished, some
-          are experiments I never finished. That's the point.
+          Right now I'm a <strong>Hardware Development Engineer</strong> intern on
+          Amazon's Project Kuiper (Leo). Before Penn I co-founded a nonprofit for
+          children of incarcerated parents and spent years in research and
+          justice work. I care about the texture of things — how they feel, move,
+          and hold up — whether that's software or a hand-veneered desk.
         </p>
+        <p class="about__play">Off the clock: skiing, squash, golf, running, and woodworking.</p>
+
+        <div class="stack">
+          <p class="label">Education</p>
+          <p class="about__edu">
+            University of Pennsylvania — B.S. Mechanical Engineering &amp; B.S.
+            Economics, Jerome Fisher M&amp;T Program. <span>Expected 2029.</span>
+          </p>
+        </div>
 
         <div class="stack">
           <p class="label">Tools I reach for</p>
@@ -119,6 +157,32 @@ const selection = projects.slice(0, 6);
             {stack.map((s) => <li>{s}</li>)}
           </ul>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ============ HONORS + PUBLICATIONS ============ -->
+  <section class="section" id="recognition">
+    <div class="wrap recog">
+      <div class="recog__col" data-reveal>
+        <p class="label">Selected honors</p>
+        <ul class="recog__honors">
+          {honors.map((h) => <li>{h}</li>)}
+        </ul>
+      </div>
+
+      <div class="recog__col" data-reveal data-reveal-delay="120ms">
+        <p class="label">Publications</p>
+        <ul class="recog__pubs">
+          {publications.map((p) => (
+            <li>
+              <span class="recog__pub-title">{p.title}</span>
+              <span class="recog__pub-meta">{p.venue} · {p.year}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </section>
@@ -207,5 +271,56 @@ const selection = projects.slice(0, 6);
 
   @media (max-width: 760px) {
     .about { grid-template-columns: 1fr; }
+  }
+
+  /* credential line + bio extras */
+  .about__cred {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-top: 1rem;
+    max-width: 40ch;
+  }
+  .about__col strong { color: var(--ink); font-weight: 500; }
+  .about__play { color: var(--ink); }
+  .about__edu { color: var(--ink-soft); font-size: 0.92rem; margin-top: 0.5rem; }
+  .about__edu span { color: var(--muted); }
+
+  /* Honors + Publications */
+  .recog {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+  .recog__honors,
+  .recog__pubs { list-style: none; margin-top: 1rem; display: grid; gap: 0.75rem; }
+  .recog__honors li {
+    font-size: 0.92rem;
+    color: var(--ink);
+    padding-left: 1rem;
+    position: relative;
+  }
+  .recog__honors li::before {
+    content: '✦';
+    position: absolute; left: 0;
+    color: var(--signal);
+  }
+  .recog__pubs li {
+    display: grid;
+    gap: 0.15rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .recog__pub-title { font-size: 0.92rem; color: var(--ink); line-height: 1.4; }
+  .recog__pub-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 760px) {
+    .recog { grid-template-columns: 1fr; }
   }
 </style>
