@@ -41,6 +41,11 @@ you go. (Deeper context for any item lives in [`HANDOVER.md`](./HANDOVER.md).)
     a crisp SVG signature (can animate as if being drawn). Replaces the current
     bubble font in the hero + nav.
 
+- [ ] **4b. Make a personal logo.**
+  - Design your own mark to replace the placeholder ◐ glyph (nav + favicon).
+    Can be hand-drawn (Procreate → SVG) or code-generated. Would also become
+    the browser tab icon and social-share image.
+
 - [ ] **5. Add personality sections.**
   - An Elly-style **"iFAQ"** (playful Q&A) — high impact, low effort.
   - A first-person voice pass across the About/hero copy.
