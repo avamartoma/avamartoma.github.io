@@ -1,34 +1,63 @@
 ---
+import { Image } from 'astro:assets';
+import headshot from '../assets/ava-headshot.jpeg';
+
 interface Props {
   count: number;
 }
 const { count } = Astro.props;
+
+// Split the name into letters so they can overlap and each carry a color.
+const nameLetters = [...'ava martoma'];
+const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--signal-4)', 'var(--signal-5)'];
 ---
 
 <section class="hero" id="top">
   <canvas class="hero__canvas" aria-hidden="true"></canvas>
 
   <div class="wrap hero__inner">
-    <p class="label hero__eyebrow" data-reveal>
-      Artsy engineer · {count} project{count === 1 ? '' : 's'} &amp; counting
-    </p>
+    <div class="hero__text">
+      <p class="label hero__eyebrow" data-reveal>
+        Artsy engineer · {count} project{count === 1 ? '' : 's'} &amp; counting
+      </p>
 
-    <h1 class="hero__name" data-reveal data-reveal-delay="60ms">ava martoma</h1>
+      <h1 class="hero__name" data-reveal data-reveal-delay="60ms" aria-label="ava martoma">
+        {nameLetters.map((ch, i) => (
+          ch === ' '
+            ? <span class="hero__space" aria-hidden="true"> </span>
+            : <span class="hero__ltr" aria-hidden="true" style={`color:${palette[i % palette.length]}`}>{ch}</span>
+        ))}
+      </h1>
 
-    <p class="hero__tagline" data-reveal data-reveal-delay="140ms">
-      design <span class="hero__x">×</span> engineering <span class="hero__x">×</span> maker
-    </p>
+      <p class="hero__tagline" data-reveal data-reveal-delay="140ms">
+        design <span class="hero__x">×</span> engineering <span class="hero__x">×</span> maker
+      </p>
 
-    <p class="hero__lede" data-reveal data-reveal-delay="200ms">
-      A catalogue of experiments living at the seam between design and
-      engineering — tools, toys, generative art, and the occasional
-      beautiful mistake.
-    </p>
+      <p class="hero__lede" data-reveal data-reveal-delay="200ms">
+        A catalogue of experiments living at the seam between design and
+        engineering — tools, toys, generative art, and the occasional
+        beautiful mistake.
+      </p>
 
-    <div class="hero__cta" data-reveal data-reveal-delay="260ms">
-      <a href="#work" class="btn btn--solid">View the work ↓</a>
-      <a href="#about" class="btn">About me</a>
+      <div class="hero__cta" data-reveal data-reveal-delay="260ms">
+        <a href="#work" class="btn btn--solid">View the work ↓</a>
+        <a href="#about" class="btn">About me</a>
+      </div>
     </div>
+
+    <!-- Headshot sticker (top-right). Swap src for the cutout PNG when ready. -->
+    <figure class="hero__photo" data-reveal data-reveal-delay="200ms">
+      <Image
+        src={headshot}
+        alt="Ava Martoma"
+        width={520}
+        height={780}
+        widths={[320, 520]}
+        sizes="(max-width: 860px) 60vw, 340px"
+        quality={82}
+        loading="eager"
+      />
+    </figure>
   </div>
 
   <div class="hero__scroll label" aria-hidden="true">
@@ -56,27 +85,55 @@ const { count } = Astro.props;
     position: relative;
     z-index: 1;
     padding-block: 6rem;
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
   }
   .hero__eyebrow { margin-bottom: 1.25rem; }
 
-  /* Big goofy bubbly name — the star of the page, on one line */
+  /* Big goofy bubbly name — letters overlap, each carved out with a bg outline */
   .hero__name {
+    display: flex;
+    flex-wrap: wrap;
     font-family: var(--font-bubble);
     font-weight: 700;
     line-height: 0.95;
-    letter-spacing: -0.01em;
     margin-bottom: 1.5rem;
     text-transform: lowercase;
-    white-space: nowrap;
-    font-size: clamp(2.6rem, 11.5vw, 9rem);
-    background: linear-gradient(105deg, var(--signal) 0%, var(--signal-2) 52%, var(--signal-3) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    font-size: clamp(2.6rem, 10vw, 8.5rem);
     filter: drop-shadow(0 5px 0 rgba(0, 0, 0, 0.22));
     transition: transform 0.35s var(--ease);
   }
   .hero__name:hover { transform: rotate(-1deg) translateY(-3px); }
+  .hero__ltr {
+    display: inline-block;
+    margin-left: -0.06em;          /* pull letters together so they overlap */
+    /* bg-colored outline drawn behind the fill so an overlapping letter
+       "digs into" the one beneath it, keeping each curve readable */
+    -webkit-text-stroke: 0.055em var(--bg);
+    paint-order: stroke fill;
+    transition: transform 0.25s var(--ease);
+  }
+  .hero__ltr:first-child { margin-left: 0; }
+  .hero__name:hover .hero__ltr { transform: translateY(-2px); }
+  .hero__space { width: 0.32em; }
+
+  .hero__photo {
+    position: relative;
+    justify-self: center;
+    max-width: 340px;
+    transform: rotate(2.5deg);
+    filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45));
+    transition: transform 0.4s var(--ease);
+  }
+  .hero__photo:hover { transform: rotate(-1.5deg) scale(1.02); }
+  .hero__photo img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 14px;
+  }
 
   .hero__tagline {
     font-family: var(--font-display);
@@ -125,6 +182,20 @@ const { count } = Astro.props;
     40% { transform: scaleY(1); transform-origin: top; }
     60% { transform: scaleY(1); transform-origin: bottom; }
     100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* Stack the hero on narrow screens: photo above the text */
+  @media (max-width: 860px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      padding-block: 5rem 4rem;
+    }
+    .hero__photo {
+      grid-row: 1;
+      justify-self: start;
+      max-width: 190px;
+      margin-bottom: 0.5rem;
+    }
   }
 </style>
 
