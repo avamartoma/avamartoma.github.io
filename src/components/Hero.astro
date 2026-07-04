@@ -16,7 +16,7 @@ const { count } = Astro.props;
     <h1 class="hero__name" data-reveal data-reveal-delay="60ms">ava martoma</h1>
 
     <p class="hero__tagline" data-reveal data-reveal-delay="140ms">
-      I build <span class="hero__accent">strange, useful</span> things.
+      design <span class="hero__x">×</span> engineering <span class="hero__x">×</span> maker
     </p>
 
     <p class="hero__lede" data-reveal data-reveal-delay="200ms">
@@ -84,6 +84,11 @@ const { count } = Astro.props;
     font-size: clamp(1.35rem, 3.2vw, 2.1rem);
     letter-spacing: -0.01em;
     margin-bottom: 1.5rem;
+  }
+  .hero__x {
+    color: var(--signal);
+    font-weight: 400;
+    padding: 0 0.12em;
   }
   .hero__accent {
     background: linear-gradient(105deg, var(--signal) 0%, var(--signal-2) 58%, var(--signal-3) 100%);
