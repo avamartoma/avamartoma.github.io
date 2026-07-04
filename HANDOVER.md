@@ -7,7 +7,7 @@
 | | |
 |---|---|
 | **Project** | Ava Martoma — personal website / project catalogue |
-| **Live site** | 🟢 **https://avamartoma.github.io/** (GitHub Pages) |
+| **Live site** | 🟢 **https://avamartoma.com** (custom domain, GitHub Pages; www→apex + HTTPS enforced) |
 | **Repo** | `git@github.com:avamartoma/avamartoma.github.io.git` (personal GitHub, **public**) |
 | **Branch** | `main` — every `git push` auto-deploys via GitHub Actions (~1–2 min) |
 | **Stack** | Astro 5.18.2 (static, root, no `base`), vanilla JS/CSS, no runtime deps |
@@ -39,12 +39,14 @@ The site is **live and looks polished**. Structure top-to-bottom on the homepage
 **in-progress banner → nav → hero (the "about") → Work selection → Experience
 timeline → Honors + Publications → footer (contact form)**.
 
-- ✅ Live at the root domain; auto-deploys on push.
+- ✅ Live at **https://avamartoma.com** (custom domain, HTTPS); auto-deploys on push.
 - ✅ 10 real projects; Experience timeline (12 roles) + Education; Honors + Publications.
 - ✅ Hero: AA/M logo, overlapping bubbly name, headshot **sticker**, tagline, bio, tools.
 - ✅ "Website in progress" banner (below the nav).
+- ✅ **Email:** `hello@avamartoma.com` + catch-all receive → Gmail (Cloudflare Email Routing).
+- ✅ **Forms deliver** — Web3Forms key live in all three forms (→ `hello@avamartoma.com`).
 - ⏳ **Project photos** not added yet (generative artwork stands in).
-- ⏳ **Forms don't deliver yet** — need a Web3Forms key (see §6).
+- ⏳ **Email *sending*** (reply *as* `hello@`) not set up — needs a free SMTP relay (see §6 / `TODO.md` 10a).
 - ⏳ Backlog in `TODO.md` (photos, iFAQ, Spotify-live, Living page, etc.).
 
 ---
@@ -129,10 +131,19 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
 
 ## 6. Known pending / gotchas
 
-- **Forms need a key:** resume popup + footer contact post to **Web3Forms** but
-  won't deliver until a free key is pasted into `WEB3FORMS_ACCESS_KEY` in THREE
-  files: `ResumeModal.astro`, `resume.astro`, `Footer.astro`. Get it at
-  web3forms.com (enter ava.martoma@gmail.com). Until then they show "Sent ✦".
+- **Forms are LIVE (Web3Forms):** footer contact + both resume forms deliver to
+  `hello@avamartoma.com` (→ Gmail). Access key `9cffc9b5-…` lives in
+  `WEB3FORMS_ACCESS_KEY` in `Footer.astro`, `ResumeModal.astro`, `resume.astro`
+  (a Web3Forms key is a public form ID — safe in a public repo). Delivery only
+  fires from the deployed domain, not `localhost`. Distinct subject per form;
+  submitter's email is the reply-to.
+- **Email — receive works, sending doesn't (yet):** Cloudflare Email Routing
+  forwards `hello@avamartoma.com` + a catch-all to Gmail. To *reply as* `hello@`
+  you need a free SMTP relay (Brevo/SMTP2GO) + Gmail "send as" — deferred in
+  `TODO.md` 10a. NOTE the DNS: Cloudflare's auto-added anti-spoofing lockdown
+  records (`v=spf1 -all`, wildcard null `*._domainkey`) were DELETED to let Email
+  Routing provision; a strict `_dmarc p=reject` remains and must be relaxed to
+  `p=none` before send-as will deliver.
 - **Amazon (Kuiper)** timeline card has placeholder bullets; a few project dates
   are estimates (CAD Bridge, CAD & Woodworking Studies, 3 marquetry pieces).
 - **Privacy:** no home address / phone / birthday on the site. The LinkedIn data
@@ -145,8 +156,8 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
 ## 7. Deploy
 
 Push to `main` → GitHub Actions builds & deploys → live at
-https://avamartoma.github.io/ in ~1–2 min. Custom domain later: set `site` +
-`base:'/'` in `astro.config.mjs` (links use `BASE_URL`, so nothing else changes).
+**https://avamartoma.com** in ~1–2 min. The custom domain is bound via
+`public/CNAME` (+ `site` in `astro.config.mjs`); DNS is on Cloudflare.
 
 ### Custom domain plan — **Cloudflare Registrar** (decided 2026-07-04)
 
@@ -185,7 +196,7 @@ Steps when Ava buys the domain:
 ## 9. Agent re-onboarding brief
 
 You're working on **Ava's personal website** — a static Astro site on her personal
-GitHub, live at **avamartoma.github.io**. Ground rules:
+GitHub, live at **avamartoma.com**. Ground rules:
 1. **Static site**, no backend. Don't add SSR/servers without asking.
 2. **Keep deps minimal** — interactivity is vanilla JS/CSS by choice.
 3. **Content = Markdown** in `src/content/projects/`; experience/education are arrays
@@ -203,6 +214,15 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 
 ## 10. Changelog (condensed, newest first)
 
+- **2026-07-04 (later)** — **Custom domain + email live.** Bought `avamartoma.com`
+  at Cloudflare Registrar; set Astro `site` + added `public/CNAME`; DNS (4× A grey
+  + www CNAME) + GitHub Pages custom domain + Enforce HTTPS → **live at
+  https://avamartoma.com** (www→apex + http→https verified). Set up Cloudflare
+  Email Routing: `hello@avamartoma.com` + catch-all → Gmail (deleted Cloudflare's
+  auto anti-spoofing lockdown records that were blocking it). Turned on Web3Forms
+  delivery (key → `hello@`) across all three forms — tested working. Public
+  contact address changed to `hello@avamartoma.com`; scrubbed personal Gmail from
+  repo. Email *sending* (send-as via SMTP relay) deferred → `TODO.md` 10a.
 - **2026-07-04** — Big session: renamed repo → root domain (live);
   two-column hero (AA/M logo, overlapping bubble name, headshot sticker, credential
   eyebrow, "Half designer…" tagline, first-person bio, Tools chips); moved About
