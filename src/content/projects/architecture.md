@@ -11,6 +11,8 @@ accentAlt: "#4361ee"
 
 ## Overview
 
+*Built with Aster Dean.*
+
 An **architecture design capstone** I did for a summer program. I created the
 mock-up in **Rhino3D** (I no longer have a license, so the original files aren't
 available).
