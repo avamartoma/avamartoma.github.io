@@ -30,6 +30,13 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
   - Confirm estimated dates: **CAD Bridge**, **CAD & Woodworking Studies**, and
     the 3 marquetry pieces.
 
+- [ ] **3b. Get indexed by Google (the SEO accelerator).** The on-site SEO is done
+      (title `Ava Martoma`, JSON-LD, sitemap, robots, RSS). To actually show up when
+      someone searches "Ava Martoma": verify `avamartoma.com` in **Google Search
+      Console** (DNS TXT via Cloudflare, or the Cloudflare integration) and submit
+      `https://avamartoma.com/sitemap-index.xml`. Optionally repeat in **Bing
+      Webmaster Tools**. Browser task on Ava's account — see `HANDOVER.md` §6.
+
 ---
 
 ## 🟡 Personality & polish
@@ -114,6 +121,13 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [ ] **14. Animated hand-drawn sprites** (Elly-style hover animation) — draw
       2–4 frames in Procreate; Kiro wires the frame-swap on hover.
 
+- [ ] **15. Social share image (`og:image`).** Links shared to LinkedIn/iMessage/
+      Slack currently show no thumbnail. Need a ~1200×630 PNG/JPG in `public/`
+      (headshot + name, or the AA/M logo); Kiro adds `og:image`/`twitter:image` in
+      `Layout.astro` and switches the Twitter card to `summary_large_image`. Meta
+      scaffolding is already in place — just needs the image asset. (Overlaps the
+      logo work in #7.)
+
 ---
 
 ## ✔️ Done
@@ -135,3 +149,8 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [x] **Email receiving** — `hello@avamartoma.com` + catch-all → Gmail (Cloudflare
       Email Routing)
 - [x] **Forms deliver** — Web3Forms key live in all three forms (→ hello@)
+- [x] **Resume-request cooldown** — 2-day soft-lock on the popover + `/resume`
+      (shared `resumeLastSubmit` localStorage key); "You already submitted!" note
+- [x] **On-site SEO** — homepage title `Ava Martoma`, Person + WebSite JSON-LD,
+      `@astrojs/sitemap` (`/sitemap-index.xml`), `robots.txt`, RSS (`/rss.xml`),
+      richer OG/Twitter meta (indexing via Search Console still TODO — see 3b)

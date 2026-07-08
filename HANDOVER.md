@@ -10,9 +10,9 @@
 | **Live site** | 🟢 **https://avamartoma.com** (custom domain, GitHub Pages; www→apex + HTTPS enforced) |
 | **Repo** | `git@github.com:avamartoma/avamartoma.github.io.git` (personal GitHub, **public**) |
 | **Branch** | `main` — every `git push` auto-deploys via GitHub Actions (~1–2 min) |
-| **Stack** | Astro 5.18.2 (static, root, no `base`), vanilla JS/CSS, no runtime deps |
+| **Stack** | Astro 5.18.2 (static, root, no `base`), vanilla JS/CSS, no runtime deps; build-time integrations: `@astrojs/sitemap`, `@astrojs/rss` |
 | **Local dev** | `cd ~/personal-website && npm run dev` → http://localhost:4321/ |
-| **Last updated** | 2026-07-04 |
+| **Last updated** | 2026-07-08 |
 
 > Note: the local folder is still `~/personal-website` even though the GitHub
 > repo was renamed to `avamartoma.github.io`. That's fine.
@@ -33,7 +33,7 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 
 ---
 
-## 2. Current status (2026-07-04)
+## 2. Current status (2026-07-08)
 
 The site is **live and looks polished**. Structure top-to-bottom on the homepage:
 **in-progress banner → nav → hero (the "about") → Work selection → Experience
@@ -45,7 +45,16 @@ timeline → Honors + Publications → footer (contact form)**.
 - ✅ "Website in progress" banner (below the nav).
 - ✅ **Email:** `hello@avamartoma.com` + catch-all receive → Gmail (Cloudflare Email Routing).
 - ✅ **Forms deliver** — Web3Forms key live in all three forms (→ `hello@avamartoma.com`).
+- ✅ **Resume-request cooldown** — after submitting, the resume popover + `/resume`
+  soft-lock for 2 days (shared `resumeLastSubmit` localStorage key) and show
+  "You already submitted! Ava will get back to you soon :)". Per-browser nudge only.
+- ✅ **SEO / discoverability** — homepage title is now `Ava Martoma`; Person + WebSite
+  JSON-LD (with LinkedIn/GitHub `sameAs`) on the homepage; sitemap (`/sitemap-index.xml`),
+  `robots.txt`, RSS (`/rss.xml`), and richer OG/Twitter meta. **Follow-up:** submit the
+  sitemap in Google Search Console to get indexed faster (see §6).
 - ⏳ **Project photos** not added yet (generative artwork stands in).
+- ⏳ **Social share image** (`og:image`) not set — links shared to LinkedIn/iMessage
+  show no thumbnail. Meta is wired; just needs an image asset (`TODO.md` 15).
 - ⏳ **Email *sending*** (reply *as* `hello@`) not set up — needs a free SMTP relay (see §6 / `TODO.md` 10a).
 - ⏳ Backlog in `TODO.md` (photos, iFAQ, Spotify-live, Living page, etc.).
 
@@ -74,7 +83,8 @@ src/
                               Honors/Publications (#recognition). (About REMOVED.)
     work.astro                /work — ALL projects + multi-select (OR) tag filter
     projects/[...slug].astro  per-project detail pages
-    resume.astro              /resume — no-JS fallback form (Web3Forms)
+    resume.astro              /resume — no-JS fallback form (Web3Forms) + 2-day cooldown
+    rss.xml.js                /rss.xml feed for the projects collection (@astrojs/rss)
     404.astro                 animated-static not-found
   styles/global.css           design tokens, Holi palette, banner, cursor, grain, reveal
   assets/
@@ -82,9 +92,14 @@ src/
     ava-headshot.jpeg         old headshot (unused; safe to delete)
 public/
   favicon.svg                 AA/M monogram
+  robots.txt                  allow-all + Sitemap: .../sitemap-index.xml
   images/<project-slug>/      per-project photo folders (empty, awaiting uploads)
 .github/workflows/deploy.yml  GitHub Pages deploy (runs on push to main)
 ```
+
+> **SEO:** `Layout.astro` sets the per-page `<title>`/description, canonical,
+> OG/Twitter meta, an RSS `<link>`, and (homepage only) Person + WebSite JSON-LD.
+> `astro.config.mjs` registers `@astrojs/sitemap` → `/sitemap-index.xml` at build.
 
 ---
 
@@ -131,6 +146,16 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
 
 ## 6. Known pending / gotchas
 
+- **SEO is wired; indexing needs a manual push.** Homepage title = `Ava Martoma`,
+  Person + WebSite JSON-LD on the homepage, sitemap + `robots.txt` + RSS all live.
+  Code alone won't rank you fast — the accelerator is **Google Search Console**:
+  verify `avamartoma.com` (DNS TXT via Cloudflare, or the Cloudflare integration),
+  then submit `https://avamartoma.com/sitemap-index.xml`. Optionally do the same in
+  **Bing Webmaster Tools**. This is a browser task on Ava's Google/Bing account.
+- **No social share image (`og:image`) yet.** Links shared to LinkedIn/iMessage/Slack
+  show no thumbnail. Meta scaffolding is in `Layout.astro` — just needs a ~1200×630
+  PNG/JPG in `public/` and an `og:image`/`twitter:image` (+ switch card to
+  `summary_large_image`). Tracked in `TODO.md` 15.
 - **Forms are LIVE (Web3Forms):** footer contact + both resume forms deliver to
   `hello@avamartoma.com` (→ Gmail). Access key `9cffc9b5-…` lives in
   `WEB3FORMS_ACCESS_KEY` in `Footer.astro`, `ResumeModal.astro`, `resume.astro`
@@ -214,6 +239,13 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 
 ## 10. Changelog (condensed, newest first)
 
+- **2026-07-08** — **SEO / discoverability + resume cooldown.** Homepage `<title>`
+  now `Ava Martoma` (was "… — Projects"); added Person + WebSite JSON-LD (homepage
+  only, with LinkedIn/GitHub `sameAs`), richer OG/Twitter meta + author + RSS
+  `<link>`. Added `@astrojs/sitemap` (→ `/sitemap-index.xml`), `public/robots.txt`,
+  and an RSS feed at `/rss.xml` (`@astrojs/rss`). Added a 2-day resume-request
+  cooldown to the popover + `/resume` (shared `resumeLastSubmit` key). Next lever:
+  submit the sitemap in Google Search Console; `og:image` still to do.
 - **2026-07-04 (later)** — **Custom domain + email live.** Bought `avamartoma.com`
   at Cloudflare Registrar; set Astro `site` + added `public/CNAME`; DNS (4× A grey
   + www CNAME) + GitHub Pages custom domain + Enforce HTTPS → **live at

@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build
 export default defineConfig({
@@ -11,4 +12,8 @@ export default defineConfig({
     // Emit clean, directory-style URLs: /projects/foo/ instead of /projects/foo.html
     format: 'directory',
   },
+  // Generates /sitemap-index.xml (+ /sitemap-0.xml) at build time from all
+  // pages, so search engines can crawl every project + section. Referenced
+  // from public/robots.txt.
+  integrations: [sitemap()],
 });
