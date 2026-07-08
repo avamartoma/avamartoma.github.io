@@ -71,6 +71,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
           In the meantime, <a href={`${base}#work`} class="arrow-link">see the work <span>→</span></a>
         </p>
       </div>
+
+      <!-- Shown if this browser already requested within the cooldown window -->
+      <div class="resume__done" data-cooldown hidden>
+        <h2>You already submitted! ✦</h2>
+        <p>
+          Ava will get back to you soon :) In the meantime,
+          <a href={`${base}#work`} class="arrow-link">see the work <span>→</span></a>
+        </p>
+      </div>
     </div>
   </section>
 </Layout>
@@ -127,10 +136,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   // Progressive enhancement: submit via fetch (to Web3Forms) so the visitor
   // stays on the page and sees an inline thank-you. Without JS, the form posts
   // normally to Web3Forms, which shows its own success page — nothing breaks.
+  //
+  // Cooldown: shares the 'resumeLastSubmit' key with the nav resume popover, so
+  // a request from either place soft-locks both for 2 days. Per-browser nudge
+  // only (no-JS visitors bypass it, which is fine).
+  const COOLDOWN_MS = 2 * 864e5; // 2 days
+  const RESUME_KEY = 'resumeLastSubmit';
   const form = document.querySelector<HTMLFormElement>('.resume__form');
   const done = document.querySelector<HTMLElement>('[data-done]');
+  const cooling = document.querySelector<HTMLElement>('[data-cooldown]');
+
+  const inCooldown = () =>
+    Number(localStorage.getItem(RESUME_KEY) || 0) > 0 &&
+    Date.now() - Number(localStorage.getItem(RESUME_KEY) || 0) < COOLDOWN_MS;
 
   if (form && done) {
+    // Already requested recently in this browser → show the friendly note.
+    if (cooling && inCooldown()) {
+      form.hidden = true;
+      cooling.hidden = false;
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = new FormData(form);
@@ -143,6 +169,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
       } catch {
         // Offline / blocked — still show the thank-you so the UX is intact.
       }
+      localStorage.setItem(RESUME_KEY, String(Date.now()));
       form.hidden = true;
       done.hidden = false;
       done.scrollIntoView({ behavior: 'smooth', block: 'center' });

@@ -42,6 +42,10 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
   <div class="rm__done" data-resume-done hidden>
     <h2 class="rm__title">Sent. ✦ I'll email it over.</h2>
   </div>
+
+  <div class="rm__done" data-resume-cooldown hidden>
+    <h2 class="rm__title">You already submitted! Ava will get back to you soon :)</h2>
+  </div>
 </div>
 
 <style>
@@ -114,8 +118,19 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
 <script>
   const pop = document.getElementById('resume-pop') as HTMLElement | null;
   if (pop) {
+    // Resume-request cooldown: after a successful submit, soft-lock the request
+    // for 2 days across both the popover and the /resume fallback page (shared
+    // localStorage key). A per-browser nudge, not hard enforcement — a real
+    // person on another device / after clearing storage can always ask again.
+    const COOLDOWN_MS = 2 * 864e5; // 2 days
+    const RESUME_KEY = 'resumeLastSubmit';
+    const inCooldown = () =>
+      Number(localStorage.getItem(RESUME_KEY) || 0) > 0 &&
+      Date.now() - Number(localStorage.getItem(RESUME_KEY) || 0) < COOLDOWN_MS;
+
     const form = pop.querySelector<HTMLFormElement>('.rm__form');
     const done = pop.querySelector<HTMLElement>('[data-resume-done]');
+    const cooling = pop.querySelector<HTMLElement>('[data-resume-cooldown]');
     const input = pop.querySelector<HTMLInputElement>('.rm__input');
     let isOpen = false;
 
@@ -133,15 +148,17 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
     const open = (e: Event) => {
       e.preventDefault();
       const anchor = e.currentTarget as HTMLElement;
-      // reset to the form view each time
-      if (form) form.hidden = false;
+      // reset views each time, then pick form vs. cooldown note
+      const cooling_ = inCooldown();
+      if (form) form.hidden = cooling_;
       if (done) done.hidden = true;
+      if (cooling) cooling.hidden = !cooling_;
       pop.hidden = false;
       place(anchor);
       pop.classList.add('is-open');
       isOpen = true;
       // focus the field on the next frame (after it's visible)
-      requestAnimationFrame(() => input?.focus());
+      if (!cooling_) requestAnimationFrame(() => input?.focus());
     };
 
     const close = () => {
@@ -192,6 +209,7 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
       } catch {
         // Offline / blocked — still show success for the UX.
       }
+      localStorage.setItem(RESUME_KEY, String(Date.now()));
       if (form) form.hidden = true;
       if (done) done.hidden = false;
     });
