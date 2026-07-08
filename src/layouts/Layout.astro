@@ -10,12 +10,45 @@ interface Props {
 }
 
 const {
-  title = "Ava Martoma — Projects",
-  description = "A catalogue of things I've designed, built, and broken. Artsy engineer, occasional troublemaker.",
+  title = "Ava Martoma",
+  description = "Ava Martoma is a hardware engineer and designer studying at Penn (M&T). Explore her projects, experience, and the things she's designed, built, and broken.",
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+
+// Site-wide identity used for Open Graph + structured data.
+const SITE_NAME = 'Ava Martoma';
+const siteUrl = (Astro.site?.toString() ?? 'https://avamartoma.com/').replace(/\/$/, '');
+const isHome = canonical.pathname === '/';
+
+// JSON-LD structured data — the key signal for "Ava Martoma" name searches.
+// Person ties the site to Ava as an entity (with her socials via sameAs);
+// WebSite names the site itself. Rendered on the homepage only.
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: siteUrl + '/',
+    author: { '@type': 'Person', name: 'Ava Martoma' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Ava Martoma',
+    url: siteUrl + '/',
+    jobTitle: 'Hardware Engineer',
+    worksFor: { '@type': 'Organization', name: 'Amazon' },
+    alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of Pennsylvania' },
+    description:
+      'Half designer, half engineer, fully curious. Mechanical engineering & business student at Penn (M&T).',
+    sameAs: [
+      'https://www.linkedin.com/in/avamartoma/',
+      'https://github.com/avamartoma',
+    ],
+  },
+];
 ---
 
 <!doctype html>
@@ -26,15 +59,28 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="Ava Martoma" />
     <link rel="canonical" href={canonical} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
 
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Ava Martoma — Projects" href={`${base}rss.xml`} />
+
+    {isHome && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
 
     <!-- Type: Space Grotesk (display) + JetBrains Mono (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
