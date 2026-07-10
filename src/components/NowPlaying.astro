@@ -10,7 +10,7 @@
 //   {
 //     "isPlaying": boolean,
 //     "current":   { title, artist, album, albumImageUrl, songUrl } | null,
-//     "recent":    [ { title, artist, album, albumImageUrl, songUrl }, ... ]
+//     "recent":    [ { title, artist, album, albumImageUrl, songUrl, playedAt }, ... ]
 //   }
 //
 // The Worker URL is public/non-sensitive; only the secret (a Wrangler secret)
@@ -49,7 +49,7 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
 
   .np__list { display: grid; gap: 0.7rem; }
 
-  /* A track row: album art + title/artist + equalizer icon. */
+  /* A track row: album art + text + equalizer icon. */
   .np__row {
     display: grid;
     grid-template-columns: 44px 1fr auto;
@@ -69,21 +69,26 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
   }
   .np__row--current .np__art { width: 56px; height: 56px; border-radius: 8px; }
 
-  .np__meta { display: grid; gap: 0.1rem; min-width: 0; }
-  .np__title {
+  .np__meta { display: grid; gap: 0.15rem; min-width: 0; }
+  .np__line {
     font-size: 0.9rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .np__row--current .np__line { font-size: 1rem; }
+  .np__song {
     color: var(--ink);
     text-decoration: none;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     transition: color 0.2s var(--ease);
   }
-  .np__row--current .np__title { font-size: 1rem; }
-  .np__title:hover { color: var(--signal); }
-  .np__artist {
-    font-size: 0.78rem;
+  .np__song:hover { color: var(--signal); }
+  .np__by { color: var(--ink-soft); }
+  .np__when {
+    font-size: 0.72rem;
     color: var(--ink-soft);
+    opacity: 0.7;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .np__row--current .np__when { color: var(--signal-4); opacity: 1; }
 
   /* Equalizer icon, one per row.
      --live  = animated green (the track playing right now)
@@ -92,7 +97,7 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
     display: inline-flex;
     align-items: flex-end;
     gap: 2px;
-    height: 15px;
+    height: 16px;
     flex: 0 0 auto;
   }
   .np__eq i {
@@ -106,7 +111,7 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
   .np__eq--live i:nth-child(2) { animation-delay: 0.2s; }
   .np__eq--live i:nth-child(3) { animation-delay: 0.4s; }
 
-  .np__eq--static i { background: var(--ink-soft); opacity: 0.5; }
+  .np__eq--static i { background: var(--ink-soft); opacity: 0.8; }
   .np__eq--static i:nth-child(1) { transform: scaleY(0.5); }
   .np__eq--static i:nth-child(2) { transform: scaleY(0.95); }
   .np__eq--static i:nth-child(3) { transform: scaleY(0.6); }
@@ -127,6 +132,7 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
     album?: string;
     albumImageUrl?: string;
     songUrl?: string;
+    playedAt?: string | null;
   }
   interface Payload {
     isPlaying: boolean;
@@ -144,6 +150,20 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
       (s || '').replace(/[&<>"']/g, (c) =>
         ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
 
+    // Human "x ago" from an ISO timestamp.
+    const timeAgo = (iso?: string | null) => {
+      if (!iso) return '';
+      const ms = Date.now() - new Date(iso).getTime();
+      if (!Number.isFinite(ms) || ms < 0) return '';
+      const min = Math.floor(ms / 60000);
+      if (min < 1) return 'just now';
+      if (min < 60) return `${min} minute${min === 1 ? '' : 's'} ago`;
+      const hr = Math.floor(min / 60);
+      if (hr < 24) return `${hr} hour${hr === 1 ? '' : 's'} ago`;
+      const day = Math.floor(hr / 24);
+      return `${day} day${day === 1 ? '' : 's'} ago`;
+    };
+
     // Equalizer icon: green + animated for the live track, gray + frozen otherwise.
     const eq = (live: boolean) =>
       `<span class="np__eq np__eq--${live ? 'live' : 'static'}" aria-hidden="true"><i></i><i></i><i></i></span>`;
@@ -152,12 +172,16 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
       const art = t.albumImageUrl
         ? ` style="background-image:url('${esc(t.albumImageUrl)}')"`
         : '';
-      const title = t.songUrl
-        ? `<a class="np__title" href="${esc(t.songUrl)}" target="_blank" rel="noopener">${esc(t.title)}</a>`
-        : `<span class="np__title">${esc(t.title)}</span>`;
+      const song = t.songUrl
+        ? `<a class="np__song" href="${esc(t.songUrl)}" target="_blank" rel="noopener">${esc(t.title)}</a>`
+        : `<span class="np__song">${esc(t.title)}</span>`;
+      const when = current ? 'right now' : timeAgo(t.playedAt);
       return `<div class="np__row${current ? ' np__row--current' : ''}">
         <div class="np__art"${art} aria-hidden="true"></div>
-        <div class="np__meta">${title}<span class="np__artist">${esc(t.artist)}</span></div>
+        <div class="np__meta">
+          <span class="np__line">${song}<span class="np__by"> by ${esc(t.artist)}</span></span>
+          ${when ? `<span class="np__when">${esc(when)}</span>` : ''}
+        </div>
         ${eq(current)}
       </div>`;
     };
@@ -170,16 +194,16 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
       // Fewer recent when a live track is on top, so the card stays tidy.
       const max = playing ? 4 : 5;
       for (const t of recent.slice(0, max)) rows.push(rowHtml(t));
-      if (list) list.innerHTML = rows.join('') || '<p class="np__artist">Nothing to show right now.</p>';
+      if (list) list.innerHTML = rows.join('') || '<p class="np__when">Nothing to show right now.</p>';
     };
 
     if (isDemo) {
       paint({
         isPlaying: true,
-        current: { title: 'Demo Track (dev preview)', artist: 'Connect Spotify to go live', songUrl: 'https://open.spotify.com' },
+        current: { title: 'Demo Track (dev preview)', artist: 'Connect Spotify', songUrl: 'https://open.spotify.com' },
         recent: [
-          { title: 'Previous Song', artist: 'Some Artist' },
-          { title: 'Another One', artist: 'Another Artist' },
+          { title: 'Previous Song', artist: 'Some Artist', playedAt: new Date(Date.now() - 8 * 60000).toISOString() },
+          { title: 'Another One', artist: 'Another Artist', playedAt: new Date(Date.now() - 3 * 3600000).toISOString() },
         ],
       });
     } else if (endpoint) {
@@ -190,7 +214,7 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
           const data: Payload = await res.json();
           paint(data);
         } catch {
-          if (list) list.innerHTML = '<p class="np__artist">Couldn’t load right now.</p>';
+          if (list) list.innerHTML = '<p class="np__when">Couldn’t load right now.</p>';
         }
       };
       refresh();

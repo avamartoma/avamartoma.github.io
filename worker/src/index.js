@@ -5,7 +5,7 @@
 //   {
 //     isPlaying: boolean,
 //     current:   { title, artist, album, albumImageUrl, songUrl } | null,
-//     recent:    [ { title, artist, album, albumImageUrl, songUrl }, ... ]  // up to 5
+//     recent:    [ { title, artist, album, albumImageUrl, songUrl, playedAt }, ... ]  // up to 5
 //   }
 //
 // Secrets are read from `env` (set with `wrangler secret put` — see README):
@@ -122,7 +122,7 @@ async function getRecentlyPlayed(token) {
     const t = mapTrack(it.track);
     if (!t || !t.songUrl || seen.has(t.songUrl)) continue; // de-dupe repeats
     seen.add(t.songUrl);
-    out.push(t);
+    out.push({ ...t, playedAt: it.played_at || null });
   }
   return out;
 }
