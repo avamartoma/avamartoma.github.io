@@ -8,12 +8,41 @@
 //     recent:    [ { title, artist, album, albumImageUrl, songUrl, playedAt }, ... ]  // up to 5
 //   }
 //
+// Content filtering (see CONFIG below) happens HERE, server-side, so anything
+// explicit or hand-blocked never reaches the website at all.
+//
 // Secrets are read from `env` (set with `wrangler secret put` — see README):
 //   SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN
 
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const NOW_PLAYING_URL = 'https://api.spotify.com/v1/me/player/currently-playing';
 const RECENT_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=10';
+
+// ---- CONFIG: content filtering ---------------------------------------------
+// Hide any track Spotify flags as explicit.
+const HIDE_EXPLICIT = true;
+// Only show music (skip podcast episodes / ads as the "now playing").
+const MUSIC_ONLY = true;
+// Manual hide-list for anything NOT flagged explicit that you'd rather not show.
+// Match by Spotify track ID, or by a lowercased substring of "artist + title".
+const BLOCKLIST = [
+  // '3n3Ppam7vgaVa1iaRUc9Lp',   // by exact track ID
+  // 'some artist',              // by artist/title substring (case-insensitive)
+];
+
+function isAllowed(t) {
+  if (!t) return false;
+  if (HIDE_EXPLICIT && t.explicit) return false;
+  const hay = `${t.id || ''} ${t.artist} ${t.title}`.toLowerCase();
+  return !BLOCKLIST.some((b) => b && hay.includes(b.toLowerCase()));
+}
+
+// Strip internal-only fields (id, explicit, isPlaying) before sending to the client.
+function publicTrack(t) {
+  if (!t) return null;
+  const { id, explicit, isPlaying, ...rest } = t;
+  return rest;
+}
 
 export default {
   async fetch(request, env) {
@@ -39,19 +68,18 @@ export default {
         getRecentlyPlayed(token),
       ]);
 
-      // Only surface `current` when actively playing (skip paused). Drop it from
-      // the recent list to avoid showing the same song twice.
-      const playing = current && current.isPlaying ? current : null;
-      let recentList = recent;
-      if (playing) {
-        recentList = recent.filter((t) => t.songUrl !== playing.songUrl);
-      }
+      // Surface `current` only when actively playing AND allowed by the filter.
+      const playing = current && current.isPlaying && isAllowed(current) ? current : null;
+
+      // Filter the recent list, drop the live track from it, then cap at 5.
+      let recentList = recent.filter(isAllowed);
+      if (playing) recentList = recentList.filter((t) => t.songUrl !== playing.songUrl);
       recentList = recentList.slice(0, 5);
 
       const body = {
         isPlaying: Boolean(playing),
-        current: playing ? stripFlag(playing) : null,
-        recent: recentList,
+        current: publicTrack(playing),
+        recent: recentList.map(publicTrack),
       };
       return new Response(JSON.stringify(body), { headers });
     } catch (err) {
@@ -85,17 +113,14 @@ async function getAccessToken(env) {
 function mapTrack(item) {
   if (!item) return null;
   return {
+    id: item.id ?? '',
     title: item.name ?? '',
     artist: (item.artists || []).map((a) => a.name).join(', '),
     album: item.album?.name ?? '',
     albumImageUrl: item.album?.images?.[0]?.url ?? '',
     songUrl: item.external_urls?.spotify ?? '',
+    explicit: Boolean(item.explicit),
   };
-}
-
-function stripFlag(t) {
-  const { isPlaying, ...rest } = t;
-  return rest;
 }
 
 async function getCurrentlyPlaying(token) {
@@ -106,6 +131,8 @@ async function getCurrentlyPlaying(token) {
   if (res.status === 204 || res.status >= 400) return null;
   const data = await res.json();
   if (!data || !data.item) return null;
+  // Skip podcasts/ads if MUSIC_ONLY — only surface actual tracks as "now playing".
+  if (MUSIC_ONLY && data.currently_playing_type && data.currently_playing_type !== 'track') return null;
   const t = mapTrack(data.item);
   return t ? { ...t, isPlaying: Boolean(data.is_playing) } : null;
 }
