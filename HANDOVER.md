@@ -266,6 +266,18 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 
 ## 10. Changelog (condensed, newest first)
 
+- **2026-07-10 (later)** — **Spotify "Lately" is LIVE.** Finished Path A: deployed the
+  Cloudflare Worker (`worker/`) at `https://avamartoma-now-playing.avamartoma.workers.dev`
+  (account subdomain `avamartoma`; secrets set as Wrangler secrets via a Cloudflare
+  API token — `wrangler login`'s browser callback wouldn't complete on the Cloud
+  Desktop). Completed the one-time Spotify OAuth (loopback `127.0.0.1:8888` via a
+  throwaway local helper) → refresh token. Reworked the Worker + `NowPlaying.astro`
+  to return/render the **current track (equalizer) + recent tracks**, falling back to
+  the **last 5 played** when idle. Endpoint hardcoded as the default in
+  `NowPlaying.astro` (still overridable via `PUBLIC_SPOTIFY_ENDPOINT`). ⚠️ Gotcha
+  hit: an expired auth code silently produced an empty refresh token → Worker returned
+  a blank payload; re-doing the exchange within the ~60 s window fixed it.
+
 - **2026-07-10** — **"Lately" section: GitHub + Spotify widgets.** Added a homepage
   "Lately" section (between Experience and Recognition) with two widgets:
   `GitHubActivity.astro` (recent public repos, client-side, no auth — **live**) and
