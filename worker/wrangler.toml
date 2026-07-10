@@ -6,3 +6,29 @@ compatibility_date = "2026-07-10"
 #   npx wrangler secret put SPOTIFY_CLIENT_ID
 #   npx wrangler secret put SPOTIFY_CLIENT_SECRET
 #   npx wrangler secret put SPOTIFY_REFRESH_TOKEN
+
+# ---------------------------------------------------------------------------
+# OPTIONAL: edit the blocked-songs list with NO code change and NO redeploy.
+#
+# The Worker reads extra blocked entries from a KV key called "list" (binding
+# BLOCKED_SONGS_KV) and merges them with BLOCKED_SONGS in src/index.js. Once set
+# up, you add/remove songs straight from the Cloudflare dashboard.
+#
+# ONE-TIME SETUP (run in the worker/ dir, then a single redeploy):
+#   1. npx wrangler@latest kv namespace create BLOCKED_SONGS_KV
+#        -> copy the printed id into the [[kv_namespaces]] block below and
+#           uncomment it.
+#   2. Seed the list (optional):
+#        npx wrangler@latest kv key put --binding BLOCKED_SONGS_KV list "wap
+#        slut me out"
+#   3. npx wrangler@latest deploy      # last redeploy you need for this
+#
+# ADD SONGS LATER (no code, no deploy):
+#   Cloudflare dashboard -> Storage & Databases -> KV -> BLOCKED_SONGS_KV ->
+#   open key "list" -> put one song per line (same formats as BLOCKED_SONGS:
+#   a title, 'title | artist', or a Spotify track ID) -> Save. Live within ~1 min.
+#
+# [[kv_namespaces]]
+# binding = "BLOCKED_SONGS_KV"
+# id = "PASTE_KV_NAMESPACE_ID_HERE"
+# ---------------------------------------------------------------------------

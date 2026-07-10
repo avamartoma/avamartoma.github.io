@@ -30,13 +30,21 @@ const HIDE_CRASS_TITLES = true;
 const MUSIC_ONLY = true;
 // ============================================================================
 // SONGS TO ALWAYS HIDE — the easy list to grow over time.
-// Add one entry per line. Each entry can be:
-//   • a song title          e.g. 'wap'           — matched as a whole phrase in
-//                                                   the title (any casing), so
-//                                                   'wap' hides "WAP" but NOT "Swap Meet"
-//   • 'title | artist'      e.g. 'party | drake' — title phrase AND artist
-//   • a Spotify track ID    e.g. '4Oun2ylbjFKMPTvlurfXbG' — exact, most precise
-// After editing this list, redeploy once:  cd worker && npx wrangler@latest deploy
+//
+// To add more later, just add one line to BLOCKED_SONGS below, in any of these
+// forms:
+//   - 'song title'       — matched as a whole phrase in the title
+//                          (e.g. 'wap' hides "WAP" and "WAP (feat. …)" but NOT "Swap Meet")
+//   - 'title | artist'   — when you need to disambiguate two songs with the same title
+//   - a Spotify track ID — the most precise (exact one track)
+//
+// Then redeploy once:  cd worker && npx wrangler@latest deploy
+// Each addition is just a line + a redeploy — no logic to touch.
+//
+// NO-CODE / NO-REDEPLOY OPTION: entries added to the Cloudflare KV "list" key are
+// merged in at request time, so you can add songs straight from the Cloudflare
+// dashboard with no code edit and no deploy. Same three entry formats as above.
+// One-time setup + how to edit it is documented in worker/wrangler.toml.
 const BLOCKED_SONGS = [
   'slut me out',
   'slut me out 2',
@@ -64,12 +72,12 @@ function hasStrongLanguage(title) {
   return STRONG_TERMS.some((term) => wholeMatch(s, term.toLowerCase()));
 }
 
-function isBlockedSong(t) {
+function isBlockedSong(t, songs) {
   const title = (t.title || '').toLowerCase();
   const artist = (t.artist || '').toLowerCase();
   const id = (t.id || '').toLowerCase();
-  return BLOCKED_SONGS.some((raw) => {
-    const entry = raw.trim().toLowerCase();
+  return songs.some((raw) => {
+    const entry = String(raw).trim().toLowerCase();
     if (!entry) return false;
     if (/^[a-z0-9]{22}$/.test(entry)) return entry === id;       // Spotify track ID
     if (entry.includes('|')) {                                    // "title | artist"
@@ -80,12 +88,29 @@ function isBlockedSong(t) {
   });
 }
 
-function isAllowed(t) {
+function isAllowed(t, blockedSongs) {
   if (!t) return false;
   if (HIDE_EXPLICIT && t.explicit) return false;
   if (HIDE_CRASS_TITLES && hasStrongLanguage(t.title)) return false;
-  if (isBlockedSong(t)) return false;
+  if (isBlockedSong(t, blockedSongs)) return false;
   return true;
+}
+
+// Read extra blocked entries from a Cloudflare KV "list" key, if a KV namespace
+// is bound (binding name BLOCKED_SONGS_KV — see wrangler.toml). Lets the list be
+// edited in the Cloudflare dashboard with no code change and no redeploy.
+// Accepts a JSON array or plain newline/comma-separated text. Fails soft.
+async function getExtraBlockedSongs(env) {
+  try {
+    if (!env || !env.BLOCKED_SONGS_KV) return [];
+    const raw = await env.BLOCKED_SONGS_KV.get('list');
+    if (!raw) return [];
+    let arr;
+    try { arr = JSON.parse(raw); } catch { arr = raw.split(/[\n,]+/); }
+    return Array.isArray(arr) ? arr.map((s) => String(s).trim()).filter(Boolean) : [];
+  } catch {
+    return [];
+  }
 }
 
 // Strip internal-only fields (id, explicit, isPlaying) before sending to the client.
@@ -114,16 +139,18 @@ export default {
 
     try {
       const token = await getAccessToken(env);
-      const [current, recent] = await Promise.all([
+      const [current, recent, extraBlocked] = await Promise.all([
         getCurrentlyPlaying(token),
         getRecentlyPlayed(token),
+        getExtraBlockedSongs(env),
       ]);
+      const blockedSongs = [...BLOCKED_SONGS, ...extraBlocked];
 
       // Surface `current` only when actively playing AND allowed by the filter.
-      const playing = current && current.isPlaying && isAllowed(current) ? current : null;
+      const playing = current && current.isPlaying && isAllowed(current, blockedSongs) ? current : null;
 
       // Filter the recent list, drop the live track from it, then cap at 5.
-      let recentList = recent.filter(isAllowed);
+      let recentList = recent.filter((t) => isAllowed(t, blockedSongs));
       if (playing) recentList = recentList.filter((t) => t.songUrl !== playing.songUrl);
       recentList = recentList.slice(0, 5);
 
