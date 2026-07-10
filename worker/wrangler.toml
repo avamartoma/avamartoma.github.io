@@ -27,8 +27,8 @@ compatibility_date = "2026-07-10"
 #   Cloudflare dashboard -> Storage & Databases -> KV -> BLOCKED_SONGS_KV ->
 #   open key "list" -> put one song per line (same formats as BLOCKED_SONGS:
 #   a title, 'title | artist', or a Spotify track ID) -> Save. Live within ~1 min.
-#
-# [[kv_namespaces]]
-# binding = "BLOCKED_SONGS_KV"
-# id = "PASTE_KV_NAMESPACE_ID_HERE"
+
+[[kv_namespaces]]
+binding = "BLOCKED_SONGS_KV"
+id = "41b422ecb2e2472ab2db3ad96329aaba"
 # ---------------------------------------------------------------------------
