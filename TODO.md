@@ -30,12 +30,10 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
   - Confirm estimated dates: **CAD Bridge**, **CAD & Woodworking Studies**, and
     the 3 marquetry pieces.
 
-- [ ] **3b. Get indexed by Google (the SEO accelerator).** The on-site SEO is done
-      (title `Ava Martoma`, JSON-LD, sitemap, robots, RSS). To actually show up when
-      someone searches "Ava Martoma": verify `avamartoma.com` in **Google Search
-      Console** (DNS TXT via Cloudflare, or the Cloudflare integration) and submit
-      `https://avamartoma.com/sitemap-index.xml`. Optionally repeat in **Bing
-      Webmaster Tools**. Browser task on Ava's account — see `HANDOVER.md` §6.
+- [x] **3b. ✅ Indexed by Google (2026-07-08).** On-site SEO done + `avamartoma.com`
+      verified in **Google Search Console** (Domain property, DNS TXT) and
+      `sitemap-index.xml` submitted → status **Success**. Now waiting on Google to
+      crawl/index (days). Bing import optional/not done yet.
 
 ---
 
@@ -57,6 +55,11 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 - [ ] **8. Your own drawings / illustration pass** — bring your art; Kiro builds
       an original interactive layer around it (Koberger *spirit*, not a clone).
+
+- [ ] **8a. Hand-drawn custom cursor** 🖌️ — swap the current geometric cursor
+      (dot + lerped ring in `Layout.astro`) for one of your own hand-drawn cursors
+      (e.g. a little pen/marker, or a doodle that trails the pointer). Part of the
+      art pass (#8) — needs the drawing. Keep the reduced-motion + touch fallbacks.
 
 - [ ] **8b. "Living" page 📷** — a `/living` photo gallery of you out living life;
       hovering a photo reveals a new place / experience (caption swap). Add

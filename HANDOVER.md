@@ -146,12 +146,12 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
 
 ## 6. Known pending / gotchas
 
-- **SEO is wired; indexing needs a manual push.** Homepage title = `Ava Martoma`,
-  Person + WebSite JSON-LD on the homepage, sitemap + `robots.txt` + RSS all live.
-  Code alone won't rank you fast — the accelerator is **Google Search Console**:
-  verify `avamartoma.com` (DNS TXT via Cloudflare, or the Cloudflare integration),
-  then submit `https://avamartoma.com/sitemap-index.xml`. Optionally do the same in
-  **Bing Webmaster Tools**. This is a browser task on Ava's Google/Bing account.
+- **SEO is wired AND indexed.** Homepage title = `Ava Martoma`, Person + WebSite
+  JSON-LD on the homepage, sitemap + `robots.txt` + RSS all live. ✅ `avamartoma.com`
+  is **verified in Google Search Console** (Domain property, google-site-verification
+  TXT in Cloudflare DNS) and `sitemap-index.xml` was submitted → status **Success**
+  (2026-07-08). Now just waiting on Google to crawl/index (days). Bing Webmaster
+  Tools import is optional and not done yet.
 - **No social share image (`og:image`) yet.** Links shared to LinkedIn/iMessage/Slack
   show no thumbnail. Meta scaffolding is in `Layout.astro` — just needs a ~1200×630
   PNG/JPG in `public/` and an `og:image`/`twitter:image` (+ switch card to
@@ -215,6 +215,33 @@ Steps when Ava buys the domain:
   planned for where the old About section was.)
 - **ignaciofigueroa.dev** — a terminal-style **AI bot** trained on her content (later; needs backend).
 - **riasaheta.com** / **sirobles.com** — clean structure, build logs, journal, timeline.
+
+### Feed / API ideas — "what's Ava up to" (brainstorm 2026-07-08/09)
+
+> **Guiding filter:** favor feeds that **feed themselves** (auto-update via API) over
+> ones that need manual upkeep — a stale feed looks worse than none. Build-time or
+> serverless fetch; keep the static-first posture (see §9 ground rules).
+
+- **⭐ "Things of Interest" page via Are.na or Raindrop.io** — the concrete, near-term
+  version of Ava's long-term "bot that I bookmark news into → auto-populates a page"
+  idea. Use an off-the-shelf bookmarking service as the "bot": save links from
+  phone/browser into an **Are.na** channel (visual, design-crowd favorite, free API)
+  or **Raindrop.io** (clean link list, free API + save buttons); the site reads that
+  collection via API. **No custom bot/backend/DB needed to start.** A custom Telegram
+  bot capture layer could come *later* (ties into TODO #12 AI bot). Reframes the
+  earlier "curated news feed" — Ava doesn't read the news, so scope it as "stuff I'm
+  into" (engineering/design/makers), only if there's real content to feed it.
+- **GitHub activity** — recent commits/repos; "what I've been building." Auto, on-brand
+  for an engineer. Public API, no backend.
+- **Spotify recently-played** 🎧 — already TODO #10; automatable via API (the reason it
+  beats manual feeds). **Last.fm** is a lighter alt with a clean free API.
+- **Letterboxd** — films watched via a free **RSS feed** (no auth) — easiest to wire.
+- **Lichess** — recent games/rating if Ava plays chess; excellent free API.
+- **Weather/location** micro-touch — "currently in Philadelphia, 34°F" flavor line.
+- **Rejected/parked:** **Strava** (API is free but terms tightened in 2024, and Ava
+  isn't deep in it). **NYT Wordle/Connections** — *no public API for personal stats*;
+  only manual entry or share-grid paste, so best as a playful **iFAQ line**, not a
+  live tracker.
 
 ---
 
