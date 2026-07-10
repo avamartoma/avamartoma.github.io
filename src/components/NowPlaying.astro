@@ -23,17 +23,8 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
 ---
 
 {render && (
-  <div
-    class="np"
-    data-np
-    data-np-endpoint={SPOTIFY_ENDPOINT}
-    data-np-demo={showDemo ? 'true' : 'false'}
-    aria-live="polite"
-  >
-    <p class="np__head">
-      <span class="np__eq" data-np-eq aria-hidden="true"><i></i><i></i><i></i></span>
-      <span data-np-label>Lately on Spotify</span>
-    </p>
+  <div class="np" data-np data-np-endpoint={SPOTIFY_ENDPOINT} data-np-demo={showDemo ? 'true' : 'false'} aria-live="polite">
+    <p class="np__head">What I've been listening to</p>
     <div class="np__list" data-np-list></div>
   </div>
 )}
@@ -48,7 +39,6 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
     gap: 0.85rem;
   }
   .np__head {
-    display: flex; align-items: center; gap: 0.5rem;
     font-family: var(--font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.06em;
@@ -59,15 +49,15 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
 
   .np__list { display: grid; gap: 0.7rem; }
 
-  /* A track row: album art + title/artist. */
+  /* A track row: album art + title/artist + equalizer icon. */
   .np__row {
     display: grid;
-    grid-template-columns: 44px 1fr;
+    grid-template-columns: 44px 1fr auto;
     gap: 0.75rem;
     align-items: center;
     min-width: 0;
   }
-  .np__row--current { grid-template-columns: 56px 1fr; }
+  .np__row--current { grid-template-columns: 56px 1fr auto; }
 
   .np__art {
     width: 44px; height: 44px;
@@ -95,25 +85,38 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
-  /* Equalizer in the header — only animates when actually playing. */
-  .np__eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 0.8em; }
+  /* Equalizer icon, one per row.
+     --live  = animated green (the track playing right now)
+     --static = frozen gray bars (played earlier, not anymore) */
+  .np__eq {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 15px;
+    flex: 0 0 auto;
+  }
   .np__eq i {
     width: 3px; height: 100%;
-    background: var(--signal-4);
+    border-radius: 1px;
     transform-origin: bottom;
     transform: scaleY(0.4);
   }
-  .np.is-playing .np__eq i { animation: np-bar 0.9s ease-in-out infinite; }
-  .np.is-playing .np__eq i:nth-child(2) { animation-delay: 0.2s; }
-  .np.is-playing .np__eq i:nth-child(3) { animation-delay: 0.4s; }
-  .np:not(.is-playing) .np__eq { display: none; }
+
+  .np__eq--live i { background: var(--signal-4); animation: np-bar 0.9s ease-in-out infinite; }
+  .np__eq--live i:nth-child(2) { animation-delay: 0.2s; }
+  .np__eq--live i:nth-child(3) { animation-delay: 0.4s; }
+
+  .np__eq--static i { background: var(--ink-soft); opacity: 0.5; }
+  .np__eq--static i:nth-child(1) { transform: scaleY(0.5); }
+  .np__eq--static i:nth-child(2) { transform: scaleY(0.95); }
+  .np__eq--static i:nth-child(3) { transform: scaleY(0.6); }
 
   @keyframes np-bar {
-    0%, 100% { transform: scaleY(0.35); }
+    0%, 100% { transform: scaleY(0.3); }
     50%      { transform: scaleY(1); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .np.is-playing .np__eq i { animation: none; transform: scaleY(0.7); }
+    .np__eq--live i { animation: none; transform: scaleY(0.7); }
   }
 </style>
 
@@ -135,14 +138,17 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
   if (root) {
     const endpoint = root.dataset.npEndpoint || '';
     const isDemo = root.dataset.npDemo === 'true';
-    const label = root.querySelector<HTMLElement>('[data-np-label]');
     const list = root.querySelector<HTMLElement>('[data-np-list]');
 
     const esc = (s: string) =>
       (s || '').replace(/[&<>"']/g, (c) =>
         ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
 
-    const row = (t: Track, current = false) => {
+    // Equalizer icon: green + animated for the live track, gray + frozen otherwise.
+    const eq = (live: boolean) =>
+      `<span class="np__eq np__eq--${live ? 'live' : 'static'}" aria-hidden="true"><i></i><i></i><i></i></span>`;
+
+    const rowHtml = (t: Track, current = false) => {
       const art = t.albumImageUrl
         ? ` style="background-image:url('${esc(t.albumImageUrl)}')"`
         : '';
@@ -152,20 +158,18 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
       return `<div class="np__row${current ? ' np__row--current' : ''}">
         <div class="np__art"${art} aria-hidden="true"></div>
         <div class="np__meta">${title}<span class="np__artist">${esc(t.artist)}</span></div>
+        ${eq(current)}
       </div>`;
     };
 
     const paint = (data: Payload) => {
       const playing = !!data.isPlaying && !!data.current;
-      root.classList.toggle('is-playing', playing);
-      if (label) label.textContent = playing ? 'Now playing' : 'Recently played';
-
       const rows: string[] = [];
-      if (playing && data.current) rows.push(row(data.current, true));
+      if (playing && data.current) rows.push(rowHtml(data.current, true));
       const recent = Array.isArray(data.recent) ? data.recent : [];
-      // Show fewer recent when a current track is on top, so the card stays tidy.
+      // Fewer recent when a live track is on top, so the card stays tidy.
       const max = playing ? 4 : 5;
-      for (const t of recent.slice(0, max)) rows.push(row(t));
+      for (const t of recent.slice(0, max)) rows.push(rowHtml(t));
       if (list) list.innerHTML = rows.join('') || '<p class="np__artist">Nothing to show right now.</p>';
     };
 
@@ -186,8 +190,6 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
           const data: Payload = await res.json();
           paint(data);
         } catch {
-          root.classList.remove('is-playing');
-          if (label) label.textContent = 'Recently played';
           if (list) list.innerHTML = '<p class="np__artist">Couldn’t load right now.</p>';
         }
       };
