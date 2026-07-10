@@ -266,6 +266,16 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 
 ## 10. Changelog (condensed, newest first)
 
+- **2026-07-10** — **"Lately" section: GitHub + Spotify widgets.** Added a homepage
+  "Lately" section (between Experience and Recognition) with two widgets:
+  `GitHubActivity.astro` (recent public repos, client-side, no auth — **live**) and
+  `NowPlaying.astro` (Spotify frontend; fetches `PUBLIC_SPOTIFY_ENDPOINT` JSON; demo
+  card in dev, hidden in prod until wired). Chose **Path A** for Spotify: scaffolded
+  a Cloudflare Worker in `worker/` (`/now-playing`, holds secrets server-side).
+  ⏳ **Spotify not finished** — needs the one-time OAuth (refresh token) + `wrangler`
+  deploy, then set the endpoint. **Exact resume steps in `personal_assistant.md`
+  (▶️ RESUME HERE) and `worker/README.md`.** Also added TODO #16 (scroll-driven
+  exploded CAD viewer) and #8a (hand-drawn cursor).
 - **2026-07-08** — **SEO / discoverability + resume cooldown.** Homepage `<title>`
   now `Ava Martoma` (was "… — Projects"); added Person + WebSite JSON-LD (homepage
   only, with LinkedIn/GitHub `sameAs`), richer OG/Twitter meta + author + RSS

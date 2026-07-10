@@ -4,6 +4,8 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Experience from '../components/Experience.astro';
+import NowPlaying from '../components/NowPlaying.astro';
+import GitHubActivity from '../components/GitHubActivity.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 
@@ -89,6 +91,22 @@ const publications = [
 
   <hr class="divider" />
 
+  <!-- ============ LATELY ============ -->
+  <section class="section" id="lately">
+    <div class="wrap">
+      <header class="sec-head" data-reveal>
+        <h2>Lately</h2>
+        <p class="label">What I'm listening to &amp; building</p>
+      </header>
+      <div class="lately__grid" data-reveal>
+        <NowPlaying />
+        <GitHubActivity />
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
   <!-- ============ HONORS + PUBLICATIONS ============ -->
   <section class="section" id="recognition">
     <div class="wrap recog">
@@ -128,6 +146,15 @@ const publications = [
     display: flex;
     justify-content: center;
     margin-top: clamp(2rem, 5vw, 3rem);
+  }
+
+  /* Lately: Now Playing + GitHub activity. auto-fit keeps it tidy whether one
+     card (Spotify not connected yet) or two are present. */
+  .lately__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--gap);
+    align-items: start;
   }
 
   .grid {

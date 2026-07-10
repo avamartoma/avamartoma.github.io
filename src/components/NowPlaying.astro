@@ -1,0 +1,173 @@
+---
+// Spotify "Now Playing" widget — FRONTEND ONLY (path-agnostic).
+//
+// It fetches a JSON endpoint that returns the current/last track. That endpoint
+// must hold the Spotify secret + refresh token server-side (a Cloudflare Worker
+// or a GitHub Action-baked JSON file) — see HANDOVER §6 / TODO #10. NEVER put the
+// client secret or refresh token in this file or any client code (public repo!).
+//
+// Expected JSON contract from the endpoint:
+//   {
+//     "isPlaying": boolean,
+//     "title": string,
+//     "artist": string,
+//     "album": string,
+//     "albumImageUrl": string,   // Spotify cover art URL
+//     "songUrl": string          // open.spotify.com track link
+//   }
+//
+// Set the endpoint via a PUBLIC env var (the URL is public, only the secret isn't):
+//   PUBLIC_SPOTIFY_ENDPOINT="https://<your-worker>.workers.dev/now-playing"
+const SPOTIFY_ENDPOINT = import.meta.env.PUBLIC_SPOTIFY_ENDPOINT || '';
+const showDemo = !SPOTIFY_ENDPOINT && import.meta.env.DEV;
+const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
+---
+
+{render && (
+  <div
+    class="np"
+    data-np
+    data-np-endpoint={SPOTIFY_ENDPOINT}
+    data-np-demo={showDemo ? 'true' : 'false'}
+  >
+    <div class="np__art" data-np-art aria-hidden="true"></div>
+    <div class="np__body">
+      <p class="np__status">
+        <span class="np__eq" data-np-eq aria-hidden="true"><i></i><i></i><i></i></span>
+        <span data-np-label>Now playing</span>
+      </p>
+      <a class="np__title" data-np-title href="#" target="_blank" rel="noopener">—</a>
+      <p class="np__artist" data-np-artist></p>
+    </div>
+  </div>
+)}
+
+<style>
+  .np {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 0.9rem;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1rem 1.15rem;
+    background: var(--bg-soft);
+  }
+  .np__art {
+    width: 56px; height: 56px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--signal), var(--signal-2));
+    background-size: cover;
+    background-position: center;
+    flex: 0 0 auto;
+  }
+  .np__body { display: grid; gap: 0.15rem; min-width: 0; }
+  .np__status {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--signal-4);
+  }
+  .np__title {
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: color 0.2s var(--ease);
+  }
+  .np__title:hover { color: var(--signal); }
+  .np__artist {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* Little equalizer bars — only animate when actually playing */
+  .np__eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 0.8em; }
+  .np__eq i {
+    width: 3px; height: 100%;
+    background: var(--signal-4);
+    transform-origin: bottom;
+    transform: scaleY(0.4);
+  }
+  .np.is-playing .np__eq i { animation: np-bar 0.9s ease-in-out infinite; }
+  .np.is-playing .np__eq i:nth-child(2) { animation-delay: 0.2s; }
+  .np.is-playing .np__eq i:nth-child(3) { animation-delay: 0.4s; }
+  .np:not(.is-playing) .np__eq { display: none; }
+
+  @keyframes np-bar {
+    0%, 100% { transform: scaleY(0.35); }
+    50%      { transform: scaleY(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .np.is-playing .np__eq i { animation: none; transform: scaleY(0.7); }
+  }
+</style>
+
+<script>
+  interface Track {
+    isPlaying: boolean;
+    title: string;
+    artist: string;
+    album?: string;
+    albumImageUrl?: string;
+    songUrl?: string;
+  }
+
+  const root = document.querySelector<HTMLElement>('[data-np]');
+  if (root) {
+    const endpoint = root.dataset.npEndpoint || '';
+    const isDemo = root.dataset.npDemo === 'true';
+
+    const art = root.querySelector<HTMLElement>('[data-np-art]');
+    const label = root.querySelector<HTMLElement>('[data-np-label]');
+    const title = root.querySelector<HTMLAnchorElement>('[data-np-title]');
+    const artist = root.querySelector<HTMLElement>('[data-np-artist]');
+
+    const paint = (t: Track) => {
+      root.classList.toggle('is-playing', !!t.isPlaying);
+      if (label) label.textContent = t.isPlaying ? 'Now playing' : 'Last played';
+      if (title) {
+        title.textContent = t.title || '—';
+        if (t.songUrl) title.href = t.songUrl;
+      }
+      if (artist) artist.textContent = t.artist || '';
+      if (art && t.albumImageUrl) art.style.backgroundImage = `url("${t.albumImageUrl}")`;
+    };
+
+    const idle = () => {
+      root.classList.remove('is-playing');
+      if (label) label.textContent = 'Not playing';
+      if (title) { title.textContent = 'Nothing right now'; title.removeAttribute('href'); }
+      if (artist) artist.textContent = '';
+    };
+
+    if (isDemo) {
+      // Local-dev preview only — never shown in production.
+      paint({
+        isPlaying: true,
+        title: 'Demo Track (dev preview)',
+        artist: 'Connect Spotify to go live',
+        albumImageUrl: '',
+        songUrl: 'https://open.spotify.com',
+      });
+    } else if (endpoint) {
+      const refresh = async () => {
+        try {
+          const res = await fetch(endpoint, { cache: 'no-store' });
+          if (!res.ok) throw new Error(String(res.status));
+          const data: Track = await res.json();
+          if (data && data.title) paint(data);
+          else idle();
+        } catch {
+          idle();
+        }
+      };
+      refresh();
+      // Light polling so "now playing" stays fresh without hammering the endpoint.
+      setInterval(refresh, 60_000);
+    }
+  }
+</script>
