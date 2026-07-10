@@ -111,6 +111,7 @@ const MAX_REPOS = 4;
     pushed_at: string;
     stargazers_count: number;
     topics?: string[];
+    languages_url: string;
   }
 
   const root = document.querySelector<HTMLElement>('.gh');
@@ -162,8 +163,23 @@ const MAX_REPOS = 4;
         return;
       }
 
+      // The list endpoint only gives one primary language; /languages gives the
+      // full breakdown (by bytes). Fetch per chosen repo, in parallel, and keep
+      // the top few. (List + N language calls stays well under the 60/hr limit.)
+      const langLists = await Promise.all(chosen.map(async (r) => {
+        try {
+          const lr = await fetch(r.languages_url, { headers: { Accept: 'application/vnd.github+json' } });
+          if (!lr.ok) return r.language ? [r.language] : [];
+          const bytes: Record<string, number> = await lr.json();
+          const langs = Object.entries(bytes).sort((a, b) => b[1] - a[1]).map(([k]) => k);
+          return langs.length ? langs.slice(0, 3) : (r.language ? [r.language] : []);
+        } catch {
+          return r.language ? [r.language] : [];
+        }
+      }));
+
       list.innerHTML = '';
-      for (const r of chosen) {
+      chosen.forEach((r, i) => {
         const li = document.createElement('li');
         li.className = 'gh__item';
 
@@ -184,15 +200,15 @@ const MAX_REPOS = 4;
 
         const meta = document.createElement('div');
         meta.className = 'gh__meta';
-        if (r.language) {
+        for (const name of langLists[i]) {
           const lang = document.createElement('span');
           lang.className = 'gh__lang';
           const dot = document.createElement('span');
           dot.className = 'gh__dot';
-          const color = LANG_COLOR[r.language];
+          const color = LANG_COLOR[name];
           if (color) dot.style.background = color;
           lang.appendChild(dot);
-          lang.appendChild(document.createTextNode(r.language));
+          lang.appendChild(document.createTextNode(name));
           meta.appendChild(lang);
         }
         if (r.stargazers_count > 0) {
@@ -218,7 +234,7 @@ const MAX_REPOS = 4;
         }
 
         list.appendChild(li);
-      }
+      });
     } catch (err) {
       list.innerHTML =
         '<li class="gh__empty">Couldn\u2019t reach GitHub right now.</li>';
