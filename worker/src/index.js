@@ -19,20 +19,43 @@ const NOW_PLAYING_URL = 'https://api.spotify.com/v1/me/player/currently-playing'
 const RECENT_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=10';
 
 // ---- CONFIG: content filtering ---------------------------------------------
-// Hide any track Spotify flags as explicit.
-const HIDE_EXPLICIT = true;
+// The `explicit` flag alone is too broad (lots of fine songs are flagged), so
+// it's OFF by default. Instead we auto-hide only tracks whose TITLE contains
+// genuinely crass language — that catches the really-crass ones while letting
+// ordinary explicit songs through. (This is title-based; a clean-titled song
+// with filthy lyrics won't be auto-caught — add those to BLOCKLIST.)
+const HIDE_EXPLICIT = false;
+const HIDE_CRASS_TITLES = true;
 // Only show music (skip podcast episodes / ads as the "now playing").
 const MUSIC_ONLY = true;
-// Manual hide-list for anything NOT flagged explicit that you'd rather not show.
-// Match by Spotify track ID, or by a lowercased substring of "artist + title".
+// Manual hide-list for anything else you'd rather not show. Match by Spotify
+// track ID, or by a lowercased substring of "artist + title".
 const BLOCKLIST = [
   // '3n3Ppam7vgaVa1iaRUc9Lp',   // by exact track ID
   // 'some artist',              // by artist/title substring (case-insensitive)
 ];
 
+// Strong terms that, in a TITLE, mark a track as too crass for the site.
+// Includes common self-censored spellings (f*ck, sh*t). Matched as whole tokens
+// so "class"/"assassin" etc. don't false-positive.
+const STRONG_TERMS = [
+  'fuck', 'f*ck', 'f**k', 'fuckin', 'motherfucker', 'shit', 'sh*t',
+  'bitch', 'b*tch', 'cunt', 'pussy', 'whore', 'slut', 'dick',
+  'cock', 'nigga', 'n*gga', 'nigger', 'faggot',
+];
+
+function hasStrongLanguage(text) {
+  const s = (text || '').toLowerCase();
+  return STRONG_TERMS.some((term) => {
+    const esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // treat * as literal
+    return new RegExp(`(^|[^a-z0-9])${esc}([^a-z0-9]|$)`, 'i').test(s);
+  });
+}
+
 function isAllowed(t) {
   if (!t) return false;
   if (HIDE_EXPLICIT && t.explicit) return false;
+  if (HIDE_CRASS_TITLES && hasStrongLanguage(t.title)) return false;
   const hay = `${t.id || ''} ${t.artist} ${t.title}`.toLowerCase();
   return !BLOCKLIST.some((b) => b && hay.includes(b.toLowerCase()));
 }
