@@ -1,0 +1,8 @@
+name = "avamartoma-now-playing"
+main = "src/index.js"
+compatibility_date = "2026-07-10"
+
+# Secrets are NEVER stored here (this repo is public). Set them once with:
+#   npx wrangler secret put SPOTIFY_CLIENT_ID
+#   npx wrangler secret put SPOTIFY_CLIENT_SECRET
+#   npx wrangler secret put SPOTIFY_REFRESH_TOKEN

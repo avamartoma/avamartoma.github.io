@@ -71,13 +71,12 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       woodworking) were removed with the About section; fold into the iFAQ or
       elsewhere if wanted.
 
-- [ ] **10. Spotify "what I'm listening to" 🎧** — a headphone icon that shows
-      songs you've actually been playing lately (live "recently played" vibe).
-      Needs the Spotify Web API (OAuth) + a small backend to hide tokens — *not*
-      pure static. Path A: a free serverless function (Vercel/Netlify/Cloudflare)
-      the Pages site fetches from (truly live). Path B: a scheduled GitHub Action
-      that bakes recent tracks in (~hourly, stays on Pages). A working static
-      embed version was prototyped then removed pending the real connection.
+- [ ] **10. Spotify "what I'm listening to" 🎧 — IN PROGRESS (Path A).** Widget UI
+      done (`NowPlaying.astro`, in the homepage "Lately" section) + Cloudflare Worker
+      scaffolded (`worker/`). Remaining: one-time Spotify OAuth (refresh token) +
+      `wrangler` deploy, then set `PUBLIC_SPOTIFY_ENDPOINT`. **Resume steps in
+      `personal_assistant.md` (▶️ RESUME HERE) + `worker/README.md`.** GitHub half of
+      "Lately" (`GitHubActivity.astro`) is DONE + live.
 - [ ] **11. "Clubs & activities at Penn" strip** — showcase the things you do at
       Penn: Women's Club Squash (Co-Captain), Penn Electric Racing, Kesem, etc.
       Could be a small tag/badge row, a mini-card strip, or folded into the
@@ -130,6 +129,29 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       `Layout.astro` and switches the Twitter card to `summary_large_image`. Meta
       scaffolding is already in place — just needs the image asset. (Overlaps the
       logo work in #7.)
+
+- [ ] **16. Scroll-driven exploded CAD viewer** 🛠️ (signature feature, involved) —
+      a 3D model on a project page that breaks into its components as you scroll
+      (exploded assembly view). Killer differentiator for a MechE portfolio.
+      - **NOT anime.js** (that's 2D SVG). This is 3D → **three.js/WebGL**, or the
+        pre-rendered trick below.
+      - **"Just upload the CAD file" isn't possible** — browsers can't read native
+        CAD (STEP/`.sldasm`/`.f3d`/IGES). Always a conversion step. Make it a
+        repeatable **recipe** instead: CAD → web asset → drop into the project.
+      - **Approach A — real 3D (three.js):** export assembly to **glTF/GLB** with
+        components as *separate meshes*; map scroll progress → each part's explode
+        offset + camera. Interactive/rotatable; more build work; adds three.js
+        (bigger runtime dep).
+      - **Approach B — pre-rendered frames (Apple-AirPods trick):** render the
+        explode animation in CAD/Blender as an image sequence; swap frames on
+        scroll (reuses existing IntersectionObserver, zero 3D lib). Gorgeous baked
+        renders; fixed camera; heavier image payload. **Recommended for the first
+        pilot** (less risk).
+      - **Integration:** add optional `model:` (or `frames:`) field to the project
+        frontmatter schema; `[...slug].astro` renders the viewer when present
+        (keeps `.md` simple — avoids needing MDX). Pilot on ONE project first.
+      - **Caveats:** mobile perf (provide a static fallback image); gate behind
+        `prefers-reduced-motion`.
 
 ---
 

@@ -1,0 +1,164 @@
+---
+// "Recently building" — shows Ava's most recently pushed public GitHub repos.
+// Fully client-side: the GitHub REST API serves public data with NO auth and no
+// backend (unauthenticated limit is 60 req/hr per visitor IP — plenty for a
+// personal site). No secrets, no dependencies.
+const GITHUB_USER = 'avamartoma';
+const MAX_REPOS = 4;
+---
+
+<div class="gh" data-gh-user={GITHUB_USER} data-gh-max={MAX_REPOS}>
+  <p class="gh__label">Recently building</p>
+  <ul class="gh__list" data-gh-list>
+    <li class="gh__loading" data-gh-loading>Loading from GitHub…</li>
+  </ul>
+  <a
+    class="gh__all arrow-link"
+    href={`https://github.com/${GITHUB_USER}`}
+    target="_blank"
+    rel="noopener"
+  >
+    All repositories <span>↗</span>
+  </a>
+</div>
+
+<style>
+  .gh {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.35rem 1.1rem;
+    background: var(--bg-soft);
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+  }
+  .gh__label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .gh__list { list-style: none; display: grid; gap: 0.7rem; }
+  .gh__loading,
+  .gh__empty { color: var(--muted); font-size: 0.85rem; font-family: var(--font-mono); }
+
+  .gh__item { display: grid; gap: 0.2rem; }
+  .gh__repo {
+    font-size: 0.92rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+  .gh__repo:hover { color: var(--signal); }
+  .gh__desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.4; }
+  .gh__meta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .gh__lang { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .gh__dot {
+    width: 0.6em; height: 0.6em; border-radius: 50%;
+    background: var(--signal); display: inline-block;
+  }
+  .gh__all { font-family: var(--font-mono); font-size: 0.78rem; margin-top: 0.15rem; }
+</style>
+
+<script>
+  interface Repo {
+    name: string;
+    html_url: string;
+    description: string | null;
+    language: string | null;
+    fork: boolean;
+    pushed_at: string;
+    stargazers_count: number;
+  }
+
+  const root = document.querySelector<HTMLElement>('.gh');
+  const list = root?.querySelector<HTMLElement>('[data-gh-list]');
+
+  function timeAgo(iso: string): string {
+    const then = new Date(iso).getTime();
+    const secs = Math.max(1, Math.round((Date.now() - then) / 1000));
+    const units: [number, string][] = [
+      [60, 'second'], [60, 'minute'], [24, 'hour'],
+      [7, 'day'], [4.34, 'week'], [12, 'month'], [Infinity, 'year'],
+    ];
+    let val = secs;
+    let unit = 'second';
+    for (const [size, name] of units) {
+      if (val < size) { unit = name; break; }
+      val = Math.floor(val / size);
+      unit = name;
+    }
+    return `${val} ${unit}${val === 1 ? '' : 's'} ago`;
+  }
+
+  async function load() {
+    if (!root || !list) return;
+    const user = root.dataset.ghUser || 'avamartoma';
+    const max = Number(root.dataset.ghMax || 4);
+    try {
+      const res = await fetch(
+        `https://api.github.com/users/${user}/repos?sort=pushed&direction=desc&per_page=20&type=owner`,
+        { headers: { Accept: 'application/vnd.github+json' } }
+      );
+      if (!res.ok) throw new Error(`GitHub ${res.status}`);
+      const repos: Repo[] = await res.json();
+      const top = repos.filter((r) => !r.fork).slice(0, max);
+
+      if (top.length === 0) {
+        list.innerHTML = '<li class="gh__empty">No public repositories yet.</li>';
+        return;
+      }
+
+      list.innerHTML = '';
+      for (const r of top) {
+        const li = document.createElement('li');
+        li.className = 'gh__item';
+
+        const a = document.createElement('a');
+        a.className = 'gh__repo';
+        a.href = r.html_url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = r.name;
+        li.appendChild(a);
+
+        if (r.description) {
+          const d = document.createElement('p');
+          d.className = 'gh__desc';
+          d.textContent = r.description;
+          li.appendChild(d);
+        }
+
+        const meta = document.createElement('div');
+        meta.className = 'gh__meta';
+        if (r.language) {
+          const lang = document.createElement('span');
+          lang.className = 'gh__lang';
+          lang.innerHTML = '<span class="gh__dot"></span>';
+          lang.appendChild(document.createTextNode(r.language));
+          meta.appendChild(lang);
+        }
+        const updated = document.createElement('span');
+        updated.textContent = `Updated ${timeAgo(r.pushed_at)}`;
+        meta.appendChild(updated);
+        li.appendChild(meta);
+
+        list.appendChild(li);
+      }
+    } catch (err) {
+      list.innerHTML =
+        '<li class="gh__empty">Couldn\u2019t reach GitHub right now.</li>';
+    }
+  }
+
+  load();
+</script>
