@@ -86,6 +86,36 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 ---
 
+## 💡 New feature ideas (brainstorm 2026-07-10)
+
+> Sparked after finishing the Spotify "Lately" widget. Several of these are now
+> cheap because the site has a **Cloudflare Worker + KV** (the Spotify backend) —
+> KV can be edited from the Cloudflare dashboard with no code change / no deploy.
+
+- [ ] **17. ⭐ "Now" page (KV-backed) — NEXT UP (Ava wants this).** A
+      nownownow.com-style `/now` page: "what I'm focused on right now" — current
+      classes, projects, what I'm building/reading. Content stored in KV so Ava
+      edits it straight from the Cloudflare dashboard (same no-deploy workflow as
+      the blocked-songs list). Low effort, personal, self-serve to update.
+
+- [ ] **18. Guestbook (KV-backed).** Visitors leave a short note; stored in KV,
+      rendered on the page. Warm + personal; infra already exists. (Needs light
+      spam handling — length cap + basic profanity filter, reuse the Spotify one.)
+
+- [ ] **19. Project reactions / view counts (KV-backed).** A little ♥ or "N
+      views" per project, counted in KV. Cheap social proof.
+
+- [ ] **20. Case-study project pages.** Turn the strongest 2–3 projects from a
+      blurb into problem → approach → build process → result → what I learned.
+      Highest recruiter value (shows *process*, not just outcome).
+
+- [ ] **21. Build-log / "workshop" view.** Show CAD → prototype → final photos in
+      sequence for hardware projects. The exploded-CAD viewer (#16) is the flashy
+      version of this.
+
+- [ ] **22. Privacy-friendly analytics.** Cloudflare Web Analytics (free, one
+      snippet, no cookies) to see which pages people visit.
+
 ## 🔵 Later / infrastructure
 
 - [x] **10. Custom domain — `avamartoma.com`** (bought via Cloudflare Registrar,
