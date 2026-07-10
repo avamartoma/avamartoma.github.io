@@ -29,7 +29,10 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
   </div>
 )}
 
-<style>
+<style is:global>
+  /* Global (not scoped): the track rows are injected at runtime via innerHTML,
+     so Astro's scoped-style attribute never reaches them. The `.np__*` prefix
+     keeps these from colliding with anything else. */
   .np {
     border: 1px solid var(--line);
     border-radius: var(--radius);
