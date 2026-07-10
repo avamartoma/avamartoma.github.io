@@ -31,6 +31,8 @@ const MUSIC_ONLY = true;
 // Manual hide-list for anything else you'd rather not show. Match by Spotify
 // track ID, or by a lowercased substring of "artist + title".
 const BLOCKLIST = [
+  'slut',
+  'whore',
   // '3n3Ppam7vgaVa1iaRUc9Lp',   // by exact track ID
   // 'some artist',              // by artist/title substring (case-insensitive)
 ];
