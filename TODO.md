@@ -71,12 +71,14 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       woodworking) were removed with the About section; fold into the iFAQ or
       elsewhere if wanted.
 
-- [ ] **10. Spotify "what I'm listening to" 🎧 — IN PROGRESS (Path A).** Widget UI
-      done (`NowPlaying.astro`, in the homepage "Lately" section) + Cloudflare Worker
-      scaffolded (`worker/`). Remaining: one-time Spotify OAuth (refresh token) +
-      `wrangler` deploy, then set `PUBLIC_SPOTIFY_ENDPOINT`. **Resume steps in
-      `personal_assistant.md` (▶️ RESUME HERE) + `worker/README.md`.** GitHub half of
-      "Lately" (`GitHubActivity.astro`) is DONE + live.
+- [x] **10. ✅ Spotify "Lately" 🎧 — LIVE (2026-07-10, Path A).** Cloudflare Worker
+      (`worker/`) deployed at `https://avamartoma-now-playing.avamartoma.workers.dev`
+      (secrets — client id/secret + refresh token — stored as Wrangler secrets;
+      account subdomain `avamartoma`). `NowPlaying.astro` shows the **current track
+      (with equalizer) + recent tracks**, and falls back to the **last 5 played**
+      when nothing's on. Endpoint hardcoded as the default in `NowPlaying.astro`
+      (still overridable via `PUBLIC_SPOTIFY_ENDPOINT`). GitHub half of "Lately"
+      (`GitHubActivity.astro`) also DONE + live.
 - [ ] **11. "Clubs & activities at Penn" strip** — showcase the things you do at
       Penn: Women's Club Squash (Co-Captain), Penn Electric Racing, Kesem, etc.
       Could be a small tag/badge row, a mini-card strip, or folded into the

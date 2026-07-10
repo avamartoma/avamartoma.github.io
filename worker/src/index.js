@@ -1,15 +1,19 @@
-// Cloudflare Worker — Spotify "Now Playing" proxy for avamartoma.com
+// Cloudflare Worker — Spotify "Lately" proxy for avamartoma.com
 //
 // Holds the Spotify secrets server-side (as Wrangler secrets, NOT in this repo)
-// and returns a small JSON payload the site's NowPlaying widget consumes:
-//   { isPlaying, title, artist, album, albumImageUrl, songUrl }
+// and returns what Ava is playing now + recently played:
+//   {
+//     isPlaying: boolean,
+//     current:   { title, artist, album, albumImageUrl, songUrl } | null,
+//     recent:    [ { title, artist, album, albumImageUrl, songUrl }, ... ]  // up to 5
+//   }
 //
 // Secrets are read from `env` (set with `wrangler secret put` — see README):
 //   SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN
 
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const NOW_PLAYING_URL = 'https://api.spotify.com/v1/me/player/currently-playing';
-const RECENT_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=1';
+const RECENT_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=10';
 
 export default {
   async fetch(request, env) {
@@ -30,14 +34,30 @@ export default {
 
     try {
       const token = await getAccessToken(env);
-      let track = await getCurrentlyPlaying(token);
-      if (!track) track = await getRecentlyPlayed(token);
-      const body = track ?? { isPlaying: false, title: '', artist: '' };
+      const [current, recent] = await Promise.all([
+        getCurrentlyPlaying(token),
+        getRecentlyPlayed(token),
+      ]);
+
+      // Only surface `current` when actively playing (skip paused). Drop it from
+      // the recent list to avoid showing the same song twice.
+      const playing = current && current.isPlaying ? current : null;
+      let recentList = recent;
+      if (playing) {
+        recentList = recent.filter((t) => t.songUrl !== playing.songUrl);
+      }
+      recentList = recentList.slice(0, 5);
+
+      const body = {
+        isPlaying: Boolean(playing),
+        current: playing ? stripFlag(playing) : null,
+        recent: recentList,
+      };
       return new Response(JSON.stringify(body), { headers });
     } catch (err) {
-      // Fail soft — the widget shows an idle state on a non-track payload.
+      // Fail soft — the widget shows an idle state on an empty payload.
       return new Response(
-        JSON.stringify({ isPlaying: false, title: '', artist: '' }),
+        JSON.stringify({ isPlaying: false, current: null, recent: [] }),
         { status: 200, headers }
       );
     }
@@ -62,10 +82,9 @@ async function getAccessToken(env) {
   return data.access_token;
 }
 
-function mapTrack(item, isPlaying) {
+function mapTrack(item) {
   if (!item) return null;
   return {
-    isPlaying,
     title: item.name ?? '',
     artist: (item.artists || []).map((a) => a.name).join(', '),
     album: item.album?.name ?? '',
@@ -74,22 +93,36 @@ function mapTrack(item, isPlaying) {
   };
 }
 
+function stripFlag(t) {
+  const { isPlaying, ...rest } = t;
+  return rest;
+}
+
 async function getCurrentlyPlaying(token) {
   const res = await fetch(NOW_PLAYING_URL, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  // 204 = nothing playing; anything >=400 = fall back to recently played.
+  // 204 = nothing playing; anything >=400 = treat as nothing playing.
   if (res.status === 204 || res.status >= 400) return null;
   const data = await res.json();
   if (!data || !data.item) return null;
-  return mapTrack(data.item, Boolean(data.is_playing));
+  const t = mapTrack(data.item);
+  return t ? { ...t, isPlaying: Boolean(data.is_playing) } : null;
 }
 
 async function getRecentlyPlayed(token) {
   const res = await fetch(RECENT_URL, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!res.ok) return null;
+  if (!res.ok) return [];
   const data = await res.json();
-  return mapTrack(data?.items?.[0]?.track, false);
+  const seen = new Set();
+  const out = [];
+  for (const it of data?.items || []) {
+    const t = mapTrack(it.track);
+    if (!t || !t.songUrl || seen.has(t.songUrl)) continue; // de-dupe repeats
+    seen.add(t.songUrl);
+    out.push(t);
+  }
+  return out;
 }
