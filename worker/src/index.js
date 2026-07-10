@@ -23,19 +23,26 @@ const RECENT_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=1
 // it's OFF by default. Instead we auto-hide only tracks whose TITLE contains
 // genuinely crass language — that catches the really-crass ones while letting
 // ordinary explicit songs through. (This is title-based; a clean-titled song
-// with filthy lyrics won't be auto-caught — add those to BLOCKLIST.)
+// with filthy lyrics won't be auto-caught — add those to BLOCKED_SONGS.)
 const HIDE_EXPLICIT = false;
 const HIDE_CRASS_TITLES = true;
 // Only show music (skip podcast episodes / ads as the "now playing").
 const MUSIC_ONLY = true;
-// Manual hide-list for anything else you'd rather not show. Match by Spotify
-// track ID, or by a lowercased substring of "artist + title".
-const BLOCKLIST = [
-  'slut',
-  'whore',
-  // '3n3Ppam7vgaVa1iaRUc9Lp',   // by exact track ID
-  // 'some artist',              // by artist/title substring (case-insensitive)
+// ============================================================================
+// SONGS TO ALWAYS HIDE — the easy list to grow over time.
+// Add one entry per line. Each entry can be:
+//   • a song title          e.g. 'wap'           — matched as a whole phrase in
+//                                                   the title (any casing), so
+//                                                   'wap' hides "WAP" but NOT "Swap Meet"
+//   • 'title | artist'      e.g. 'party | drake' — title phrase AND artist
+//   • a Spotify track ID    e.g. '4Oun2ylbjFKMPTvlurfXbG' — exact, most precise
+// After editing this list, redeploy once:  cd worker && npx wrangler@latest deploy
+const BLOCKED_SONGS = [
+  'slut me out',
+  'slut me out 2',
+  'wap',
 ];
+// ============================================================================
 
 // Strong terms that, in a TITLE, mark a track as too crass for the site.
 // Includes common self-censored spellings (f*ck, sh*t). Matched as whole tokens
@@ -46,11 +53,30 @@ const STRONG_TERMS = [
   'cock', 'nigga', 'n*gga', 'nigger', 'faggot',
 ];
 
-function hasStrongLanguage(text) {
-  const s = (text || '').toLowerCase();
-  return STRONG_TERMS.some((term) => {
-    const esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // treat * as literal
-    return new RegExp(`(^|[^a-z0-9])${esc}([^a-z0-9]|$)`, 'i').test(s);
+// Whole-token match (treats * literally) so lookalikes don't false-positive.
+function wholeMatch(haystack, term) {
+  const esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(^|[^a-z0-9])${esc}([^a-z0-9]|$)`, 'i').test(haystack);
+}
+
+function hasStrongLanguage(title) {
+  const s = (title || '').toLowerCase();
+  return STRONG_TERMS.some((term) => wholeMatch(s, term.toLowerCase()));
+}
+
+function isBlockedSong(t) {
+  const title = (t.title || '').toLowerCase();
+  const artist = (t.artist || '').toLowerCase();
+  const id = (t.id || '').toLowerCase();
+  return BLOCKED_SONGS.some((raw) => {
+    const entry = raw.trim().toLowerCase();
+    if (!entry) return false;
+    if (/^[a-z0-9]{22}$/.test(entry)) return entry === id;       // Spotify track ID
+    if (entry.includes('|')) {                                    // "title | artist"
+      const [ti, ar] = entry.split('|').map((s) => s.trim());
+      return (!ti || wholeMatch(title, ti)) && (!ar || artist.includes(ar));
+    }
+    return wholeMatch(title, entry);                              // title phrase
   });
 }
 
@@ -58,8 +84,8 @@ function isAllowed(t) {
   if (!t) return false;
   if (HIDE_EXPLICIT && t.explicit) return false;
   if (HIDE_CRASS_TITLES && hasStrongLanguage(t.title)) return false;
-  const hay = `${t.id || ''} ${t.artist} ${t.title}`.toLowerCase();
-  return !BLOCKLIST.some((b) => b && hay.includes(b.toLowerCase()));
+  if (isBlockedSong(t)) return false;
+  return true;
 }
 
 // Strip internal-only fields (id, explicit, isPlaying) before sending to the client.
