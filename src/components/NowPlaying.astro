@@ -60,7 +60,6 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
     align-items: center;
     min-width: 0;
   }
-  .np__row--current { grid-template-columns: 56px 1fr auto; }
 
   .np__art {
     width: 44px; height: 44px;
@@ -70,14 +69,13 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
     background-position: center;
     flex: 0 0 auto;
   }
-  .np__row--current .np__art { width: 56px; height: 56px; border-radius: 8px; }
 
   .np__meta { display: grid; gap: 0.15rem; min-width: 0; }
   .np__line {
     font-size: 0.9rem;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .np__row--current .np__line { font-size: 1rem; }
+  .np__row--current .np__line { font-size: 0.9rem; }
   .np__song {
     color: var(--ink);
     text-decoration: none;

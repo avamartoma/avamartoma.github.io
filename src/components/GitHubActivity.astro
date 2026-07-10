@@ -1,14 +1,28 @@
 ---
-// "Recently building" — shows Ava's most recently pushed public GitHub repos.
-// Fully client-side: the GitHub REST API serves public data with NO auth and no
-// backend (unauthenticated limit is 60 req/hr per visitor IP — plenty for a
-// personal site). No secrets, no dependencies.
+// "On GitHub" — a curated showcase of Ava's public repos.
+//
+// Unlike a recency feed, this shows a hand-picked / best-of set with TIMELESS
+// info (language, stars, topics, description) and NO "updated X ago", so it
+// reads as "code I've written" rather than "how recently I pushed".
+//
+// Curate by listing repo names in FEATURED (in the order you want them shown).
+// Leave FEATURED empty to auto-pick your most-starred, then most-recent repos.
+// Fully client-side: GitHub's REST API serves this public data with no auth and
+// no backend. No secrets, no dependencies.
 const GITHUB_USER = 'avamartoma';
+const FEATURED: string[] = [
+  // e.g. 'penn-electric-racing', 'linkedin-hackathon'
+];
 const MAX_REPOS = 4;
 ---
 
-<div class="gh" data-gh-user={GITHUB_USER} data-gh-max={MAX_REPOS}>
-  <p class="gh__label">Recently building</p>
+<div
+  class="gh"
+  data-gh-user={GITHUB_USER}
+  data-gh-max={MAX_REPOS}
+  data-gh-featured={FEATURED.join(',')}
+>
+  <p class="gh__label">On GitHub</p>
   <ul class="gh__list" data-gh-list>
     <li class="gh__loading" data-gh-loading>Loading from GitHub…</li>
   </ul>
@@ -22,7 +36,9 @@ const MAX_REPOS = 4;
   </a>
 </div>
 
-<style>
+<style is:global>
+  /* Global (not scoped): the repo rows are injected at runtime via the DOM API
+     inside a fragment, so keep styles reachable and prefixed to avoid clashes. */
   .gh {
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -37,35 +53,51 @@ const MAX_REPOS = 4;
     font-size: 0.72rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--ink-soft);
+    color: var(--signal-4);
+    margin: 0;
   }
-  .gh__list { list-style: none; display: grid; gap: 0.7rem; }
+  .gh__list { list-style: none; display: grid; gap: 0.85rem; margin: 0; padding: 0; }
   .gh__loading,
   .gh__empty { color: var(--muted); font-size: 0.85rem; font-family: var(--font-mono); }
 
-  .gh__item { display: grid; gap: 0.2rem; }
+  .gh__item { display: grid; gap: 0.25rem; }
   .gh__repo {
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     color: var(--ink);
     text-decoration: none;
+    font-weight: 500;
     transition: color 0.2s var(--ease);
   }
   .gh__repo:hover { color: var(--signal); }
   .gh__desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.4; }
+
   .gh__meta {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     color: var(--muted);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.9rem;
     align-items: center;
   }
   .gh__lang { display: inline-flex; align-items: center; gap: 0.35rem; }
   .gh__dot {
-    width: 0.6em; height: 0.6em; border-radius: 50%;
+    width: 0.62em; height: 0.62em; border-radius: 50%;
     background: var(--signal); display: inline-block;
   }
+  .gh__stars { display: inline-flex; align-items: center; gap: 0.3rem; }
+
+  .gh__topics { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.1rem; }
+  .gh__topic {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.1rem 0.5rem;
+    white-space: nowrap;
+  }
+
   .gh__all { font-family: var(--font-mono); font-size: 0.78rem; margin-top: 0.15rem; }
 </style>
 
@@ -78,48 +110,60 @@ const MAX_REPOS = 4;
     fork: boolean;
     pushed_at: string;
     stargazers_count: number;
+    topics?: string[];
   }
 
   const root = document.querySelector<HTMLElement>('.gh');
   const list = root?.querySelector<HTMLElement>('[data-gh-list]');
 
-  function timeAgo(iso: string): string {
-    const then = new Date(iso).getTime();
-    const secs = Math.max(1, Math.round((Date.now() - then) / 1000));
-    const units: [number, string][] = [
-      [60, 'second'], [60, 'minute'], [24, 'hour'],
-      [7, 'day'], [4.34, 'week'], [12, 'month'], [Infinity, 'year'],
-    ];
-    let val = secs;
-    let unit = 'second';
-    for (const [size, name] of units) {
-      if (val < size) { unit = name; break; }
-      val = Math.floor(val / size);
-      unit = name;
-    }
-    return `${val} ${unit}${val === 1 ? '' : 's'} ago`;
-  }
+  // Rough language → color (GitHub-ish). Falls back to the site accent.
+  const LANG_COLOR: Record<string, string> = {
+    JavaScript: '#f1e05a', TypeScript: '#3178c6', Python: '#3572A5',
+    C: '#555555', 'C++': '#f34b7d', Java: '#b07219', HTML: '#e34c26',
+    CSS: '#563d7c', Arduino: '#00979D', 'C#': '#178600', Rust: '#dea584',
+    Shell: '#89e051', 'Jupyter Notebook': '#DA5B0B', MATLAB: '#e16737',
+  };
 
   async function load() {
     if (!root || !list) return;
     const user = root.dataset.ghUser || 'avamartoma';
     const max = Number(root.dataset.ghMax || 4);
+    const featured = (root.dataset.ghFeatured || '')
+      .split(',').map((s) => s.trim()).filter(Boolean);
+
     try {
       const res = await fetch(
-        `https://api.github.com/users/${user}/repos?sort=pushed&direction=desc&per_page=20&type=owner`,
+        `https://api.github.com/users/${user}/repos?per_page=100&type=owner`,
         { headers: { Accept: 'application/vnd.github+json' } }
       );
       if (!res.ok) throw new Error(`GitHub ${res.status}`);
-      const repos: Repo[] = await res.json();
-      const top = repos.filter((r) => !r.fork).slice(0, max);
+      const all: Repo[] = await res.json();
+      const owned = all.filter((r) => !r.fork);
 
-      if (top.length === 0) {
+      let chosen: Repo[];
+      if (featured.length) {
+        // Curated order; drop any names that don't resolve.
+        const byName = new Map(owned.map((r) => [r.name.toLowerCase(), r]));
+        chosen = featured
+          .map((n) => byName.get(n.toLowerCase()))
+          .filter((r): r is Repo => Boolean(r))
+          .slice(0, max);
+      } else {
+        // Auto best-of: most stars, then most recently pushed.
+        chosen = [...owned]
+          .sort((a, b) =>
+            b.stargazers_count - a.stargazers_count ||
+            new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
+          .slice(0, max);
+      }
+
+      if (chosen.length === 0) {
         list.innerHTML = '<li class="gh__empty">No public repositories yet.</li>';
         return;
       }
 
       list.innerHTML = '';
-      for (const r of top) {
+      for (const r of chosen) {
         const li = document.createElement('li');
         li.className = 'gh__item';
 
@@ -143,14 +187,35 @@ const MAX_REPOS = 4;
         if (r.language) {
           const lang = document.createElement('span');
           lang.className = 'gh__lang';
-          lang.innerHTML = '<span class="gh__dot"></span>';
+          const dot = document.createElement('span');
+          dot.className = 'gh__dot';
+          const color = LANG_COLOR[r.language];
+          if (color) dot.style.background = color;
+          lang.appendChild(dot);
           lang.appendChild(document.createTextNode(r.language));
           meta.appendChild(lang);
         }
-        const updated = document.createElement('span');
-        updated.textContent = `Updated ${timeAgo(r.pushed_at)}`;
-        meta.appendChild(updated);
-        li.appendChild(meta);
+        if (r.stargazers_count > 0) {
+          const stars = document.createElement('span');
+          stars.className = 'gh__stars';
+          stars.textContent = `★ ${r.stargazers_count}`;
+          meta.appendChild(stars);
+        }
+        if (meta.childElementCount > 0) li.appendChild(meta);
+
+        // Topics as small pills (up to 3).
+        const topics = (r.topics || []).slice(0, 3);
+        if (topics.length) {
+          const wrap = document.createElement('div');
+          wrap.className = 'gh__topics';
+          for (const t of topics) {
+            const pill = document.createElement('span');
+            pill.className = 'gh__topic';
+            pill.textContent = t;
+            wrap.appendChild(pill);
+          }
+          li.appendChild(wrap);
+        }
 
         list.appendChild(li);
       }
