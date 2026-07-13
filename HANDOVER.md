@@ -12,7 +12,7 @@
 | **Branch** | `main` — every `git push` auto-deploys via GitHub Actions (~1–2 min) |
 | **Stack** | Astro 5.18.2 (static, root, no `base`), vanilla JS/CSS, no runtime deps; build-time integrations: `@astrojs/sitemap`, `@astrojs/rss` |
 | **Local dev** | `cd ~/personal-website && npm run dev` → http://localhost:4321/ |
-| **Last updated** | 2026-07-08 |
+| **Last updated** | 2026-07-13 |
 
 > Note: the local folder is still `~/personal-website` even though the GitHub
 > repo was renamed to `avamartoma.github.io`. That's fine.
@@ -33,7 +33,13 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 
 ---
 
-## 2. Current status (2026-07-08)
+## 2. Current status (2026-07-13)
+
+> **Session end 2026-07-13:** Resume-alignment content pass + headshot `og:image`
+> are committed **and already on `origin/main`** (this env auto-syncs commits to
+> the remote — no manual `git push` needed), so GitHub Actions is deploying them.
+> Verify the new Experience bullets + social-share thumbnail on the live site once
+> the ~1–2 min build finishes. Working tree is clean.
 
 The site is **live and looks polished**. Structure top-to-bottom on the homepage:
 **in-progress banner → nav → hero (the "about") → Work selection → Experience
