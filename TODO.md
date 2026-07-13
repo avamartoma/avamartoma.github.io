@@ -24,8 +24,9 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       per form; submitter's email is the reply-to.
 
 - [ ] **3. Fill in real details for a few entries.**
-  - **Amazon (Kuiper)** experience — real bullets (currently a neutral
-    placeholder).
+  - [x] **Amazon (Kuiper)** experience — ✅ real bullets added from resume
+    (2026-07-13): Flask dashboard across 94 built / ~200 planned antenna sites +
+    on-site Texas install with Intellian. Placeholder gone.
   - **LinkedIn Hackathon** — add a demo/live link if there is one.
   - Confirm estimated dates: **CAD Bridge**, **CAD & Woodworking Studies**, and
     the 3 marquetry pieces.
@@ -83,6 +84,9 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       Penn: Women's Club Squash (Co-Captain), Penn Electric Racing, Kesem, etc.
       Could be a small tag/badge row, a mini-card strip, or folded into the
       Experience section. (PER is also a project; Kesem is in the timeline.)
+      - Partial (2026-07-13): **Penn Women's Club Squash (Co-Captain)** added as
+        its own Experience timeline card (#6 national finish, 6 matches, $300
+        budget). A dedicated clubs strip is still open if wanted.
 
 ---
 
@@ -155,12 +159,15 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [ ] **14. Animated hand-drawn sprites** (Elly-style hover animation) — draw
       2–4 frames in Procreate; Kiro wires the frame-swap on hover.
 
-- [ ] **15. Social share image (`og:image`).** Links shared to LinkedIn/iMessage/
-      Slack currently show no thumbnail. Need a ~1200×630 PNG/JPG in `public/`
-      (headshot + name, or the AA/M logo); Kiro adds `og:image`/`twitter:image` in
-      `Layout.astro` and switches the Twitter card to `summary_large_image`. Meta
-      scaffolding is already in place — just needs the image asset. (Overlaps the
-      logo work in #7.)
+- [ ] **15. Social share image (`og:image`).** ⏳ Interim done (2026-07-13):
+      headshot sticker copied to `public/og-image.png` and wired as
+      `og:image` + `twitter:image` in `Layout.astro` (absolute URL; Twitter card
+      kept as `summary` because the asset is **portrait** 972×1500). ✅ Links
+      shared to LinkedIn/iMessage/Slack now show the headshot.
+      **Still ideal:** a dedicated **~1200×630 landscape** asset (headshot + name,
+      or AA/M logo) so wide `summary_large_image` cards don't center-crop it —
+      then bump `og:image:width`/`height` and switch the Twitter card. Overlaps
+      the logo work in #7.
 
 - [ ] **16. Scroll-driven exploded CAD viewer** 🛠️ (signature feature, involved) —
       a 3D model on a project page that breaks into its components as you scroll
