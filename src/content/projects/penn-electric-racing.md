@@ -1,9 +1,9 @@
 ---
 title: "Penn Electric Racing"
 blurb: "Mounting tabs, manufacturing jigs, and production-ready drawings for Penn's electric race car — plus composite airfoil layups."
-description: "My work with Penn Electric Racing (PER): designing mounting tabs and jigs, generating production SolidWorks drawings, and hands-on composite manufacturing for the aero airfoils."
+description: "My work with Penn Electric Racing (PER): designing mounting tabs and jigs, generating production SolidWorks drawings, and hands-on composite hand layup with ANSYS Fluent / Luminary aero analysis for the airfoils."
 date: 2025-12-31
-tags: ["SolidWorks", "Composites", "Manufacturing", "Technical Drawing"]
+tags: ["SolidWorks", "Composites", "Manufacturing", "ANSYS Fluent", "Technical Drawing"]
 accent: "#a855f7"
 accentAlt: "#4361ee"
 featured: true
@@ -24,8 +24,9 @@ engineering drawings** I finalized for production.
 
 ## Composite airfoils (rookie project)
 
-For my rookie project, I focused extensively on the **composite manufacturing
-and layup process** for the aerodynamic airfoils.
+For my rookie project, I manufactured the aerodynamic **airfoils via composite
+hand layup**, then ran **aerodynamic analysis in ANSYS Fluent and Luminary** to
+refine the design.
 
 <!-- Add your process shots here once downloaded:
 ![SolidWorks production drawing](/images/penn-electric-racing/drawing.jpg)
