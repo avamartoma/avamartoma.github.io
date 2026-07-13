@@ -53,8 +53,9 @@ timeline → Honors + Publications → footer (contact form)**.
   `robots.txt`, RSS (`/rss.xml`), and richer OG/Twitter meta. **Follow-up:** submit the
   sitemap in Google Search Console to get indexed faster (see §6).
 - ⏳ **Project photos** not added yet (generative artwork stands in).
-- ⏳ **Social share image** (`og:image`) not set — links shared to LinkedIn/iMessage
-  show no thumbnail. Meta is wired; just needs an image asset (`TODO.md` 15).
+- ✅ **Social share image** (`og:image`) — headshot sticker wired as
+  `og:image`/`twitter:image` (interim; portrait, so a landscape asset is still
+  ideal — `TODO.md` 15).
 - ⏳ **Email *sending*** (reply *as* `hello@`) not set up — needs a free SMTP relay (see §6 / `TODO.md` 10a).
 - ⏳ Backlog in `TODO.md` (photos, iFAQ, Spotify-live, Living page, etc.).
 
@@ -152,10 +153,10 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
   TXT in Cloudflare DNS) and `sitemap-index.xml` was submitted → status **Success**
   (2026-07-08). Now just waiting on Google to crawl/index (days). Bing Webmaster
   Tools import is optional and not done yet.
-- **No social share image (`og:image`) yet.** Links shared to LinkedIn/iMessage/Slack
-  show no thumbnail. Meta scaffolding is in `Layout.astro` — just needs a ~1200×630
-  PNG/JPG in `public/` and an `og:image`/`twitter:image` (+ switch card to
-  `summary_large_image`). Tracked in `TODO.md` 15.
+- **Social share image (`og:image`) is set** (interim, 2026-07-13): the headshot
+  sticker at `public/og-image.png` is wired as `og:image`/`twitter:image` in
+  `Layout.astro`. It's **portrait** (972×1500) so the Twitter card stays `summary`;
+  a dedicated ~1200×630 landscape asset is still ideal (TODO #15).
 - **Forms are LIVE (Web3Forms):** footer contact + both resume forms deliver to
   `hello@avamartoma.com` (→ Gmail). Access key `9cffc9b5-…` lives in
   `WEB3FORMS_ACCESS_KEY` in `Footer.astro`, `ResumeModal.astro`, `resume.astro`
@@ -169,8 +170,9 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
   records (`v=spf1 -all`, wildcard null `*._domainkey`) were DELETED to let Email
   Routing provision; a strict `_dmarc p=reject` remains and must be relaxed to
   `p=none` before send-as will deliver.
-- **Amazon (Kuiper)** timeline card has placeholder bullets; a few project dates
-  are estimates (CAD Bridge, CAD & Woodworking Studies, 3 marquetry pieces).
+- **Amazon (Kuiper)** timeline card now has real bullets (resume pass 2026-07-13);
+  a few project dates are still estimates (CAD Bridge, CAD & Woodworking Studies,
+  3 marquetry pieces).
 - **Privacy:** no home address / phone / birthday on the site. The LinkedIn data
   export (`*.zip`) is gitignored — never commit it.
 - **Astro advisories** in `npm audit` only fix in Astro 7 (major). Fine on static;
@@ -265,6 +267,25 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-07-13** — **Resume-alignment content pass + social share image.** Wired
+  the **`og:image`**: copied the headshot sticker to `public/og-image.png` and added
+  `og:image` (+ `:alt`/`:width`/`:height`) and `twitter:image` in `Layout.astro`
+  (absolute URL). Twitter card left as `summary` since the sticker is portrait
+  (972×1500) — a dedicated 1200×630 landscape asset stays on TODO #15. Also updated
+  site copy to match Ava's revised resume. **Experience timeline** (`Experience.astro`): replaced the
+  **Amazon/Kuiper** placeholder with real bullets (Python/Flask as-built dashboard
+  across 94 built + ~200 planned antenna sites; on-site Texas install with
+  Intellian); quantified **Kesem** (1 of 48 counselors, ~$2K raised), **KidsMates**
+  ($16K raised, 5+ partners, literacy drive), **Duke** CFD (112–117% drag delta
+  Kia Soul vs. Elantra + paper title), **MIT Langer** (reframed to lit review +
+  EVBA / vagal-nerve stimulation eval), and **Put Me In!** (CEO/investor pitch +
+  launched store); **added a new Penn Women's Club Squash (Co-Captain)** card
+  (#6 nationals, 6 matches, $300 budget). **PER project page**
+  (`penn-electric-racing.md`): composite **hand layup** + **ANSYS Fluent / Luminary**
+  aero analysis, added `ANSYS Fluent` tag. **Hero** (`Hero.astro`): tool chips now
+  lead with **SolidWorks** and add **ANSYS Fluent** + **TypeScript**. Build ✓
+  (14 pages). Not yet pushed.
 
 - **2026-07-10 (later)** — **Spotify "Lately" is LIVE.** Finished Path A: deployed the
   Cloudflare Worker (`worker/`) at `https://avamartoma-now-playing.avamartoma.workers.dev`
