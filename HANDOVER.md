@@ -12,7 +12,7 @@
 | **Branch** | `main` — every `git push` auto-deploys via GitHub Actions (~1–2 min) |
 | **Stack** | Astro 5.18.2 (static, root, no `base`), vanilla JS/CSS, no runtime deps; build-time integrations: `@astrojs/sitemap`, `@astrojs/rss` |
 | **Local dev** | `cd ~/personal-website && npm run dev` → http://localhost:4321/ |
-| **Last updated** | 2026-07-13 |
+| **Last updated** | 2026-08-05 |
 
 > Note: the local folder is still `~/personal-website` even though the GitHub
 > repo was renamed to `avamartoma.github.io`. That's fine.
@@ -183,6 +183,16 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
   export (`*.zip`) is gitignored — never commit it.
 - **Astro advisories** in `npm audit` only fix in Astro 7 (major). Fine on static;
   upgrade deliberately later.
+- **Self-hosted demo video / repo size** ⚠️ — the LinkedIn Career Discovery page
+  self-hosts its demo clip at `public/videos/linkedin-hackathon/demo.mp4`
+  (~19 MB, committed to git; served fine by GitHub Pages, well under limits).
+  It's an HTML5 `<video>` (poster frame, `preload="none"`). **If we ever hit
+  repo-size / storage pressure** (more videos, LFS warnings, slow clones),
+  switch this — and any future demo videos — to **Drive-hosted** playback
+  (embed the Drive preview iframe, or link out) instead of committing the binary.
+  Source video lives on Ava's Drive (`file/d/1EvLNHzAUAuKZlVMybCVtGntN5xqlV82n`).
+  Note that anything already committed stays in git history, so a real slim-down
+  would need history rewriting (avoid unless necessary).
 
 ---
 
@@ -273,6 +283,24 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-05** — **New Amazon Path project + card/media rework + LinkedIn media.**
+  Added a new project, **Amazon Path** (`afe-hackathon.md`) — the AFE intern
+  hackathon project (theme: Pay it Forward) — with two inline screenshots and a
+  `Hackathon` tag (also tagged LinkedIn Career Discovery). **Card/detail rework:**
+  project cards *and* the detail-page banner now always render the accent-color
+  **generative artwork** (no cover images); project **photos flow inline** in the
+  body instead. `cover` frontmatter is no longer rendered anywhere (still allowed
+  by the schema — unused). **Reveal bug fix:** scroll-reveal used `threshold: 0.15`,
+  so a `data-reveal` container taller than ~6.5× the viewport (a body with big
+  screenshots) never revealed and stayed `opacity:0` — switched to `threshold: 0`;
+  also capped inline `.prose img` at `80vh` and added `.prose video` styling.
+  **LinkedIn Career Discovery** page fleshed out into a case study: pulled the demo
+  video + four product screenshots from the pitch deck (exported the Google Slides
+  as PPTX). ⚠️ The demo video is **self-hosted (~19 MB in git)** — see §6 gotcha for
+  the Drive-hosted fallback if storage becomes an issue. All committed; **push
+  status: pushed through the card/media/reveal work; the LinkedIn-media commit
+  (`1b7f1d6`) + this handover update may still be local — check `git status`.**
 
 - **2026-07-13** — **Resume-alignment content pass + social share image.** Wired
   the **`og:image`**: copied the headshot sticker to `public/og-image.png` and added
