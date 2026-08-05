@@ -63,3 +63,9 @@ its pose.
 ![The finished LED lamp.](/images/cad-projects/led-lamp-1.jpg)
 
 ![The articulating arm and jointed base.](/images/cad-projects/led-lamp-2.jpg)
+
+---
+
+*📓 **Origins / build log:** the full day-by-day process for these builds —
+client briefs, Fusion models, and fabrication notes — lives on my
+[Lawrenceville design portfolio](https://lvilledesign.org/ava-m/).*

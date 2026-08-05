@@ -57,3 +57,8 @@ The result is a lantern that throws its mehndi pattern as light and shadow:
 ![Another angle of the finished lantern.](/images/luminary/final-2.jpg)
 
 ![Detail of the mandala top and side panels.](/images/luminary/final-3.jpg)
+
+---
+
+*📓 **Origins / build log:** the full day-by-day process — sketches, laser tests,
+staining, and assembly — lives on my [Lawrenceville design portfolio](https://lvilledesign.org/ava-m/).*
