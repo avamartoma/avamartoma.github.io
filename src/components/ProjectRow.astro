@@ -1,0 +1,175 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  blurb: string;
+  tags?: string[];
+  date: Date;
+  accent?: string;
+  accentAlt?: string;
+  index: number;
+}
+
+const {
+  href,
+  title,
+  blurb,
+  tags = [],
+  date,
+  accent = '#a855f7',
+  accentAlt = '#4361ee',
+  index,
+} = Astro.props;
+
+const num = String(index + 1).padStart(2, '0');
+const dateLabel = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+});
+---
+
+<a
+  class="row"
+  href={href}
+  data-reveal
+  data-reveal-delay={`${Math.min(index, 8) * 45}ms`}
+  data-tags={tags.join(',')}
+  style={`--a:${accent};--b:${accentAlt}`}
+>
+  <span class="row__art" aria-hidden="true">
+    <span class="row__blob row__blob--1"></span>
+    <span class="row__blob row__blob--2"></span>
+  </span>
+
+  <span class="row__num label">{num}</span>
+
+  <span class="row__main">
+    <span class="row__title">{title}</span>
+    <span class="row__blurb">{blurb}</span>
+  </span>
+
+  {tags.length > 0 && (
+    <span class="row__tags" aria-hidden="true">
+      {tags.slice(0, 3).map((t) => <span class="row__tag">{t}</span>)}
+    </span>
+  )}
+
+  <span class="row__date label">{dateLabel}</span>
+  <span class="row__go" aria-hidden="true">→</span>
+</a>
+
+<style>
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto auto;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding: clamp(1rem, 2.5vw, 1.5rem) clamp(0.75rem, 2vw, 1.5rem);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    isolation: isolate;
+    transition: padding-left 0.35s var(--ease);
+  }
+  .row:first-child { border-top: 1px solid var(--line); }
+
+  /* Generative artwork — hidden until hover, fades in behind the row content */
+  .row__art {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.45s var(--ease);
+  }
+  .row__blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(45px);
+    opacity: 0.9;
+    transition: transform 0.8s var(--ease);
+  }
+  .row__blob--1 {
+    width: 30%; min-width: 240px; aspect-ratio: 1;
+    background: var(--a);
+    top: -60%; left: -2%;
+  }
+  .row__blob--2 {
+    width: 26%; min-width: 200px; aspect-ratio: 1;
+    background: var(--b);
+    bottom: -60%; right: 6%;
+  }
+
+  .row:hover,
+  .row:focus-visible {
+    padding-left: clamp(1.25rem, 3vw, 2.25rem);
+    outline: none;
+  }
+  .row:hover .row__art,
+  .row:focus-visible .row__art { opacity: 0.5; }
+  .row:hover .row__blob--1 { transform: translate(12%, 15%); }
+  .row:hover .row__blob--2 { transform: translate(-12%, -15%); }
+
+  .row__num { color: var(--muted); font-size: 0.72rem; }
+
+  .row__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+  .row__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+    color: var(--ink);
+    line-height: 1.15;
+    transition: color 0.3s var(--ease);
+  }
+  .row:hover .row__title { color: var(--a); }
+  .row__blurb {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .row__tags { display: flex; gap: 0.4rem; }
+  .row__tag {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.2em 0.7em;
+    white-space: nowrap;
+  }
+
+  .row__date {
+    color: var(--muted);
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+  .row__go {
+    font-family: var(--font-display);
+    color: var(--muted);
+    transition: transform 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .row:hover .row__go { color: var(--a); transform: translateX(5px); }
+
+  /* Narrower screens: drop the blurb line and tags, keep it tight */
+  @media (max-width: 720px) {
+    .row { grid-template-columns: auto 1fr auto auto; gap: 1rem; }
+    .row__blurb { display: none; }
+    .row__tags { display: none; }
+  }
+  @media (max-width: 460px) {
+    .row { grid-template-columns: auto 1fr auto; }
+    .row__date { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row, .row__art, .row__blob, .row__title, .row__go { transition: none; }
+  }
+</style>

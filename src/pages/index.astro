@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import ProjectRow from '../components/ProjectRow.astro';
 import Experience from '../components/Experience.astro';
 import NowPlaying from '../components/NowPlaying.astro';
 import GitHubActivity from '../components/GitHubActivity.astro';
@@ -57,9 +57,9 @@ const publications = [
         </p>
       ) : (
         <>
-          <div class="grid">
+          <div class="proj-list">
             {selection.map((p, i) => (
-              <ProjectCard
+              <ProjectRow
                 href={`${base}projects/${p.id}/`}
                 title={p.data.title}
                 blurb={p.data.blurb}
@@ -156,11 +156,7 @@ const publications = [
     align-items: start;
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-    gap: var(--gap);
-  }
+  .proj-list { display: flex; flex-direction: column; }
 
   .empty {
     color: var(--ink-soft);

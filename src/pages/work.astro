@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import ProjectRow from '../components/ProjectRow.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 
@@ -45,9 +45,9 @@ const allTags = [...tagCounts.entries()]
 
       <p class="work__empty" data-empty hidden>No projects match those tags.</p>
 
-      <div class="grid">
+      <div class="proj-list">
         {projects.map((p, i) => (
-          <ProjectCard
+          <ProjectRow
             href={`${base}projects/${p.id}/`}
             title={p.data.title}
             blurb={p.data.blurb}
@@ -106,12 +106,8 @@ const allTags = [...tagCounts.entries()]
   }
   .filter.is-active .filter__n { color: var(--bg); opacity: 0.7; }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-    gap: var(--gap);
-  }
-  .card[hidden] { display: none; }
+  .proj-list { display: flex; flex-direction: column; }
+  .row[hidden] { display: none; }
   .work__empty { color: var(--ink-soft); }
 </style>
 
@@ -120,7 +116,7 @@ const allTags = [...tagCounts.entries()]
   // selected tags. "All" clears the selection and shows everything.
   const filterEls = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter'));
   const allBtn = document.querySelector<HTMLButtonElement>('.filter[data-filter="all"]');
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.grid .card'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.proj-list .row'));
   const empty = document.querySelector<HTMLElement>('[data-empty]');
   const selected = new Set<string>();
 
