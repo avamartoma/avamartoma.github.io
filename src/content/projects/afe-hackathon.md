@@ -1,7 +1,7 @@
 ---
 title: "Path"
 blurb: "A hackathon knowledge graph that answers the question every new intern is afraid to ask: \"who owns this, and who do I talk to?\""
-description: "An AFE internship hackathon project (theme: Pay it Forward). Path is an evidence-backed knowledge graph that traces verified ownership, access, and deployment paths across an engineering org, returning ranked people to contact with explainable relevancy scores."
+description: "Path turns an engineering org into a queryable map: ask 'who owns this?' or 'can I edit this in prod?' in plain English and get the answer, the evidence-backed path behind it, and a ranked list of who to ask. An AFE hackathon project."
 date: 2026-07-21
 tags: ["TypeScript", "React", "Three.js", "Node.js", "MCP", "Knowledge Graph"]
 repo: "https://github.com/avamartoma/afe-hackathon-26"
