@@ -20,7 +20,7 @@ and mechanical design. It's driven by a **brushless motor** for rear-wheel
 drive and a **servo** on the front wheels for steering — and nearly every part,
 from the circuit boards to the chassis, was designed and fabricated by hand.
 
-![The RC F1 car build — from the team's weekly engineering blog.](/images/rc-car/build-1.jpg)
+![The RC F1 car project — from the team's weekly engineering build log.](/images/rc-car/build-01.jpg)
 
 ## The electrical side
 
@@ -36,10 +36,6 @@ The drivetrain runs on a **brushless motor** (rear-wheel drive) through an
 Researching brushless motors and the ESC was eye-opening — I'd naively assumed a
 motor was a one-size-fits-all part, and comparing motor types, batteries, and
 speed controllers taught me how they actually work.
-
-![Electronics work — circuit and board bring-up.](/images/rc-car/build-2.jpg)
-
-![Prototyping and testing the circuit.](/images/rc-car/build-3.jpg)
 
 Debugging the radio control was one of the hardest parts: I tried three
 different approaches to a stubborn communication problem before finally getting
@@ -61,10 +57,6 @@ Structural and custom parts were **3D printed**, modeled in **Autodesk Fusion
 and re-arranging the print file, and experimenting with support types until the
 parts came out clean.
 
-![Mechanical build — chassis and drivetrain assembly.](/images/rc-car/build-4.jpg)
-
-![Assembling the car from the fabricated parts.](/images/rc-car/build-5.jpg)
-
 ## What I learned
 
 - Designing, printing, and debugging our own circuit boards on the Voltera + KiCad.
@@ -78,6 +70,41 @@ parts came out clean.
 **If we had two more weeks:** clean up the Ackermann steering so it works *and*
 looks the part, and finish migrating the soldered board to a **Voltera-printed
 PCB** — the plan from the start.
+
+## Build log
+
+The build, week by week — circuit design, 3D prints, chassis, and assembly.
+Use the arrows to step through:
+
+<div class="carousel" data-carousel>
+  <span class="carousel__count"></span>
+  <div class="carousel__track">
+    <img src="/images/rc-car/build-02.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-03.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-04.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-05.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-06.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-07.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-08.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-09.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-10.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-11.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-12.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-13.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-14.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-15.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-16.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-17.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-18.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-19.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-20.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-21.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-22.jpg" alt="RC car build photo" loading="lazy" />
+  </div>
+  <button class="carousel__btn carousel__btn--prev" aria-label="Previous photo">←</button>
+  <button class="carousel__btn carousel__btn--next" aria-label="Next photo">→</button>
+  <div class="carousel__dots"></div>
+</div>
 
 ---
 
