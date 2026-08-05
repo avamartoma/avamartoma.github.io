@@ -8,11 +8,18 @@ repo: "https://github.com/avamartoma/possibilities-hack-67"
 accent: "#4361ee"
 accentAlt: "#a855f7"
 featured: true
-# cover: "/images/linkedin-hackathon/cover.jpg"
 ---
 
 *Built with Daniel Lee, Namyanzi Edwards, and Muhammed Ali — with mentorship
 from Jaden Hinton and Pablo Najera.*
+
+## See it in action
+
+<video controls preload="none" poster="/images/linkedin-hackathon/demo-poster.jpg">
+  <source src="/videos/linkedin-hackathon/demo.mp4" type="video/mp4" />
+  Your browser can't play embedded video —
+  <a href="/videos/linkedin-hackathon/demo.mp4">download the demo clip</a> instead.
+</video>
 
 ## The idea
 
@@ -27,6 +34,8 @@ The core bet: **everything reduces to skills** as the connective tissue —
 a role is a cluster of skills, you hold some of them, a course teaches some,
 the gap is the difference, and your "fit %" is the overlap.
 
+![The entry point: a LinkedIn-style profile with a persistent Locked[IN] button that kicks off the discovery flow.](/images/linkedin-hackathon/profile.png)
+
 ## The flow
 
 **Lock in → (Explore *or* Explain) → Comparison → Your Path**, with a streak /
@@ -37,6 +46,12 @@ leaderboard around it:
 - **Explain** — an AI chatbot route into the same space.
 - **Comparison** — weigh roles against each other.
 - **Your Path** — readiness, skill gaps, and a concrete milestone plan.
+
+![Explore — "Discover where you could go": search hundreds of roles, each scored with a readiness % against your profile.](/images/linkedin-hackathon/discover.png)
+
+![Comparison — a role deep-dive: readiness ring, live open roles, and a clean split of the skills you already have versus the ones to build.](/images/linkedin-hackathon/role-detail.png)
+
+![Your Path — a milestone plan that turns the skill gap into concrete, checkable actions on a suggested timeline.](/images/linkedin-hackathon/your-path.png)
 
 ## My role
 
@@ -51,7 +66,3 @@ backend over a JSON/HTTP API, with **Anthropic (Claude)** for the AI guidance
 (deterministic recommendations as a fallback). Designed against synthetic
 LinkedIn-style data — ~2,000 users, **207 roles across 21 industries**, and 600
 courses — specifically to showcase discovering *unfamiliar* roles.
-
-<!-- Add screenshots once ready:
-![Explore — interest bubbles](/images/linkedin-hackathon/explore.jpg)
-![Your Path — milestones](/images/linkedin-hackathon/path.jpg) -->
