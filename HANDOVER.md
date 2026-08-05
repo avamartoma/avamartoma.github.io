@@ -33,37 +33,44 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 
 ---
 
-## 2. Current status (2026-07-13)
+## 2. Current status (2026-08-05)
 
-> **Session end 2026-07-13:** Resume-alignment content pass + headshot `og:image`
-> are committed **and already on `origin/main`** (this env auto-syncs commits to
-> the remote — no manual `git push` needed), so GitHub Actions is deploying them.
-> Verify the new Experience bullets + social-share thumbnail on the live site once
-> the ~1–2 min build finishes. Working tree is clean.
+> **Session end 2026-08-05:** Big content + UX session (see §10 changelog for the
+> full list). **⚠️ Commits do NOT auto-sync to the remote** — an earlier note here
+> was wrong; you must run **`git push`** yourself. As of hand-off everything is
+> **committed AND pushed** to `origin/main`, so GitHub Actions is deploying it.
+> Working tree clean.
+>
+> **⚠️ Open follow-up (needs a fresh chat):** the RC-car build-log carousel, the
+> CAD-studies photos, and a couple of scraped shots have **generic captions**
+> because image *previews* broke mid-session (a >2000px image loaded early poisoned
+> the model's image context — see §6). In a new chat the agent can view/resize
+> images normally and caption them. **Two things to do next:** (1) caption those
+> photos, and (2) build the **self-serve editor** (see `TODO.md` #23) so Ava can
+> create/edit projects + add images herself without an AI.
 
 The site is **live and looks polished**. Structure top-to-bottom on the homepage:
-**in-progress banner → nav → hero (the "about") → Work selection → Experience
-timeline → Honors + Publications → footer (contact form)**.
+**in-progress banner → nav → hero (the "about") → Work selection (compact list) →
+Experience timeline → Honors + Publications → footer (contact form)**.
 
 - ✅ Live at **https://avamartoma.com** (custom domain, HTTPS); auto-deploys on push.
-- ✅ 10 real projects; Experience timeline (12 roles) + Education; Honors + Publications.
-- ✅ Hero: AA/M logo, overlapping bubbly name, headshot **sticker**, tagline, bio, tools.
-- ✅ "Website in progress" banner (below the nav).
-- ✅ **Email:** `hello@avamartoma.com` + catch-all receive → Gmail (Cloudflare Email Routing).
-- ✅ **Forms deliver** — Web3Forms key live in all three forms (→ `hello@avamartoma.com`).
-- ✅ **Resume-request cooldown** — after submitting, the resume popover + `/resume`
-  soft-lock for 2 days (shared `resumeLastSubmit` localStorage key) and show
-  "You already submitted! Ava will get back to you soon :)". Per-browser nudge only.
-- ✅ **SEO / discoverability** — homepage title is now `Ava Martoma`; Person + WebSite
-  JSON-LD (with LinkedIn/GitHub `sameAs`) on the homepage; sitemap (`/sitemap-index.xml`),
-  `robots.txt`, RSS (`/rss.xml`), and richer OG/Twitter meta. **Follow-up:** submit the
-  sitemap in Google Search Console to get indexed faster (see §6).
-- ⏳ **Project photos** not added yet (generative artwork stands in).
-- ✅ **Social share image** (`og:image`) — headshot sticker wired as
-  `og:image`/`twitter:image` (interim; portrait, so a landscape asset is still
-  ideal — `TODO.md` 15).
-- ⏳ **Email *sending*** (reply *as* `hello@`) not set up — needs a free SMTP relay (see §6 / `TODO.md` 10a).
-- ⏳ Backlog in `TODO.md` (photos, iFAQ, Spotify-live, Living page, etc.).
+- ✅ **13 projects** incl. two hackathons (Amazon Path, LinkedIn Career Discovery) +
+  Henna Luminary; Experience timeline (12 roles) + Education; Honors + Publications.
+- ✅ **Project listings are now a compact hover-reveal list** (`ProjectRow.astro`) on
+  the homepage selection and `/work`, not cards. Cards (`ProjectCard.astro`) are
+  now **unused** (left in place; safe to delete).
+- ✅ **Project media:** cards/banners always use generative accent artwork; **photos
+  live inline in the project body**. New reusable **image carousel** (arrows/dots/
+  counter) — see RC car. `<video>` supported inline (LinkedIn demo).
+- ✅ **Photos added** to: Amazon Path, LinkedIn (video + 4 shots), Henna Luminary (7),
+  CAD & Woodworking Studies (organizer/pencil box/phone stand/LED lamp), RC car (22).
+- ✅ **Origins backlinks** on RC car (Wix build blog), Luminary + CAD studies
+  (lvilledesign.org).
+- ✅ Hero, banner, email, forms, resume cooldown, SEO, `og:image` — all as before.
+- ⏳ **Photo captions** for the scraped RC/CAD/Luminary shots (see warning above).
+- ⏳ **Self-serve editor** not built yet (`TODO.md` #23).
+- ⏳ **Email *sending*** (reply *as* `hello@`) not set up (see §6 / `TODO.md` 10a).
+- ⏳ Backlog in `TODO.md` (iFAQ, "Now" page, Living page, etc.).
 
 ---
 
@@ -83,7 +90,8 @@ src/
                               headshot sticker, cursor-reactive Holi dot canvas
     Experience.astro          #experience — horizontal-scroll timeline (drag/wheel)
                               of 12 roles + Education boxes (Penn, Lawrenceville)
-    ProjectCard.astro         grid card: data-tags, full dates, generative artwork
+    ProjectCard.astro         grid card (NOW UNUSED — replaced by ProjectRow)
+    ProjectRow.astro          compact list row; accent generative art fades in on hover
     ResumeModal.astro         anchored resume popover (Web3Forms)
   pages/
     index.astro               hero + Work selection(6) + "See all" + Experience +
@@ -183,6 +191,12 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
   export (`*.zip`) is gitignored — never commit it.
 - **Astro advisories** in `npm audit` only fix in Astro 7 (major). Fine on static;
   upgrade deliberately later.
+- **Agent image previews & the 2000px cap** ⚠️ — when an agent *views* images, each
+  image (including ones already loaded earlier in the chat) must be **≤2000px per
+  side** for multi-image requests. If a bigger one gets loaded, it poisons the whole
+  chat: every later image read fails (surfaces as "cancelled"). Fix: **resize to
+  ≤1500px before viewing**, and if it's already broken, **start a fresh chat**. This
+  is why some scraped photos this session have generic captions.
 - **Self-hosted demo video / repo size** ⚠️ — the LinkedIn Career Discovery page
   self-hosts its demo clip at `public/videos/linkedin-hackathon/demo.mp4`
   (~19 MB, committed to git; served fine by GitHub Pages, well under limits).
@@ -284,7 +298,22 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 
 ## 10. Changelog (condensed, newest first)
 
-- **2026-08-05** — **New Amazon Path project + card/media rework + LinkedIn media.**
+- **2026-08-05 (part 2)** — **List view, new projects, scraped photos, carousel.**
+  Switched project listings (homepage + `/work`) from cards to a **compact
+  hover-reveal row list** (`ProjectRow.astro`); `ProjectCard.astro` now unused.
+  **New project pages:** Henna-Inspired Luminary (`luminary.md`, scraped from
+  lvilledesign.org/ava-m with 7 photos) and a rebuilt **CAD & Woodworking Studies**
+  gallery (organizer, pencil box, phone stand, LED lamp + photos). **RC car** page
+  fleshed out from the Wix build blog (amartoma25.wixsite.com/projects-in-engineer)
+  — KiCad/Voltera/ESC/RadioHead/Ackermann detail + **22 build photos** in a new
+  reusable **image carousel** (arrows/dots/counter; JS in `Layout.astro`, CSS in
+  `global.css`). Added **"Origins / build log" backlinks** (RC→Wix, Luminary+CAD→
+  lvilledesign). Shrank the project detail **banner** (38vh→24vh) and **title**.
+  Dates on Luminary/CAD corrected to real 2023 timeframe. ⚠️ Many scraped photos
+  have **generic captions** — image previews broke (see §6 2000px gotcha); caption
+  in a fresh chat. **Requested next:** a self-serve editor (`TODO.md` #23).
+
+- **2026-08-05 (part 1)** — **New Amazon Path project + card/media rework + LinkedIn media.**
   Added a new project, **Amazon Path** (`afe-hackathon.md`) — the AFE intern
   hackathon project (theme: Pay it Forward) — with two inline screenshots and a
   `Hackathon` tag (also tagged LinkedIn Career Discovery). **Card/detail rework:**

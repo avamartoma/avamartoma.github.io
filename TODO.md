@@ -9,13 +9,16 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [x] **0. ✅ Enforce HTTPS enabled (2026-07-04).** DNS verified, GitHub issued
       the TLS cert, Enforce HTTPS on; https://avamartoma.com serves over HTTPS.
 
-- [ ] **1. Add project photos.** Every project currently uses generative
-      artwork. Pull images from your Google Docs (File → Download → Web Page
-      .html, zipped), drop them in the matching `public/images/<slug>/` folder,
-      and tell Kiro the filenames — it wires the cover + inline shots.
-      Slugs: `rc-car`, `penn-electric-racing`, `wooden-car`, `cad-bridge`,
-      `cad-projects`, `marquetry-desk`, `marquetry-flower-press`,
-      `marquetry-clock`, `architecture`, `linkedin-hackathon`.
+- [~] **1. Add project photos.** *(In progress — 2026-08-05.)* Photos now on:
+      Amazon Path, LinkedIn (video + shots), Henna Luminary, CAD & Woodworking
+      Studies, and RC car (22, in a carousel). **Remaining:** `penn-electric-racing`,
+      `wooden-car`, `cad-bridge`, `marquetry-*`, `architecture` still use generative
+      artwork. Drop images in `public/images/<slug>/` and reference inline in the
+      body (Markdown `![alt](/images/<slug>/x.jpg)`), or use a `<div class="carousel"
+      data-carousel>…</div>` block for a slideshow (see `rc-car.md`).
+  - [ ] **1a. Caption the scraped photos.** RC-car carousel, CAD-studies, and some
+        Luminary shots have **generic alt text** because image previews broke this
+        session (see HANDOVER §6). In a fresh chat, view + caption them properly.
 
 - [x] **2. ✅ Real resume/contact delivery live (Web3Forms, 2026-07-04).** Access
       key registered to `hello@avamartoma.com` (→ forwards to Gmail) and set in all
@@ -119,6 +122,17 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 - [ ] **22. Privacy-friendly analytics.** Cloudflare Web Analytics (free, one
       snippet, no cookies) to see which pages people visit.
+
+- [ ] **23. ⭐ Self-serve content editor (Ava wants this — NEXT UP).** A visual
+      interface so Ava can create/edit projects — text **and** image uploads —
+      **without** going through an AI. Recommended: **Sveltia CMS** (git-based,
+      single static `/admin` page, no build step; commits Markdown + images to the
+      repo → auto-deploys). Needs a one-time GitHub OAuth app + a tiny Cloudflare
+      Worker auth relay (Ava already has Cloudflare). Config the `projects`
+      collection to match the frontmatter schema in `src/content.config.ts` (title,
+      blurb, description, date, tags, accent/accentAlt, featured, draft) + a body
+      + image/media field. Alternative: **Pages CMS** (pagescms.org) — hosted, zero
+      self-hosting, but a third-party GitHub App gets repo write access.
 
 ## 🔵 Later / infrastructure
 
