@@ -3,7 +3,7 @@ title: "LinkedIn Career Discovery"
 blurb: "A gamified career-exploration concept for LinkedIn — discover roles you've never heard of, then use your profile + AI to map the skill gap to get there."
 description: "A hackathon project: a career-discovery feature built inside LinkedIn for GenZ/GenAlpha. Discover unfamiliar roles, then use profile data + AI to map the gap to a field you're excited about, with Khan-Academy-style progress and % mastery."
 date: 2026-06-24
-tags: ["Next.js", "TypeScript", "FastAPI", "Python", "AI/LLM"]
+tags: ["Hackathon", "Next.js", "TypeScript", "FastAPI", "Python", "AI/LLM"]
 repo: "https://github.com/avamartoma/possibilities-hack-67"
 accent: "#4361ee"
 accentAlt: "#a855f7"
