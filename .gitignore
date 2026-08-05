@@ -21,3 +21,11 @@ pnpm-debug.log*
 # Never commit personal data exports
 *.zip
 Basic_LinkedInDataExport*
+
+# Personal research scratch (not part of the site)
+whiskers.md
+REV 12 Aero Notes.pdf
+
+# Hackathon application drafts (personal, not part of the site)
+hackmit.md
+hackharvard.md
