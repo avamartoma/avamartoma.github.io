@@ -7,7 +7,6 @@ interface Props {
   date: Date;
   accent?: string;
   accentAlt?: string;
-  cover?: string;
   index: number;
 }
 
@@ -19,7 +18,6 @@ const {
   date,
   accent = '#a855f7',
   accentAlt = '#4361ee',
-  cover,
   index,
 } = Astro.props;
 
@@ -40,15 +38,11 @@ const dateLabel = date.toLocaleDateString('en-US', {
   style={`--a:${accent};--b:${accentAlt}`}
 >
   <div class="card__art" aria-hidden="true">
-    {cover ? (
-      <img src={cover} alt="" loading="lazy" class="card__img" />
-    ) : (
-      <div class="card__gen">
-        <span class="card__blob card__blob--1"></span>
-        <span class="card__blob card__blob--2"></span>
-        <span class="card__grid"></span>
-      </div>
-    )}
+    <div class="card__gen">
+      <span class="card__blob card__blob--1"></span>
+      <span class="card__blob card__blob--2"></span>
+      <span class="card__grid"></span>
+    </div>
     <span class="card__num label">{num}</span>
   </div>
 
@@ -88,15 +82,8 @@ const dateLabel = date.toLocaleDateString('en-US', {
     overflow: hidden;
     background: var(--bg-soft);
   }
-  .card__img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s var(--ease), filter 0.6s var(--ease);
-    filter: saturate(0.9) contrast(1.02);
-  }
-  .card:hover .card__img { transform: scale(1.04); }
 
-  /* Generative fallback artwork built from the accent pair */
+  /* Generative artwork built from the accent pair */
   .card__gen { position: absolute; inset: 0; }
   .card__blob {
     position: absolute;
