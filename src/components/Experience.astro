@@ -242,6 +242,9 @@ const experiences: Exp[] = [
   .exp__scroll {
     overflow-x: auto;
     overflow-y: hidden;
+    /* Don't let a horizontal swipe that runs out of timeline chain onwards to
+       the page or trigger the browser's back gesture. */
+    overscroll-behavior-x: contain;
     scroll-snap-type: x proximity;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -436,21 +439,36 @@ const experiences: Exp[] = [
       scroller.classList.remove('is-dragging');
     });
 
-    // Vertical wheel scrolls the timeline horizontally when hovering it —
-    // but only while the timeline still has room to scroll in that direction.
-    // Once it hits either edge, let the event through so the PAGE scrolls
-    // vertically instead of the cursor getting "stuck" over the cards.
-    scroller.addEventListener('wheel', (e) => {
-      // Ignore intentionally-horizontal wheels (trackpad / shift-scroll).
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-      const maxScroll = scroller.scrollWidth - scroller.clientWidth;
-      const atStart = scroller.scrollLeft <= 0;
-      const atEnd = scroller.scrollLeft >= maxScroll - 1;
-      // At an edge and pushing further past it → don't trap the page scroll.
-      if ((e.deltaY < 0 && atStart) || (e.deltaY > 0 && atEnd)) return;
-      scroller.scrollLeft += e.deltaY;
-      e.preventDefault();
-    }, { passive: false });
+    // Wheel handling: a vertical wheel ALWAYS scrolls the page.
+    //
+    // This used to translate vertical wheel into horizontal timeline scroll,
+    // releasing only once the timeline hit an edge. That still trapped the
+    // page: hovering the timeline meant grinding through its whole horizontal
+    // range (13 cards) before the page would move again, which reads as the
+    // scroll getting stuck under the cursor.
+    //
+    // Horizontal intent still works — a trackpad swipe (deltaX) scrolls the
+    // timeline natively with no JS at all, and shift+wheel is mapped below.
+    // Dragging, the arrow keys (the scroller is focusable) and the "drag /
+    // scroll →" hint cover the rest, so nothing is lost by not hijacking.
+    scroller.addEventListener(
+      'wheel',
+      (e) => {
+        // Shift+wheel is the conventional "scroll horizontally" gesture; it
+        // arrives as deltaY, so map it across by hand.
+        if (e.shiftKey && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+          const atStart = scroller.scrollLeft <= 0;
+          const atEnd = scroller.scrollLeft >= maxScroll - 1;
+          if ((e.deltaY < 0 && atStart) || (e.deltaY > 0 && atEnd)) return;
+          scroller.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+        // Everything else falls through: vertical scrolls the page, and a real
+        // horizontal wheel scrolls the timeline via the browser's own handling.
+      },
+      { passive: false },
+    );
   }
 
   // Click-through detail modals. A card only opens if the pointer wasn't dragged.
