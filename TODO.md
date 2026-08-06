@@ -14,7 +14,7 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       the red block at the top of `HANDOVER.md` for the full table and the
       one-set-per-chat plan (a chat can only include ~100 images).** Waiting:
       flower press (16), clock (1), CAD studies (68), luminary (16), gallery (60),
-      Chick-fil-A (28), LinkedIn Possibilities in Tech (25), Coca-Cola (12).
+      LinkedIn Possibilities in Tech (25), Coca-Cola (12).
       ✅ Done this session: **Marquetry Lap Desk** (15 photos) and
       **Architecture / "The Grove"** (14 + carousel + clip). Photos now on:
       Amazon Path, LinkedIn (video + shots), Henna Luminary, CAD & Woodworking
@@ -85,11 +85,24 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         and stills interleave into a narrative. Process raws first with
         `node scripts/process-community-media.mjs <slug> <prefix>`, then list
         them. Any chip with `media` automatically becomes a modal button.
-      - **Remaining chips with no media yet (8):** Amazon Future Engineer,
-        LinkedIn Possibilities in Tech, Coca-Cola Scholars, Chick-fil-A Community
-        Scholars, **Penn M&T**, **Phi Gamma Nu**, NCWIT Aspirations in
-        Computing, Davidson Young Scholars. All have scaffolded folders under
+      - **Remaining chips with no media yet (7):** Amazon Future Engineer,
+        LinkedIn Possibilities in Tech, Coca-Cola Scholars, **Penn M&T**,
+        **Phi Gamma Nu**, NCWIT Aspirations in Computing, Davidson Young
+        Scholars. All have scaffolded folders under
         `public/images/communities/<slug>/`.
+      - **Chick-fil-A Community Scholars — ✅ DONE, built + validated
+        (2026-08-06 pt.8).** Chip now shows `◈ 15` and opens a modal with a blurb
+        (verified against chick-fil-a.com/community-scholars: 13 scholars/yr,
+        $25K each, 1-year leadership + mentorship program; Ava is a 2025
+        recipient per the $25,000 / 02-28-2025 check in the photos) plus 15
+        captioned photos telling the story: the check reveal with the Cow mascot
+        and confetti, the Support Center Backstage Tour, a Bracken's Kitchen
+        service shift, a food-facility plant tour, and a Walt Disney Studios day.
+        **13 of the 28 processed shots were dropped** (personal/scenery: Disney
+        selfies, cotton candy, In-N-Out, castle/Cars-Land scenery, redundant
+        group shots) and deleted from `public/`; raws are in git history if
+        wanted back. `npm run build` ✓ (17 pages), Playwright **34/34** at
+        1440×900 + 390×844.
       - **Photos deliberately NOT published (Ava's call to reverse):** 9 MITES,
         1 Coolidge and 1 architecture processed shot were dropped rather than
         shipped — mostly informal night shots of other participants. The raws

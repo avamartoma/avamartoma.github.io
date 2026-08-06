@@ -13,7 +13,7 @@ Progress: tick these off as they land.
 
 - [ ] 1. Marquetry Clock + Flower Press (18 photos)
 - [ ] 2. Henna Luminary (16 photos)
-- [ ] 3. Chick-fil-A Community Scholars (28 photos)
+- [x] 3. Chick-fil-A Community Scholars (28 photos) — DONE 2026-08-06 pt.8 (15 published, 13 dropped)
 - [ ] 4. LinkedIn Possibilities in Tech + Coca-Cola Scholars (38 photos)
 - [ ] 4b. Phi Gamma Nu + Penn M&T (18 photos)
 - [ ] 5. Gallery wall (60 photos)

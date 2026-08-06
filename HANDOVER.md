@@ -19,6 +19,39 @@
 
 ---
 
+> **Session 2026-08-06 (pt.8) — Chick-fil-A Community Scholars modal shipped.**
+> Viewed all 28 processed `cfa-*` photos, verified the program against
+> **chick-fil-a.com/community-scholars** (13 Community Scholars/yr, **$25K** each,
+> awarded for academic success + community service + financial need, plus a
+> **1-year** leadership-development & mentorship program). The oversized check in
+> the photos reads **$25,000 / 02-28-2025 / "2025 Scholarship Winners"**, so Ava
+> is a **2025** recipient — stated in the blurb; nothing was guessed. Added a
+> `blurb` + a 15-item **`media`** array to the Chick-fil-A entry in
+> `src/pages/index.astro` (chip now `◈ 15`), ordered as a narrative: check reveal
+> with the Cow mascot + confetti → Support Center "Backstage Tour" → Bracken's
+> Kitchen service shift → Bay Center food-facility plant tour → Walt Disney
+> Studios day (Archives + Oscar, Partners statue, cohort). Every item has
+> frame-specific alt text and a caption.
+> **Dropped 13 of 28** as personal/scenery, not program: `cfa-03` (turf selfie),
+> `09` (tongue-out selfie), `10` (cotton candy), `11` (solo signpost), `12` (Robin
+> Williams plaque), `13` (In-N-Out tray), `16` (Bay Center exterior, redundant),
+> `17` (signpost detail), `20`/`23` (redundant Disney group shots), `21` (castle
+> scenery), `22` (Cars Land scenery), `26` (Flo's V8 casual). These were **deleted
+> from `public/`**; raws remain in git history if wanted back. ⚠️ `cfa-05/07/25`
+> are byte-identical to gallery `gal-41/42/52` (kept — published in the modal);
+> the dropped `cfa-26` = `gal-53`, which still lives safely in the gallery folder.
+> **✅ VALIDATED:** `npm run build` ✓ (17 pages); `dist/` has 15 refs = 15 files,
+> no orphans/missing. Playwright **34/34** at **1440×900 + 390×844** (chip is a
+> `<button>`, modal opens, page does NOT jump to top, title + blurb facts render,
+> 15 images decode with alt text, 15 captions, body scrolls, ×/Escape/backdrop
+> all close, no console errors). **Committed, not pushed** (ground rule #5).
+> ⚠️ Unrelated in-flight work was left untouched in the working tree (a
+> path-limited commit was used): `phi-gamma-nu/pgn-11.jpg`,
+> `marquetry-flower-press/press-15.jpg`, `src/pages/projects/[...slug].astro`,
+> `worker/src/index.js`.
+
+---
+
 ## 1. Start-of-session checklist
 
 ```bash
@@ -732,6 +765,18 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (part 8)** — **Chick-fil-A Community Scholars photo modal.**
+  Viewed all 28 `cfa-*` shots, verified the program against
+  chick-fil-a.com/community-scholars (13 scholars/yr, $25K each, 1-year
+  leadership + mentorship program; Ava = 2025 recipient per the $25,000 /
+  02-28-2025 check), and added a blurb + 15-item `media` array to the Chick-fil-A
+  entry in `index.astro` (chip → `◈ 15`), ordered as a narrative (check reveal →
+  Support Center Backstage Tour → Bracken's Kitchen service → Bay Center plant
+  tour → Walt Disney Studios day). Dropped 13 personal/scenery shots and deleted
+  them from `public/` (raws in git history). Build ✓ (17 pages), 15/15 dist refs
+  resolve, Playwright **34/34** at 1440×900 + 390×844. Committed, not pushed;
+  unrelated in-flight work preserved via a path-limited commit.
 
 - **2026-08-06 (marquetry finish)** — **Koi clock + Flower press pages done.**
   `marquetry-clock.md` rewritten around its single photo (two calico koi in a
