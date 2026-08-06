@@ -35,42 +35,140 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 
 ## 2. Current status (2026-08-06)
 
-> **Session 2026-08-06:** Captioned the scraped photos and built the self-serve
-> editor (see §10 changelog). **⚠️ Commits are NOT auto-pushed** — run **`git
-> push`** yourself. As of hand-off this session's work is **committed but NOT yet
-> pushed** (check `git status` / `git log origin/main..HEAD`). Push to deploy.
+> **Session 2026-08-06 (big one):** captioned the scraped photos, fixed mislabeled
+> CAD images + fetched the real LED-lamp photo, **expanded the CAD + Luminary
+> galleries** from portfolio source photos, **fleshed out Wooden Car + CAD Bridge**
+> from Ava's ME-class docs, built the **Sveltia CMS self-serve editor** (/admin/),
+> and added a new **Gallery page** (/gallery). See §10 changelog.
 >
-> **⚠️ Two follow-ups need Ava (not code):**
-> 1. **Editor auth (~15 min):** the Sveltia CMS editor at **/admin/** is built,
->    but needs a one-time GitHub OAuth app + `sveltia-cms-auth` Cloudflare Worker
->    before login works. Full walkthrough in **`admin-setup.md`**.
-> 2. **Privacy flag:** the CAD phone-stand render (`phone-stand.png`, live on the
->    site) uses a **personal photo of two kids** as the phone-screen wallpaper.
->    Left as-is — Ava's call whether to swap the render.
+> **T-Mobile Changemaker modal — ✅ BUILT AND VALIDATED (2026-08-06):**
+> - ✅ Pulled/merged commit `85512f6` from Ava's other laptop, bringing over 13
+>   T-Mobile Changemaker JPGs plus `IMG_7537.heic`. Local `main` is currently
+>   **ahead of `origin/main` by 4 commits** (the merge is local; nothing pushed).
+> - ✅ Processed the 13 decodable JPGs into web assets at
+>   `public/images/communities/t-mobile-changemaker/changemaker-01..13.jpg`:
+>   EXIF handling, long edge capped at 1500 px, JPEG quality 82, about 2.5 MB
+>   total. `changemaker-02.jpg` was manually rotated counterclockwise after its
+>   source orientation proved wrong.
+> - ⚠️ `IMG_7537.heic` was skipped because this machine's Sharp/libvips can read
+>   HEIF metadata but lacks the HEVC decoder. The other photos already cover the
+>   full event story, so the HEIC is not required for the modal.
+> - ✅ Viewed every processed photo and wrote specific alt text/captions. They
+>   document Ava and Joshua Martoma pitching KIDSMATES, accepting its $15,000
+>   2023 T-Mobile Changemaker Challenge grant, the three winning teams, the
+>   cohort, Seattle activities, and informal event moments.
+> - ✅ `src/pages/index.astro` was changed from a string-only Communities array to
+>   typed community objects. The T-Mobile chip now carries a `◈ 12` photo badge
+>   and opens a native `<dialog>` containing the KIDSMATES blurb and captioned
+>   photo grid. Added keyboard/focus styling, Escape/native close behavior, ×
+>   close, backdrop-click close, responsive grid CSS, and open/close JavaScript.
+> - ✏️ **Now 12 photos, not 13** — Ava asked to drop the "At the Space Needle"
+>   shot (2026-08-06). Its array entry was removed from `index.astro` and
+>   `changemaker-06.jpg` was moved out of `public/` so it isn't published (copy
+>   parked at `/tmp/removed-changemaker-06.jpg`; the raw source also still lives
+>   in commit `85512f6` if it's ever wanted back). Filenames now run
+>   `changemaker-01..13` **minus 06** — the gap is intentional, don't renumber.
+> - ✅ **VALIDATED:** `npm run build` passes clean (**17 pages**, no Astro or
+>   TypeScript errors) and all 12 images ship to `dist/` with no broken refs.
+>   A Playwright pass at **desktop 1440×900 and mobile 390×844** ran **38/38
+>   checks green**: chip renders as a `<button>` with the `◈ 12` badge (the other
+>   9 chips stay inert `<span>`s), the modal opens, title + KIDSMATES/$15,000
+>   blurb render, **all 12 photos decode** (`naturalWidth > 0`) with 12 non-empty
+>   captions, the body **scrolls** (desktop 1076px content in a 792px box; mobile
+>   3496/743), and **×, backdrop click, and Escape each close it**. No console
+>   errors. Grid is 3-up on desktop, 1-up on mobile.
+> - ✅ Raw camera files were removed from the incorrect `src/pages/communities/`
+>   route directory; those deletions are currently **staged**. Processed files in
+>   `public/images/communities/` and the one-off
+>   `scripts/process-changemaker-photos.mjs` are **untracked** — still Ava's call
+>   whether to keep the script in the repo (it documents the resize recipe) or
+>   drop it.
+> - **Remaining for Ava:** commit (validation is done) and `git push` to deploy.
+>   Preserve the unrelated uncommitted Sveltia/admin and `Experience.astro` work
+>   noted below. Minor cosmetic note: the grid thumbnails are a `4/3` `cover`
+>   crop, so tall portrait shots get center-cropped in the grid (e.g. Joshua is
+>   cropped out of the check-acceptance thumbnail even though he's in the full
+>   photo and in its alt text). Fine as-is; a lightbox is the fix if it bugs her.
+>
+> **Git state (⚠️ nothing pushed):** work landed across **several local commits** —
+> run `git log origin/main..HEAD` to see them. **Kiro commits but never pushes;
+> run `git push` yourself to deploy.** Per Ava's request the **editor page was kept
+> OUT of the commits** (only the caption / photo / project / gallery work is
+> committed).
+>
+> **⚠️ Uncommitted in the working tree (left for Ava):**
+> - **Editor page** — `public/admin/` + `admin-setup.md` + the robots `/admin`
+>   line (untracked/modified; commit once the auth below is set up).
+> - **`src/pages/index.astro` + `src/components/Experience.astro`** — broader
+>   uncommitted homepage/timeline restructuring began outside the Changemaker
+>   task. The Changemaker work **does deliberately extend `index.astro`**; do not
+>   discard that file wholesale. `Experience.astro` remains unrelated work that
+>   should be preserved and reviewed separately.
+>
+> **⚠️ Follow-ups that need Ava (not code):**
+> 1. **Editor auth (~15 min):** the /admin editor needs a one-time GitHub OAuth
+>    app + `sveltia-cms-auth` Cloudflare Worker before login works — full
+>    walkthrough in **`admin-setup.md`**.
+> 2. **Gallery photos:** `/gallery` is live with the 4 Wix cover photos + labeled
+>    placeholders; drop real photos in `public/images/gallery/` and swap a
+>    `ph(...)` entry for a `photo(...)` in `src/pages/gallery.astro`.
+> 3. **Privacy:** the old phone-stand render showing two kids' faces was dropped
+>    when the phone-stand gallery was rebuilt **face-free**; two portfolio
+>    phone-stand renders with that wallpaper were intentionally NOT added. Re-add
+>    only if you want the family photo shown.
 
 The site is **live and looks polished**. Structure top-to-bottom on the homepage:
 **in-progress banner → nav → hero (the "about") → Work selection (compact list) →
-Experience timeline → Honors + Publications → footer (contact form)**.
+Lately → Experience timeline (compact cards → click-into detail modals) →
+Communities (color-lit tags) → footer (contact form)**.
 
 - ✅ Live at **https://avamartoma.com** (custom domain, HTTPS); auto-deploys on push.
 - ✅ **13 projects** incl. two hackathons (Amazon Path, LinkedIn Career Discovery) +
-  Henna Luminary; Experience timeline (12 roles) + Education; Honors + Publications.
+  Henna Luminary; Experience timeline (13 roles) + Education; Communities.
 - ✅ **Project listings are now a compact hover-reveal list** (`ProjectRow.astro`) on
   the homepage selection and `/work`, not cards. Cards (`ProjectCard.astro`) are
   now **unused** (left in place; safe to delete).
 - ✅ **Project media:** cards/banners always use generative accent artwork; **photos
   live inline in the project body**. New reusable **image carousel** (arrows/dots/
   counter) — see RC car. `<video>` supported inline (LinkedIn demo).
-- ✅ **Photos added** to: Amazon Path, LinkedIn (video + 4 shots), Henna Luminary (7),
-  CAD & Woodworking Studies (organizer/pencil box/phone stand/LED lamp), RC car (22).
+- ✅ **Photos added** to: Amazon Path, LinkedIn (video + shots), Henna Luminary,
+  CAD & Woodworking Studies (organizer / pencil box / phone stand / LED lamp —
+  galleries **expanded** from portfolio photos, 2026-08-06), RC car (22),
+  **Wooden Car**, and **CAD Bridge**.
 - ✅ **Origins backlinks** on RC car (Wix build blog), Luminary + CAD studies
   (lvilledesign.org).
 - ✅ Hero, banner, email, forms, resume cooldown, SEO, `og:image` — all as before.
 - ✅ **Photo captions** written for the scraped RC/CAD/Luminary shots (2026-08-06).
 - ✅ **Self-serve editor** (Sveltia CMS) built at `/admin/`; needs Ava's one-time
-  auth setup (`admin-setup.md`) before login works.
+  auth setup (`admin-setup.md`) before login works. **Kept uncommitted** per Ava.
+- ✅ **Gallery page** (`/gallery`, in nav) — rows of photos auto-scrolling in
+  **alternating** directions; each photo links to a project / experience /
+  personal page. Seeded with 4 Wix cover photos + labeled placeholders (hover to
+  pause + reveal label; respects reduced-motion). Swap in real photos over time.
+- ✅ **Homepage restructure (2026-08-06 pt.2):** **Lately** moved *above* the
+  Experience ("Where I've been") section; **Publications section removed**;
+  **"Selected honors" → "Communities"** — now small pill-tags that light up in the
+  Holi accent colors on hover (`index.astro`). New Communities list: Amazon Future
+  Engineer, LinkedIn Possibilities in Tech, Coca-Cola Scholars, Chick-fil-A
+  Community Scholars, NCWIT Aspirations in Computing, Calvin Coolidge Senator,
+  MITES, T-Mobile Changemaker Challenge, Taco Bell Ambition Accelerator, Davidson
+  Young Scholars.
+- ✅ **Experience timeline is now click-into (2026-08-06 pt.2):** cards show only
+  dates / org / role · location / "Details →"; the bullet highlights live in a
+  per-role native `<dialog>` **detail modal** (Esc / backdrop / × to close). Each
+  role accepts an optional `images: [{ src, alt }]` array that renders as a photo
+  grid in its modal — drop files in `public/images/experience/<slug>/`. Penn
+  education card now reads **"University of Pennsylvania (School of Engineering &
+  Wharton)"**.
 - ⏳ **Email *sending*** (reply *as* `hello@`) not set up (see §6 / `TODO.md` 10a).
 - ⏳ Backlog in `TODO.md` (iFAQ, "Now" page, Living page, etc.).
+
+> **⚠️ Git-state note (2026-08-06 pt.2):** during this session a merge with
+> `origin/main` pulled in newer work (galleries, Wooden Car, CAD Bridge, more
+> captions), and the earlier **Sveltia CMS commit was un-committed** — `admin-setup.md`
+> and `public/admin/` are **untracked** again and `public/robots.txt` shows
+> modified. The homepage + timeline edits above are in the working tree but **not
+> yet committed**. Run `git status` and commit deliberately before pushing.
 
 ---
 
@@ -97,6 +195,8 @@ src/
     index.astro               hero + Work selection(6) + "See all" + Experience +
                               Honors/Publications (#recognition). (About REMOVED.)
     work.astro                /work — ALL projects + multi-select (OR) tag filter
+    gallery.astro             /gallery — photo wall; rows auto-scroll, alternating
+                              direction; each photo links out (see file header)
     projects/[...slug].astro  per-project detail pages
     resume.astro              /resume — no-JS fallback form (Web3Forms) + 2-day cooldown
     rss.xml.js                /rss.xml feed for the projects collection (@astrojs/rss)
@@ -110,6 +210,7 @@ public/
   robots.txt                  allow-all (Disallow /admin/) + Sitemap link
   admin/                      Sveltia CMS self-serve editor (index.html + config.yml)
   images/<project-slug>/      per-project photos (RC/CAD/Luminary/etc. populated)
+  images/gallery/             cover photos for the /gallery wall (+ your future adds)
 .github/workflows/deploy.yml  GitHub Pages deploy (runs on push to main)
 ```
 
@@ -298,6 +399,61 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (part 5)** — **T-Mobile Changemaker photo modal — validated +
+  shipped.** Finished the interrupted modal work: `npm run build` passes (17
+  pages, no Astro/TS errors) and a Playwright pass at **1440×900 + 390×844** went
+  **38/38** (modal opens; all photos decode; captions present; content scrolls;
+  ×, backdrop-click, and Escape all close; no console errors; the other 9
+  Communities chips stay inert `<span>`s). Per Ava, dropped the **"At the Space
+  Needle"** photo — array entry removed and `changemaker-06.jpg` pulled out of
+  `public/`, so the chip badge is now **`◈ 12`** and the filename sequence runs
+  `01..13` **minus 06** (intentional gap; don't renumber). Also **scaffolded
+  `public/images/communities/<slug>/` folders for all 10 programs** (each with a
+  `.gitkeep`) so adding a program is just "drop photos in the folder + list them
+  in `index.astro`". Committed and **pushed** at Ava's request — **image/photo
+  work only**. Deliberately **left out** of the commit and still sitting in the
+  working tree: the Sveltia editor (`public/admin/`, `admin-setup.md`, the
+  `robots.txt` `Disallow: /admin/` line), the `Experience.astro` edits, and the
+  one-off `scripts/process-changemaker-photos.mjs`.
+
+- **2026-08-06 (part 4)** — **New Gallery page + Wix portfolio scrape.** Added
+  `/gallery` (in nav): rows of uniformly-sized photos auto-scrolling in
+  **alternating directions**, each linking to a project / experience / personal
+  page; hover pauses a row + reveals a label; edges soft-fade; respects
+  reduced-motion (rows become hand-scrollable). Seeded with the **4 cover photos**
+  from `avarmartoma.wixstudio.com/portfolio` (architecture, wood shop, T-Mobile
+  Changemaker, beach) + labeled Holi-gradient placeholders across 5 rows.
+  Committed **without** the editor page (per Ava). **Pending from the Wix scrape**
+  (found, not yet applied — offered): the **Bridge** post has a much richer
+  5-version FEA writeup (masses + safety factors) + real **FEA stress-plot
+  images**; **"Stranded — A Board Game"** (TSA; 1st FL states, 5th nationally) is a
+  strong **new project** to add; the **OSU / Dringenberg** engineering-education
+  internship fits the Experience timeline; the ~16 **KidsMates** posts are
+  journalism/interviews → better as a future "Writing" section than the catalogue.
+
+- **2026-08-06 (part 3)** — **Homepage restructure + click-into Experience timeline.**
+  On the homepage (`index.astro`): moved the **Lately** section *above* the
+  Experience ("Where I've been") section; **removed the Publications section**
+  entirely; renamed **"Selected honors" → "Communities"** and reworked it from a
+  bulleted list into **small pill-tags that light up in the Holi accent colors on
+  hover** (cycling violet→blue→pink→green→yellow), `cursor:pointer` and ready for a
+  future click-through detail view. Updated the 10 titles (Amazon Future Engineer,
+  LinkedIn Possibilities in Tech, Coca-Cola Scholars, Chick-fil-A Community
+  Scholars, NCWIT Aspirations in Computing, Calvin Coolidge Senator, MITES,
+  T-Mobile Changemaker Challenge, Taco Bell Ambition Accelerator, Davidson Young
+  Scholars). **Experience timeline (`Experience.astro`) → click-into:** cards are
+  now compact (dates / org / role · location / "Details →"); the bullet highlights
+  moved into a **per-role native `<dialog>` detail modal** (Esc / backdrop-click /
+  × to close, accessible by default). Added an optional `images:[{src,alt}]` field
+  per role that renders as a photo grid in the modal (`public/images/experience/<slug>/`).
+  Chose **click-into over dropdown** (photos need room; avoids expanding cards
+  inside the horizontal scroller). Fixed drag-vs-click so a drag-scroll doesn't
+  open a modal. Penn education card → **"University of Pennsylvania (School of
+  Engineering & Wharton)"**. Build ✓ (16 pages). This is the "part 2" uncommitted
+  `index.astro` edit the entry below spotted — now completed + documented; still
+  **uncommitted**. (Also confirmed the repo can stay **public**: GitHub Pages on
+  the free tier requires it; secrets are external/gitignored.)
 
 - **2026-08-06 (part 2)** — **Wooden Car + CAD Bridge fleshed out** from Ava's
   Intro to Mechanical Engineering reflection + process log (two shared Google

@@ -17,25 +17,45 @@ const projects = (await getCollection('projects'))
 // Homepage shows a selection; the full, filterable list lives on /work.
 const selection = projects.slice(0, 6);
 
-// A selection of honors (non-private).
-const honors = [
-  'Amazon Future Engineer Scholar',
-  'LinkedIn Scholar',
-  'Coca-Cola Scholar',
-  'Chick-fil-A Scholar',
-  'NCWIT Aspirations in Computing — NJ Affiliate Winner',
-  'Calvin Coolidge Senator',
-  'MITES Director\u2019s Award',
-  'T-Mobile Changemaker Challenge — Grand Prize',
-];
+// Communities & programs (non-private). Rendered as small tags/chips.
+// A chip with `photos` becomes a button that opens a click-through photo
+// modal (same native <dialog> pattern as the Experience timeline). Drop
+// files in public/images/communities/<slug>/ and list them here.
+interface Community {
+  name: string;
+  blurb?: string;
+  photos?: { src: string; alt: string; caption?: string }[];
+}
 
-const publications = [
-  { title: 'Drag on Passenger Cars: CFD Analysis of Body Design Using ANSYS Fluent', venue: 'Fluids', year: 'In progress' },
-  { title: 'Epidemiologic Analysis of a Postelimination Measles Outbreak in Central Ohio, 2022\u20132023', venue: 'JAMA Network', year: '2024' },
-  { title: 'The Puzzle of a Silent American Epidemic (graphic)', venue: 'AAP Pediatrics in Review', year: '2022' },
-  { title: 'Caring for Children of Incarcerated Parents (graphic)', venue: 'AAP Pediatrics in Review', year: '2022' },
-  { title: 'Quarantine Fatigue vs. Escalating Prison Lockdowns', venue: 'Prison Legal News', year: '2020' },
-  { title: 'Tips for a Successful Visit with Your Incarcerated Parent', venue: 'Rise News', year: '2019' },
+const communities: Community[] = [
+  { name: 'Amazon Future Engineer' },
+  { name: 'LinkedIn Possibilities in Tech' },
+  { name: 'Coca-Cola Scholars' },
+  { name: 'Chick-fil-A Community Scholars' },
+  { name: 'NCWIT Aspirations in Computing' },
+  { name: 'Calvin Coolidge Senator' },
+  { name: 'MITES' },
+  {
+    name: 'T-Mobile Changemaker Challenge',
+    blurb:
+      'KIDSMATES — the nonprofit I co-founded — won a $15,000 grant at the 2023 T-Mobile Changemaker Challenge in Seattle, one of three winning teams from the national cohort.',
+    photos: [
+      { src: '/images/communities/t-mobile-changemaker/changemaker-11.jpg', alt: 'Ava pitching KIDSMATES on stage, with a slide reading “KIDSMATES — Joshua Martoma & Ava Martoma” behind her.', caption: 'Pitching KIDSMATES on stage' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-09.jpg', alt: 'Ava and her brother Joshua accept the oversized $15,000 KIDSMATES check from a T-Mobile Foundation representative.', caption: 'Accepting the $15,000 grant' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-10.jpg', alt: 'The three winning teams on stage, each holding a $15,000 T-Mobile Foundation check.', caption: 'The three 2023 winning teams' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-02.jpg', alt: 'Ava carrying the giant pink $15,000 KIDSMATES check across the T-Mobile campus.', caption: 'One very large check' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-03.jpg', alt: 'The 2023 Changemaker Challenge cohort in matching hoodies in front of a pink “Welcome Changemakers” backdrop.', caption: 'The 2023 cohort' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-04.jpg', alt: 'Ava talking with other participants in front of the pink “Welcome Changemakers” screen.', caption: 'Meeting the other changemakers' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-05.jpg', alt: 'Ava and her reflection group posing at a rope-net structure.', caption: 'Reflection group' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-07.jpg', alt: 'The cohort laughing together beneath the Space Needle.', caption: 'Seattle Center' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-08.jpg', alt: 'The full cohort seated together on wide wooden steps.', caption: 'The whole crew' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-01.jpg', alt: 'Ava and a fellow changemaker in pink T-Mobile rain ponchos taking a selfie in the rain on campus.', caption: 'Rainy day on campus' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-12.jpg', alt: 'Ava and three others on a pink couch beneath a large magenta T-Mobile logo.', caption: 'T-Mobile HQ' },
+      { src: '/images/communities/t-mobile-changemaker/changemaker-13.jpg', alt: 'Ava lining up a shot on a pink-felt pool table during downtime.', caption: 'Downtime' },
+    ],
+  },
+  { name: 'Taco Bell Ambition Accelerator' },
+  { name: 'Davidson Young Scholars' },
 ];
 ---
 
@@ -86,10 +106,6 @@ const publications = [
 
   <hr class="divider" />
 
-  <Experience />
-
-  <hr class="divider" />
-
   <!-- ============ LATELY ============ -->
   <section class="section" id="lately">
     <div class="wrap">
@@ -106,29 +122,63 @@ const publications = [
 
   <hr class="divider" />
 
-  <!-- ============ HONORS + PUBLICATIONS ============ -->
-  <section class="section" id="recognition">
-    <div class="wrap recog">
-      <div class="recog__col" data-reveal>
-        <p class="label">Selected honors</p>
-        <ul class="recog__honors">
-          {honors.map((h) => <li>{h}</li>)}
-        </ul>
-      </div>
+  <Experience />
 
-      <div class="recog__col" data-reveal data-reveal-delay="120ms">
-        <p class="label">Publications</p>
-        <ul class="recog__pubs">
-          {publications.map((p) => (
-            <li>
-              <span class="recog__pub-title">{p.title}</span>
-              <span class="recog__pub-meta">{p.venue} · {p.year}</span>
+  <hr class="divider" />
+
+  <!-- ============ COMMUNITIES ============ -->
+  <section class="section" id="recognition">
+    <div class="wrap">
+      <header class="sec-head" data-reveal>
+        <h2>Communities</h2>
+        <p class="label">Programs, scholarships &amp; fellowships</p>
+      </header>
+      <ul class="community-tags" data-reveal>
+        {communities.map((c, i) => {
+          const style = `--tag-accent: var(--signal${i % 5 === 0 ? '' : '-' + ((i % 5) + 1)});`;
+          return (
+            <li class="community-tags__item" style={style}>
+              {c.photos && c.photos.length > 0 ? (
+                <button
+                  type="button"
+                  class="community-tag community-tag--photos"
+                  data-comm-open={i}
+                  aria-haspopup="dialog"
+                >
+                  {c.name}
+                  <span class="community-tag__badge" aria-hidden="true">◈ {c.photos.length}</span>
+                </button>
+              ) : (
+                <span class="community-tag">{c.name}</span>
+              )}
             </li>
-          ))}
-        </ul>
-      </div>
+          );
+        })}
+      </ul>
     </div>
   </section>
+
+  {/* Click-through photo modals for communities that have photos. Native
+      <dialog> gives us Escape-to-close, backdrop, and focus handling free. */}
+  {communities.map((c, i) =>
+    c.photos && c.photos.length > 0 ? (
+      <dialog class="comm__dialog" id={`comm-dialog-${i}`} aria-label={`${c.name} — photos`}>
+        <div class="comm__dialog-inner">
+          <button class="comm__dialog-close" type="button" aria-label="Close" data-comm-close>×</button>
+          <h3 class="comm__dialog-title">{c.name}</h3>
+          {c.blurb && <p class="comm__dialog-blurb">{c.blurb}</p>}
+          <div class="comm__dialog-photos">
+            {c.photos.map((p) => (
+              <figure class="comm__photo">
+                <img src={p.src} alt={p.alt} loading="lazy" />
+                {p.caption && <figcaption>{p.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </div>
+      </dialog>
+    ) : null,
+  )}
 </Layout>
 
 <style>
@@ -234,41 +284,143 @@ const publications = [
   .about__edu { color: var(--ink-soft); font-size: 0.92rem; margin-top: 0.5rem; }
   .about__edu span { color: var(--muted); }
 
-  /* Honors + Publications */
-  .recog {
-    display: grid;
-    grid-template-columns: 1fr 1.3fr;
-    gap: clamp(2rem, 6vw, 5rem);
-    align-items: start;
+  /* Communities — small tags that light up in site colors. Chips with photos
+     become buttons that open a click-through modal. */
+  .community-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
   }
-  .recog__honors,
-  .recog__pubs { list-style: none; margin-top: 1rem; display: grid; gap: 0.75rem; }
-  .recog__honors li {
-    font-size: 0.92rem;
-    color: var(--ink);
-    padding-left: 1rem;
-    position: relative;
-  }
-  .recog__honors li::before {
-    content: '✦';
-    position: absolute; left: 0;
-    color: var(--signal);
-  }
-  .recog__pubs li {
-    display: grid;
-    gap: 0.15rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--line);
-  }
-  .recog__pub-title { font-size: 0.92rem; color: var(--ink); line-height: 1.4; }
-  .recog__pub-meta {
+  .community-tags__item { display: flex; }
+  .community-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--muted);
-    letter-spacing: 0.04em;
+    font-size: 0.8rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease),
+      background 0.25s var(--ease), box-shadow 0.25s var(--ease),
+      transform 0.25s var(--ease);
+  }
+  .community-tag:hover {
+    color: var(--tag-accent);
+    border-color: var(--tag-accent);
+    background: color-mix(in srgb, var(--tag-accent) 12%, transparent);
+    box-shadow: 0 0 0 1px var(--tag-accent),
+      0 6px 20px color-mix(in srgb, var(--tag-accent) 30%, transparent);
+    transform: translateY(-2px);
+  }
+  /* photo chips are buttons — reset the UA styling and focus ring */
+  button.community-tag { font: inherit; font-size: 0.8rem; }
+  .community-tag--photos:focus-visible {
+    outline: none;
+    color: var(--tag-accent);
+    border-color: var(--tag-accent);
+    box-shadow: 0 0 0 2px var(--tag-accent);
+  }
+  .community-tag__badge {
+    font-size: 0.66rem;
+    letter-spacing: 0.02em;
+    color: var(--tag-accent);
+    opacity: 0.85;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .community-tag { transition: none; }
+    .community-tag:hover { transform: none; }
   }
 
-  @media (max-width: 760px) {
-    .recog { grid-template-columns: 1fr; }
+  /* ===== Community photo modal (mirrors the Experience dialog) ===== */
+  .comm__dialog {
+    max-width: min(94vw, 860px);
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    padding: 0;
+    margin: auto;
+  }
+  .comm__dialog::backdrop {
+    background: rgba(5, 5, 8, 0.66);
+    backdrop-filter: blur(3px);
+  }
+  .comm__dialog-inner {
+    position: relative;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+  .comm__dialog-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.9rem;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--ink-soft);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  .comm__dialog-close:hover { border-color: var(--signal); color: var(--signal); }
+  .comm__dialog-title { font-size: 1.4rem; line-height: 1.15; margin-bottom: 0.4rem; padding-right: 2rem; }
+  .comm__dialog-blurb {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 1.4rem;
+    max-width: 60ch;
+  }
+  .comm__dialog-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: 0.75rem;
+  }
+  .comm__photo { margin: 0; }
+  .comm__photo img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: calc(var(--radius) * 0.6);
+    border: 1px solid var(--line);
+    display: block;
+  }
+  .comm__photo figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    margin-top: 0.4rem;
+    line-height: 1.35;
   }
 </style>
+
+<script>
+  // Community photo modals. A chip with photos opens its <dialog>; close on
+  // the × button, on Escape (native), or by clicking the backdrop.
+  document.querySelectorAll<HTMLButtonElement>('[data-comm-open]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const i = btn.getAttribute('data-comm-open');
+      const dialog = document.getElementById(`comm-dialog-${i}`) as HTMLDialogElement | null;
+      dialog?.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('.comm__dialog').forEach((dialog) => {
+    dialog.querySelector('[data-comm-close]')?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  });
+</script>

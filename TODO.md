@@ -25,6 +25,15 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         finished **LED lamp** photo from lvilledesign.org. Corrected the Luminary
         "final" shots (they're process shots, not a finished lit lantern).
 
+- [~] **1b. Gallery page (`/gallery`) — LIVE with placeholders (2026-08-06).**
+      Rows of photos auto-scroll in alternating directions; each photo links to a
+      project / experience / personal page. Seeded with 4 Wix cover photos +
+      labeled placeholders. **To finish:** drop real photos into
+      `public/images/gallery/` and swap `ph('Label', href)` →
+      `photo('/images/gallery/x.jpg','alt',href,'Label')` in
+      `src/pages/gallery.astro`. Personal photos could later point at a dedicated
+      `/living` page (#8b).
+
 - [x] **2. ✅ Real resume/contact delivery live (Web3Forms, 2026-07-04).** Access
       key registered to `hello@avamartoma.com` (→ forwards to Gmail) and set in all
       three forms (`Footer.astro`, `ResumeModal.astro`, `resume.astro`). Contact +
@@ -38,6 +47,49 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
   - **LinkedIn Hackathon** — add a demo/live link if there is one.
   - Confirm estimated dates: **CAD Bridge**, **CAD & Woodworking Studies**, and
     the 3 marquetry pieces.
+
+- [~] **3c. Communities + Experience click-through content (2026-08-06).**
+      Click-into infrastructure now exists for both sections; content is being
+      added program by program:
+      - **T-Mobile Changemaker Challenge — ✅ DONE, built + validated
+        (2026-08-06).** The homepage chip shows a `◈ 12` badge and opens a native
+        `<dialog>` with a KIDSMATES/$15,000 grant blurb plus 12 captioned photos
+        from `public/images/communities/t-mobile-changemaker/`. Photos were
+        resized to ≤1500 px; photo 02's orientation was corrected. Ava asked to
+        drop the "At the Space Needle" shot, so `changemaker-06.jpg` was pulled
+        out of `public/` — filenames run `01..13` **minus 06**; don't renumber.
+        `npm run build` passes (17 pages, no errors) and a Playwright pass at
+        **1440×900 + 390×844** went **38/38**: 12 photos decode, 12 captions,
+        content scrolls, and ×, backdrop-click, and Escape all close the modal.
+        No console errors. The raw files under `src/pages/communities/` are
+        staged for deletion. One HEIC was never converted (local Sharp lacks HEVC
+        decoding) and isn't needed.
+      - **Photo folders scaffolded (2026-08-06):** `public/images/communities/`
+        now has a slugified, `.gitkeep`-ed folder per community, so adding a
+        program is just "drop photos in the folder + list them in `index.astro`".
+      - **Next Communities program:** pick one with photos on hand and follow the
+        typed-object + `photos` pattern in `src/pages/index.astro`; photo-bearing
+        entries automatically become clickable modal buttons.
+      - **Experience modals** already open (native `<dialog>`) and render bullets;
+        add **photos** per role via the optional `images:[{src,alt}]` field in
+        `Experience.astro` (drop files in `public/images/experience/<slug>/`).
+      - Other **Communities** chips still display as non-modal tags until they
+        have photos or a blurb.
+
+- [ ] **3d. Resume/LinkedIn reconciliation (flagged 2026-08-06).** The LinkedIn
+      export on hand is only a *Basic* profile (headline only), so a full diff
+      needs Ava's actual resume. Open items spotted:
+      - **Publications were removed** from the homepage — real credentials (JAMA
+        Network 2024 measles outbreak, 2× AAP *Pediatrics in Review* graphics,
+        *Prison Legal News*, *Rise News*, + the in-progress Duke CFD paper).
+        Decide: re-add in a subtler "Writing & Research" form, fold into project
+        pages, or leave off intentionally.
+      - **Award framing lost** when honors → Communities tags (dropped "MITES
+        Director's Award", "NCWIT — NJ Affiliate Winner", "T-Mobile — Grand
+        Prize"). Fine if intentional.
+      - **Skills gaps** in the Hero chips: **KiCad** (RC car) and **Flask**
+        (Amazon role) aren't listed; add if desired.
+      - ✅ Wharton naming fixed (Penn card now says School of Engineering & Wharton).
 
 - [x] **3b. ✅ Indexed by Google (2026-07-08).** On-site SEO done + `avamartoma.com`
       verified in **Google Search Console** (Domain property, DNS TXT) and
@@ -139,6 +191,21 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       in. A no-worker PAT fallback is documented too.
       Alternative considered: **Pages CMS** (hosted, but a 3rd-party GitHub App
       gets repo write access).
+
+- [ ] **24. Fold in the Wix portfolio content** (scraped 2026-08-06 from
+      `avarmartoma.wixstudio.com/portfolio`).
+      - **Stranded — A Board Game** (TSA; 1st at FL states, 5th nationally) → add
+        as a NEW project. Photos available: board, risky/chance card decks,
+        volcano dice centerpiece. ⚠️ Skip the team-group photos (minors' faces).
+      - **CAD Bridge** → the Wix post has a far richer **5-version FEA** writeup
+        (per-version mass + safety factor, sliding-vs-bonded contacts, slice-plane
+        analysis, caliper MDF thickness) + real **FEA stress-plot images**. Upgrade
+        `cad-bridge.md` and add the FEA screenshots.
+      - **OSU / Prof. Emily Dringenberg** engineering-education internship (BERG
+        Lab, summer 2023) → **Experience timeline** entry (research), not a project.
+      - **KidsMates** (~16 Chronicle posts + Miami Herald / Forbes features / Taco
+        Bell) → consider a separate **"Writing"** section rather than the project
+        catalogue.
 
 ## 🔵 Later / infrastructure
 
