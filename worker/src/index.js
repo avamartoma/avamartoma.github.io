@@ -2,6 +2,11 @@
 //
 // Holds the Spotify secrets server-side (as Wrangler secrets, NOT in this repo)
 // and returns what Ava is playing now + recently played:
+//
+// If `recent` is always empty while `current` works, the refresh token is
+// probably missing the `user-read-recently-played` scope (a different scope from
+// currently-playing). Check with:
+//   curl -s '<worker-url>/now-playing?debug=1' | jq .debug
 //   {
 //     isPlaying: boolean,
 //     current:   { title, artist, album, albumImageUrl, songUrl } | null,
@@ -49,7 +54,20 @@ const BLOCKED_SONGS = [
   'slut me out',
   'slut me out 2',
   'wap',
+  'blick sum',
 ];
+// ============================================================================
+// ARTISTS TO ALWAYS HIDE — blocks EVERY track by these artists, regardless of
+// title. Matched as a whole word against the track's artist(s), so a
+// collaboration/feature also counts (e.g. "Latto" hides both her own songs and
+// any track where she's a featured artist). Case-insensitive.
+//
+// Add a line per artist name, then redeploy once (or add to the Cloudflare KV
+// "artists" key for the no-code / no-redeploy option — see wrangler.toml).
+const BLOCKED_ARTISTS = [
+  'latto',
+];
+// ============================================================================
 // ============================================================================
 
 // Strong terms that, in a TITLE, mark a track as too crass for the site.
@@ -88,22 +106,33 @@ function isBlockedSong(t, songs) {
   });
 }
 
-function isAllowed(t, blockedSongs) {
+function isBlockedArtist(t, artists) {
+  const artist = (t.artist || '').toLowerCase();
+  if (!artist) return false;
+  return artists.some((raw) => {
+    const entry = String(raw).trim().toLowerCase();
+    if (!entry) return false;
+    return wholeMatch(artist, entry);
+  });
+}
+
+function isAllowed(t, blockedSongs, blockedArtists) {
   if (!t) return false;
   if (HIDE_EXPLICIT && t.explicit) return false;
   if (HIDE_CRASS_TITLES && hasStrongLanguage(t.title)) return false;
   if (isBlockedSong(t, blockedSongs)) return false;
+  if (isBlockedArtist(t, blockedArtists || [])) return false;
   return true;
 }
 
-// Read extra blocked entries from a Cloudflare KV "list" key, if a KV namespace
-// is bound (binding name BLOCKED_SONGS_KV — see wrangler.toml). Lets the list be
+// Read extra blocked entries from a Cloudflare KV key, if a KV namespace is
+// bound (binding name BLOCKED_SONGS_KV — see wrangler.toml). Lets the lists be
 // edited in the Cloudflare dashboard with no code change and no redeploy.
 // Accepts a JSON array or plain newline/comma-separated text. Fails soft.
-async function getExtraBlockedSongs(env) {
+async function getExtraFromKV(env, key) {
   try {
     if (!env || !env.BLOCKED_SONGS_KV) return [];
-    const raw = await env.BLOCKED_SONGS_KV.get('list');
+    const raw = await env.BLOCKED_SONGS_KV.get(key);
     if (!raw) return [];
     let arr;
     try { arr = JSON.parse(raw); } catch { arr = raw.split(/[\n,]+/); }
@@ -112,6 +141,10 @@ async function getExtraBlockedSongs(env) {
     return [];
   }
 }
+
+// "list" key = blocked songs; "artists" key = blocked artists.
+const getExtraBlockedSongs = (env) => getExtraFromKV(env, 'list');
+const getExtraBlockedArtists = (env) => getExtraFromKV(env, 'artists');
 
 // Strip internal-only fields (id, explicit, isPlaying) before sending to the client.
 function publicTrack(t) {
@@ -139,18 +172,20 @@ export default {
 
     try {
       const token = await getAccessToken(env);
-      const [current, recent, extraBlocked] = await Promise.all([
+      const [current, recent, extraBlocked, extraBlockedArtists] = await Promise.all([
         getCurrentlyPlaying(token),
         getRecentlyPlayed(token),
         getExtraBlockedSongs(env),
+        getExtraBlockedArtists(env),
       ]);
       const blockedSongs = [...BLOCKED_SONGS, ...extraBlocked];
+      const blockedArtists = [...BLOCKED_ARTISTS, ...extraBlockedArtists];
 
       // Surface `current` only when actively playing AND allowed by the filter.
-      const playing = current && current.isPlaying && isAllowed(current, blockedSongs) ? current : null;
+      const playing = current && current.isPlaying && isAllowed(current, blockedSongs, blockedArtists) ? current : null;
 
       // Filter the recent list, drop the live track from it, then cap at 5.
-      let recentList = recent.filter((t) => isAllowed(t, blockedSongs));
+      let recentList = recent.filter((t) => isAllowed(t, blockedSongs, blockedArtists));
       if (playing) recentList = recentList.filter((t) => t.songUrl !== playing.songUrl);
       recentList = recentList.slice(0, 5);
 
@@ -159,6 +194,17 @@ export default {
         current: publicTrack(playing),
         recent: recentList.map(publicTrack),
       };
+      // ?debug=1 explains an empty recent list: whether Spotify refused the
+      // call, or the filters/de-dupe emptied it. No track data beyond what the
+      // normal payload already exposes.
+      if (new URL(request.url).searchParams.get('debug') === '1') {
+        body.debug = {
+          recentFetched: recent.length,
+          recentAfterFilters: recentList.length,
+          recentError: lastRecentError,
+          droppedByFilters: recent.length - recentList.length,
+        };
+      }
       return new Response(JSON.stringify(body), { headers });
     } catch (err) {
       // Fail soft — the widget shows an idle state on an empty payload.
@@ -215,11 +261,24 @@ async function getCurrentlyPlaying(token) {
   return t ? { ...t, isPlaying: Boolean(data.is_playing) } : null;
 }
 
+// Records why the recent list came back empty, so /now-playing?debug=1 can say
+// so instead of the widget silently showing a single track. Module scope is fine
+// here: a Worker isolate handles one request at a time through this path.
+let lastRecentError = null;
+
 async function getRecentlyPlayed(token) {
+  lastRecentError = null;
   const res = await fetch(RECENT_URL, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!res.ok) return [];
+  if (!res.ok) {
+    // 403 here almost always means the refresh token was issued WITHOUT the
+    // `user-read-recently-played` scope — currently-playing uses a different
+    // scope, so the live track keeps working while recent stays empty forever.
+    // Re-run the consent URL in worker/README.md and update the secret.
+    lastRecentError = `spotify ${res.status} ${res.statusText}`.trim();
+    return [];
+  }
   const data = await res.json();
   const seen = new Set();
   const out = [];
