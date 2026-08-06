@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ProjectRow from '../components/ProjectRow.astro';
+import { CATEGORIES, categoriesFor } from '../lib/categories';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 
@@ -9,14 +10,17 @@ const projects = (await getCollection('projects'))
   .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-// Tags across all projects, most-common first, for the filter bar.
-const tagCounts = new Map<string, number>();
-for (const p of projects) {
-  for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+// The filter works on broad DISCIPLINES, not the 45+ specific tags — those stay
+// on the rows and project pages, where they are worth reading. See
+// src/lib/categories.ts for the tag -> discipline mapping.
+const catsByProject = new Map(projects.map((p) => [p.id, categoriesFor(p.data.tags)]));
+
+const catCounts = new Map<string, number>();
+for (const cats of catsByProject.values()) {
+  for (const c of cats) catCounts.set(c, (catCounts.get(c) ?? 0) + 1);
 }
-const allTags = [...tagCounts.entries()]
-  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-  .map(([t]) => t);
+// Fixed display order, minus any discipline nothing currently matches.
+const activeCats = CATEGORIES.filter((c) => (catCounts.get(c) ?? 0) > 0);
 ---
 
 <Layout title="All Work — Ava Martoma" description="The full catalogue of Ava Martoma's projects.">
@@ -27,23 +31,23 @@ const allTags = [...tagCounts.entries()]
       </a>
       <header class="work__head" data-reveal>
         <h1>All work</h1>
-        <p class="label">{projects.length} projects · pick tags to filter</p>
+        <p class="label">{projects.length} projects · filter by discipline</p>
       </header>
 
-      {allTags.length > 0 && (
-        <div class="filters" data-reveal role="group" aria-label="Filter projects by tag">
+      {activeCats.length > 0 && (
+        <div class="filters" data-reveal role="group" aria-label="Filter projects by discipline">
           <button class="filter is-active" data-filter="all" aria-pressed="true">
             All <span class="filter__n">{projects.length}</span>
           </button>
-          {allTags.map((t) => (
-            <button class="filter" data-filter={t} aria-pressed="false">
-              {t} <span class="filter__n">{tagCounts.get(t)}</span>
+          {activeCats.map((c) => (
+            <button class="filter" data-filter={c} aria-pressed="false">
+              {c} <span class="filter__n">{catCounts.get(c)}</span>
             </button>
           ))}
         </div>
       )}
 
-      <p class="work__empty" data-empty hidden>No projects match those tags.</p>
+      <p class="work__empty" data-empty hidden>No projects match those disciplines.</p>
 
       <div class="proj-list">
         {projects.map((p, i) => (
@@ -52,6 +56,7 @@ const allTags = [...tagCounts.entries()]
             title={p.data.title}
             blurb={p.data.blurb}
             tags={p.data.tags}
+            filterTags={catsByProject.get(p.id)}
             date={p.data.date}
             accent={p.data.accent}
             accentAlt={p.data.accentAlt}
@@ -112,8 +117,9 @@ const allTags = [...tagCounts.entries()]
 </style>
 
 <script>
-  // Multi-select tag filter (union / OR): a card shows if it carries ANY of the
-  // selected tags. "All" clears the selection and shows everything.
+  // Multi-select discipline filter (union / OR): a card shows if it belongs to
+  // ANY selected discipline. "All" clears the selection and shows everything.
+  // data-tags on each row holds its disciplines, not its display tags.
   const filterEls = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter'));
   const allBtn = document.querySelector<HTMLButtonElement>('.filter[data-filter="all"]');
   const cards = Array.from(document.querySelectorAll<HTMLElement>('.proj-list .row'));

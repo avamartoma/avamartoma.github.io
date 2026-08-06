@@ -737,7 +737,9 @@ const communities: Community[] = [
                   aria-haspopup="dialog"
                 >
                   {c.name}
-                  <span class="community-tag__badge" aria-hidden="true">◈ {c.media.length}</span>
+                  {/* Diamond only — deliberately no photo count (re-applied
+                      2026-08-06; please don't add `{c.media.length}` back). */}
+                  <span class="community-tag__badge" aria-hidden="true">◈</span>
                 </button>
               ) : (
                 <span class="community-tag">{c.name}</span>
