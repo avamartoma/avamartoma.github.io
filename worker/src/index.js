@@ -154,7 +154,7 @@ function publicTrack(t) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const headers = {
       'Content-Type': 'application/json',
       // Public, read-only data (what Ava is playing). '*' avoids CORS friction
@@ -174,7 +174,7 @@ export default {
       const token = await getAccessToken(env);
       const [current, recent, extraBlocked, extraBlockedArtists] = await Promise.all([
         getCurrentlyPlaying(token),
-        getRecentlyPlayed(token),
+        getRecentlyPlayedCached(token, env, ctx),
         getExtraBlockedSongs(env),
         getExtraBlockedArtists(env),
       ]);
@@ -202,6 +202,7 @@ export default {
           recentFetched: recent.length,
           recentAfterFilters: recentList.length,
           recentError: lastRecentError,
+          recentSource: lastRecentSource,
           droppedByFilters: recent.length - recentList.length,
         };
       }
@@ -265,6 +266,92 @@ async function getCurrentlyPlaying(token) {
 // so instead of the widget silently showing a single track. Module scope is fine
 // here: a Worker isolate handles one request at a time through this path.
 let lastRecentError = null;
+let lastRecentSource = 'spotify';
+
+// Recently-played is the endpoint Spotify rate-limits hardest, and the widget
+// polls every 60s for EVERY visitor. A Cache-Control header alone doesn't stop
+// that — Workers don't cache their own subrequests — so each poll was a fresh
+// Spotify call and the endpoint started returning 429 Too Many Requests. Cache
+// the result at the edge so Spotify sees roughly one call per FRESH_MS no matter
+// how much traffic arrives, and keep a longer-lived KV copy so a 429 (which can
+// persist for a while) shows the last known list instead of nothing.
+const RECENT_CACHE_KEY = 'https://internal.cache/recently-played';
+const RECENT_FRESH_MS = 120_000;   // edge cache window
+const RECENT_BACKUP_KEY = 'recent_backup';
+const RECENT_BACKUP_MIN_WRITE_MS = 900_000; // >= 15 min between KV writes
+
+async function readRecentBackup(env) {
+  try {
+    if (!env || !env.BLOCKED_SONGS_KV) return null;
+    const raw = await env.BLOCKED_SONGS_KV.get(RECENT_BACKUP_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed?.tracks) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+// Throttled so this stays well inside the KV free-tier write allowance.
+async function writeRecentBackup(env, tracks, previous) {
+  try {
+    if (!env || !env.BLOCKED_SONGS_KV || !tracks.length) return;
+    const age = previous?.at ? Date.now() - previous.at : Infinity;
+    if (age < RECENT_BACKUP_MIN_WRITE_MS) return;
+    await env.BLOCKED_SONGS_KV.put(
+      RECENT_BACKUP_KEY,
+      JSON.stringify({ at: Date.now(), tracks }),
+    );
+  } catch {
+    /* fails soft — the backup is a nicety, not required */
+  }
+}
+
+async function getRecentlyPlayedCached(token, env, ctx) {
+  const cache = caches.default;
+  const cacheReq = new Request(RECENT_CACHE_KEY);
+
+  const hit = await cache.match(cacheReq);
+  if (hit) {
+    try {
+      lastRecentSource = 'edge-cache';
+      lastRecentError = null;
+      return await hit.json();
+    } catch {
+      /* corrupt entry — fall through and refetch */
+    }
+  }
+
+  const fresh = await getRecentlyPlayed(token); // sets lastRecentError on failure
+  if (fresh.length) {
+    lastRecentSource = 'spotify';
+    const body = JSON.stringify(fresh);
+    const store = new Response(body, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': `max-age=${Math.floor(RECENT_FRESH_MS / 1000)}`,
+      },
+    });
+    const put = cache.put(cacheReq, store);
+    const backup = readRecentBackup(env).then((prev) => writeRecentBackup(env, fresh, prev));
+    if (ctx && typeof ctx.waitUntil === 'function') {
+      ctx.waitUntil(Promise.all([put, backup]));
+    } else {
+      await Promise.all([put, backup]).catch(() => {});
+    }
+    return fresh;
+  }
+
+  // Spotify refused (usually 429). Show the last known list rather than nothing.
+  const backup = await readRecentBackup(env);
+  if (backup?.tracks?.length) {
+    lastRecentSource = 'kv-backup';
+    return backup.tracks;
+  }
+  lastRecentSource = 'none';
+  return [];
+}
+
 
 async function getRecentlyPlayed(token) {
   lastRecentError = null;
@@ -276,7 +363,12 @@ async function getRecentlyPlayed(token) {
     // `user-read-recently-played` scope — currently-playing uses a different
     // scope, so the live track keeps working while recent stays empty forever.
     // Re-run the consent URL in worker/README.md and update the secret.
-    lastRecentError = `spotify ${res.status} ${res.statusText}`.trim();
+    // Spotify sends Retry-After (seconds) on a 429; surfacing it turns "it is
+    // broken" into "it is rate-limited for N more seconds".
+    const retryAfter = res.headers.get('retry-after');
+    lastRecentError =
+      `spotify ${res.status} ${res.statusText}`.trim() +
+      (retryAfter ? ` (retry-after ${retryAfter}s)` : '');
     return [];
   }
   const data = await res.json();
