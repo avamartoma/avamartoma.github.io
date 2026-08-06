@@ -35,6 +35,122 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 
 ## 2. Current status (2026-08-06)
 
+> ## 🔴 READ FIRST — session ended on a hard API limit
+>
+> **A chat can only ever include ~100 inline images.** Session pt.7 died at
+> *"too many inline media segments: 102 exceeds limit 100"*. This is a different
+> ceiling from the ≤2000 px rule in §6 — that one is about image *size*, this one
+> is about the *count* per conversation. Consequences:
+>
+> - **Viewing photos is the bottleneck for all remaining work**, not writing code.
+> - **Budget ~80 image views per chat**, then start a fresh one.
+> - **Do ONE photo set per chat, and commit before starting the next.** Captioning
+>   a 60-photo set and a 28-photo set in the same chat will not fit.
+> - Everything is committed, so a fresh chat loses nothing. `git log` is the truth.
+>
+> ### What is DONE and committed (nothing to redo)
+>
+> | Commit | What |
+> |---|---|
+> | `55c8623` **pushed** | `images/` restructured → `projects/ communities/ experience/ gallery/` |
+> | `7f9d243` | Taco Bell modal (10 photos + 2 clips), `media` array refactor, 2 modal bug fixes |
+> | `4d752b2` | MITES (12) + Coolidge (9) modals, Architecture case study, Penn M&T chip |
+> | `45dc72c` | Processed the 907 MB batch → 50 MB; raw-blocking deliberately disabled |
+> | `6ab2b2c` | Processed the gallery (59) + luminary (16) batch; fixed script slug bug |
+> | `ff36473` | **Marquetry Lap Desk** full case study, 15 photos |
+>
+> Four Communities modals are live and validated: T-Mobile `◈12`, Taco Bell
+> `◈12`, MITES `◈12`, Coolidge `◈9`. Verified 186/186 + 42/42 Playwright.
+>
+> ### What is LEFT — processed assets sitting in `public/`, not yet on any page
+>
+> Every file below is already resized/captioned-ready. The job is: **view → write
+> captions → wire into the page → drop the unused ones → build → commit.**
+>
+> | Set | Files | Where it goes | Notes |
+> |---|---|---|---|
+> | `gallery/gal-01..60` | 60 | `/gallery` wall | **6 links already known — see below.** Needs a label + link per photo |
+> | `projects/marquetry-flower-press/press-01..15` + 1 clip | 16 | `marquetry-flower-press.md` | **Partly catalogued, see below** |
+> | `projects/marquetry-clock/clock-01` | 1 | `marquetry-clock.md` | one photo only, quick win |
+> | `projects/cad-projects/cadnew-01..67` + 1 clip | 68 | `cad-projects.md` | biggest set; needs its own chat |
+> | `projects/luminary/lum-01..16` | 16 | `luminary.md` | Ava's own shots; likely replace the 8 scraped lvilledesign ones |
+> | `communities/chick-fil-a-community-scholars/cfa-01..28` | 28 | new modal | chip is currently inert |
+> | `communities/linkedin-possibilities-in-tech/lpit-01..25` | 25 | new modal | chip is currently inert |
+> | `communities/coca-cola-scholars/coke-01..11` + 1 clip | 12 | new modal | chip is currently inert |
+>
+> **Suggested chat plan (one row per chat):** clock + flower press → luminary →
+> Chick-fil-A → LinkedIn + Coca-Cola → gallery → CAD studies.
+>
+> ### 🎁 Findings already banked — do NOT re-derive these
+>
+> **Gallery overlap.** Six gallery photos are **byte-identical** to photos already
+> in other sets, so their link targets are certain (found with `md5sum`, worth
+> re-running for future batches):
+>
+> ```
+> gal-18 = lpit-08   → COMMUNITY: LinkedIn Possibilities in Tech
+> gal-41 = cfa-05    → COMMUNITY: Chick-fil-A Community Scholars
+> gal-42 = cfa-07    → COMMUNITY: Chick-fil-A Community Scholars
+> gal-49 = afenew-01 → /projects/afe-hackathon/
+> gal-52 = cfa-25    → COMMUNITY: Chick-fil-A Community Scholars
+> gal-53 = cfa-26    → COMMUNITY: Chick-fil-A Community Scholars
+> ```
+>
+> Ava's instruction: **work out the gallery links from the photo contents**, and
+> expect overlap with the projects/communities. `lpit-26` was deleted because it
+> was byte-identical to `lpit-20`.
+>
+> **Flower press (press-01..15), first 6 viewed.** It is a **laser-cut** lily
+> bouquet, not hand-cut: `press-01`/`02` veneer tape laid over a veneer sheet;
+> `press-03`/`04` the laser head cutting lily outlines into oak/walnut veneer;
+> `press-05` the cut pieces with charred edges sitting in the field; `press-06`
+> the assembled bouquet — white lily petals with yellow stamens, walnut stems and
+> leaves, iris shapes in a lighter wood, laid into an oak ground.
+> ⚠️ The current page says *"the CAD for this one is lost"* — the photos show
+> laser work, so vector files existed. Reword rather than repeat that.
+> `press-07..15` + the 28 s clip are **not yet viewed**.
+>
+> **CAD studies naming clash.** `cad-projects/` already holds curated assets
+> (`organizer-*`, `pencil-box-*`, `phone-stand-*`, `led-lamp*`) referenced by
+> `cad-projects.md`. The 67 new ones are prefixed `cadnew-` to avoid collision —
+> **rename them to something meaningful when wiring them in.**
+>
+> **Marquetry desk.** Its photos show a second piece — a wavy-fronted two-drawer
+> walnut/maple box — which belongs to CAD & Woodworking Studies. The desk page
+> already links to it; make sure that piece gets covered in `cad-projects.md`.
+>
+> ### Tooling a fresh chat must install (none are site dependencies)
+>
+> ```bash
+> npm i --no-save ffmpeg-static playwright   # ffmpeg is NOT on this box
+> pip install --user pillow-heif             # REQUIRED for .HEIC
+> ```
+> - **HEIC: use pillow-heif, never ffmpeg.** An iPhone HEIC is a tile grid with
+>   auxiliary streams; ffmpeg silently returns a washed-out greyscale aux image or
+>   a single 640 px tile. Four photos were broken that way before this was found.
+> - Playwright: pass
+>   `executablePath: ~/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome`.
+>   **Device descriptors are broken** with that build (a 390 px viewport reports
+>   `innerWidth` 481, `touchscreen.tap` fires nothing) → use plain viewport sizes
+>   with mouse input. `html{scroll-behavior:smooth}` means scroll assertions must
+>   wait for the scroll to settle, and `locator.click()` cannot click a
+>   viewport-anchored element (scroll-into-view loops) → click measured centre
+>   pixels.
+> - Process a batch **without touching existing curated assets** by staging the
+>   raws outside the repo:
+>   `node scripts/process-community-media.mjs <slug|path> <prefix> --from /tmp/stage/...`
+>
+> ### Repo size — decision already taken
+>
+> History is **~1.3 GB** and Ava has **more photos still to add**. Agreed plan
+> (2026-08-06): **accept it for now**; the `.gitignore` raw-blocking patterns are
+> **commented out on purpose** so her next batch isn't swallowed. Once the import
+> is finished, do ONE cleanup pass: uncomment the patterns *and* rewrite history
+> to strip the raw blobs (needs a force-push; invalidates her other clone).
+> **Do not rewrite history before she says the import is done.**
+>
+> ---
+
 > **Session 2026-08-06 (pt.6) — `images/` restructured + three more media sets
 > shipped.** Two commits, the first already pushed:
 >

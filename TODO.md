@@ -9,7 +9,14 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [x] **0. ✅ Enforce HTTPS enabled (2026-07-04).** DNS verified, GitHub issued
       the TLS cert, Enforce HTTPS on; https://avamartoma.com serves over HTTPS.
 
-- [~] **1. Add project photos.** *(In progress — 2026-08-05.)* Photos now on:
+- [~] **1. Add project photos.** *(In progress — 2026-08-06 pt.7.)*
+      **⚠️ Processed assets are sitting in `public/` waiting to be wired in — see
+      the red block at the top of `HANDOVER.md` for the full table and the
+      one-set-per-chat plan (a chat can only include ~100 images).** Waiting:
+      flower press (16), clock (1), CAD studies (68), luminary (16), gallery (60),
+      Chick-fil-A (28), LinkedIn Possibilities in Tech (25), Coca-Cola (12).
+      ✅ Done this session: **Marquetry Lap Desk** (15 photos) and
+      **Architecture / "The Grove"** (14 + carousel + clip). Photos now on:
       Amazon Path, LinkedIn (video + shots), Henna Luminary, CAD & Woodworking
       Studies, and RC car (22, in a carousel), plus **Wooden Car** and **CAD
       Bridge** (from Ava's ME-class docs, 2026-08-06). **Remaining:**
@@ -27,7 +34,17 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         finished **LED lamp** photo from lvilledesign.org. Corrected the Luminary
         "final" shots (they're process shots, not a finished lit lantern).
 
-- [~] **1b. Gallery page (`/gallery`) — LIVE with placeholders (2026-08-06).**
+- [~] **1b. Gallery page (`/gallery`) — 60 REAL PHOTOS NOW PROCESSED, not yet
+      wired (2026-08-06 pt.7).** `gal-01..60` are in `public/images/gallery/`
+      alongside the 4 Wix covers. Ava's instruction: **work out each photo's link
+      from its contents**, expecting overlap with the projects/communities. Six
+      links are already certain (byte-identical duplicates — listed in
+      `HANDOVER.md`). Swap each `ph('Label', href)` for a
+      `photo('/images/gallery/gal-NN.jpg','alt',href,'Label')` in
+      `src/pages/gallery.astro`. Needs its own chat: 60 photos ≈ the whole
+      per-chat image budget.
+
+- [~] **1c. Gallery page — original placeholder note (2026-08-06).**
       Rows of photos auto-scroll in alternating directions; each photo links to a
       project / experience / personal page. Seeded with 4 Wix cover photos +
       labeled placeholders. **To finish:** drop real photos into
