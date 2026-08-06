@@ -6,7 +6,7 @@ date: 2025-05-01
 tags: ["Woodworking", "Marquetry", "Veneer", "Fusion 360"]
 accent: "#ffd23f"
 accentAlt: "#ff5cc4"
-# cover: "/images/marquetry-desk/cover.jpg"
+# cover: "/images/projects/marquetry-desk/cover.jpg"
 ---
 
 ## Overview
@@ -16,4 +16,4 @@ marquetry**. I designed the piece in **Fusion**, then built the wood in the
 machine shop — veneering the large flat main piece (an **MDF substrate**) with
 **walnut** and other veneers. A handmade gift.
 
-<!-- ![Foldable marquetry desk](/images/marquetry-desk/cover.jpg) -->
+<!-- ![Foldable marquetry desk](/images/projects/marquetry-desk/cover.jpg) -->

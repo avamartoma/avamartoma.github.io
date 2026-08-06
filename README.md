@@ -39,7 +39,7 @@ date: 2026-01-15          # controls sort order (newest first)
 tags: ["TypeScript", "WebGL"]
 repo: "https://github.com/avamartoma/my-thing"   # optional
 demo: "https://example.com/my-thing"             # optional
-cover: "/images/my-thing.jpg"  # optional; omit for generative artwork
+cover: "/images/projects/my-thing/cover.jpg"  # optional; omit for generative artwork
 accent: "#ff5c39"        # drives the generated artwork + hover color
 accentAlt: "#3d5afe"
 featured: false          # optional
@@ -54,8 +54,8 @@ images, blockquotes are all styled.
 
 - **No cover image?** Leave `cover` off and the card/banner draws a generative
   gradient from your `accent`/`accentAlt` colors.
-- **With a cover image?** Drop the file in `public/images/` and reference it as
-  `/images/filename.jpg`.
+- **With a cover image?** Drop the file in `public/images/projects/<slug>/` and
+  reference it as `/images/projects/<slug>/filename.jpg`.
 
 Save the file, and it appears in the grid automatically. Frontmatter is
 validated at build time (see `src/content.config.ts`) — a typo'd field will

@@ -15,7 +15,7 @@ from Jaden Hinton and Pablo Najera.*
 
 ## See it in action
 
-<video controls preload="none" poster="/images/linkedin-hackathon/demo-poster.jpg">
+<video controls preload="none" poster="/images/projects/linkedin-hackathon/demo-poster.jpg">
   <source src="/videos/linkedin-hackathon/demo.mp4" type="video/mp4" />
   Your browser can't play embedded video —
   <a href="/videos/linkedin-hackathon/demo.mp4">download the demo clip</a> instead.
@@ -34,7 +34,7 @@ The core bet: **everything reduces to skills** as the connective tissue —
 a role is a cluster of skills, you hold some of them, a course teaches some,
 the gap is the difference, and your "fit %" is the overlap.
 
-![The entry point: a LinkedIn-style profile with a persistent Locked[IN] button that kicks off the discovery flow.](/images/linkedin-hackathon/profile.png)
+![The entry point: a LinkedIn-style profile with a persistent Locked[IN] button that kicks off the discovery flow.](/images/projects/linkedin-hackathon/profile.png)
 
 ## The flow
 
@@ -47,11 +47,11 @@ leaderboard around it:
 - **Comparison** — weigh roles against each other.
 - **Your Path** — readiness, skill gaps, and a concrete milestone plan.
 
-![Explore — "Discover where you could go": search hundreds of roles, each scored with a readiness % against your profile.](/images/linkedin-hackathon/discover.png)
+![Explore — "Discover where you could go": search hundreds of roles, each scored with a readiness % against your profile.](/images/projects/linkedin-hackathon/discover.png)
 
-![Comparison — a role deep-dive: readiness ring, live open roles, and a clean split of the skills you already have versus the ones to build.](/images/linkedin-hackathon/role-detail.png)
+![Comparison — a role deep-dive: readiness ring, live open roles, and a clean split of the skills you already have versus the ones to build.](/images/projects/linkedin-hackathon/role-detail.png)
 
-![Your Path — a milestone plan that turns the skill gap into concrete, checkable actions on a suggested timeline.](/images/linkedin-hackathon/your-path.png)
+![Your Path — a milestone plan that turns the skill gap into concrete, checkable actions on a suggested timeline.](/images/projects/linkedin-hackathon/your-path.png)
 
 ## My role
 

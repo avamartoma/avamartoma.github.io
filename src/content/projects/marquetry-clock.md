@@ -6,7 +6,7 @@ date: 2024-11-01
 tags: ["Woodworking", "Marquetry", "Veneer", "Laser Cutting"]
 accent: "#5ce6a0"
 accentAlt: "#4361ee"
-# cover: "/images/marquetry-clock/cover.jpg"
+# cover: "/images/projects/marquetry-clock/cover.jpg"
 ---
 
 ## Overview
@@ -14,5 +14,5 @@ accentAlt: "#4361ee"
 A **wooden veneer clock** themed around **koi fish**, with a matching
 **laser-cut box scene** made to go with it.
 
-<!-- ![Koi-fish veneer clock](/images/marquetry-clock/cover.jpg)
-![Matching laser-cut box scene](/images/marquetry-clock/box-scene.jpg) -->
+<!-- ![Koi-fish veneer clock](/images/projects/marquetry-clock/cover.jpg)
+![Matching laser-cut box scene](/images/projects/marquetry-clock/box-scene.jpg) -->

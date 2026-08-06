@@ -214,7 +214,7 @@ public/
   favicon.svg                 AA/M monogram
   robots.txt                  allow-all (Disallow /admin/) + Sitemap link
   admin/                      Sveltia CMS self-serve editor (index.html + config.yml)
-  images/<project-slug>/      per-project photos (RC/CAD/Luminary/etc. populated)
+  images/projects/<slug>/     per-project photos (RC/CAD/Luminary/etc. populated)
   images/communities/<slug>/  per-community photos; one .gitkeep'ed folder per
                               program. t-mobile-changemaker/ holds the 12 modal
                               photos (filenames run 01..13 minus 06 — the
@@ -256,7 +256,7 @@ date: 2025-08-01            # newest first; shown as "Month Day, Year"
 tags: ["Arduino", "3D Printing"]
 repo: "https://…"          # optional
 demo: "https://…"          # optional
-cover: "/images/my-slug/cover.jpg"   # optional; omit → generative artwork
+cover: "/images/projects/my-slug/cover.jpg"   # optional; omit → generative artwork
 accent: "#a855f7"          # optional card artwork colors
 accentAlt: "#4361ee"
 featured: false
@@ -264,8 +264,9 @@ draft: false               # true = hidden
 ---
 Markdown body…
 ```
-**Photos:** drop in `public/images/<slug>/`, reference as `/images/<slug>/file.jpg`
-(cover in frontmatter; inline via Markdown `![alt](/images/<slug>/x.jpg)`).
+**Photos:** drop in `public/images/projects/<slug>/`, reference as
+`/images/projects/<slug>/file.jpg` (cover in frontmatter; inline via Markdown
+`![alt](/images/projects/<slug>/x.jpg)`).
 
 Experience roles + Education are inlined arrays in `Experience.astro`.
 
@@ -488,7 +489,7 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
   lantern → recaptioned (panels laid out / stained / dry-fit) + fixed the lead-in.
   **Self-serve editor:** added **Sveltia CMS** at `/admin/`
   (`public/admin/index.html` + `config.yml`, a `projects` collection matching the
-  schema, per-project image uploads to `public/images/<slug>/`) + `admin-setup.md`
+  schema, per-project image uploads to `public/images/projects/<slug>/`) + `admin-setup.md`
   walkthrough; `robots.txt` disallows `/admin/`. Editor works once Ava does the
   one-time GitHub-OAuth-app + `sveltia-cms-auth` Cloudflare Worker setup.
   ⚠️ Flagged: the phone-stand render has a personal kids photo as wallpaper (live).

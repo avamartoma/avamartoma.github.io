@@ -7,7 +7,7 @@ tags: ["SolidWorks", "Composites", "Manufacturing", "ANSYS Fluent", "Technical D
 accent: "#a855f7"
 accentAlt: "#4361ee"
 featured: true
-# cover: "/images/penn-electric-racing/cover.jpg"
+# cover: "/images/projects/penn-electric-racing/cover.jpg"
 ---
 
 ## Overview
@@ -29,8 +29,8 @@ hand layup**, then ran **aerodynamic analysis in ANSYS Fluent and Luminary** to
 refine the design.
 
 <!-- Add your process shots here once downloaded:
-![SolidWorks production drawing](/images/penn-electric-racing/drawing.jpg)
-![Composite layup process](/images/penn-electric-racing/layup.jpg) -->
+![SolidWorks production drawing](/images/projects/penn-electric-racing/drawing.jpg)
+![Composite layup process](/images/projects/penn-electric-racing/layup.jpg) -->
 
 <!-- Beef up: what subsystems, what the tabs/jigs were for, and what you learned
      from the layup process (vacuum bagging? curing? tolerances?). -->

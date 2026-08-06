@@ -3,10 +3,27 @@
 Drop your images in this folder and reference them from anywhere on the site
 with a **leading slash** (the `public/` part is dropped in the URL):
 
-| File on disk                     | Reference in code / frontmatter |
-|----------------------------------|---------------------------------|
-| `public/images/me.jpg`           | `/images/me.jpg`                |
-| `public/images/projects/foo.jpg` | `/images/projects/foo.jpg`      |
+| File on disk                                  | Reference in code / frontmatter      |
+|-----------------------------------------------|--------------------------------------|
+| `public/images/og-image.png`                  | `/images/og-image.png`               |
+| `public/images/projects/rc-car/build-01.jpg`  | `/images/projects/rc-car/build-01.jpg` |
+
+## Folder layout
+
+Everything is grouped by **what the image is for** — there are only four
+top-level folders here, and each one holds per-item subfolders:
+
+```
+images/
+  projects/<project-slug>/     photos for a project page (slug = the .md filename)
+  communities/<program-slug>/  photos for a Communities chip modal (index.astro)
+  experience/<role-slug>/      photos for an Experience timeline detail modal
+  gallery/                     the photo wall on /gallery
+```
+
+Keep new images inside one of those four. A project slug must match its
+Markdown filename in `src/content/projects/` (e.g. `rc-car.md` →
+`images/projects/rc-car/`).
 
 ## Photos of yourself
 
@@ -26,8 +43,9 @@ with a **leading slash** (the `public/` part is dropped in the URL):
 
 ## Project cover images
 
-- Add the file here (e.g. `projects/aurora.jpg`), then set
-  `cover: "/images/projects/aurora.jpg"` in that project's Markdown frontmatter.
+- Add the file under that project's folder (e.g.
+  `projects/aurora/cover.jpg`), then set
+  `cover: "/images/projects/aurora/cover.jpg"` in its Markdown frontmatter.
 - Recommended size: **1600×1000px** (16:10) — that's the card aspect ratio.
 - Omit `cover` entirely to use the auto-generated accent-color artwork instead.
 

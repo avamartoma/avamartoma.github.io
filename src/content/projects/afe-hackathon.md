@@ -30,7 +30,7 @@ and get three things back:
 2. **The path** — the people, teams, resources, roles, and accounts behind that answer.
 3. **The next action** — who to contact, what role to request, and a draft to send.
 
-![Amazon Path living as a native tab in Phone Tool: a traced answer, the verified graph, ranked contacts with score breakdowns, and a ready-to-send message — all from one plain-English question.](/images/afe-hackathon/phone-tool.png)
+![Amazon Path living as a native tab in Phone Tool: a traced answer, the verified graph, ranked contacts with score breakdowns, and a ready-to-send message — all from one plain-English question.](/images/projects/afe-hackathon/phone-tool.png)
 
 ## What makes it different
 
@@ -59,7 +59,7 @@ test suite covering graph integrity, data-safety, deterministic queries, expert
 ranking, and responsive browser rendering. The demo runs on validated, synthetic
 public data — connector-based sync with live sources is the designed next step.
 
-![The interactive 3D relationship graph rendering on a phone-sized screen, with readable labels and touch controls.](/images/afe-hackathon/graph-mobile.png)
+![The interactive 3D relationship graph rendering on a phone-sized screen, with readable labels and touch controls.](/images/projects/afe-hackathon/graph-mobile.png)
 
 ## Pay it forward
 

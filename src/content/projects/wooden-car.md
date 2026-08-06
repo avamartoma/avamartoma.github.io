@@ -20,11 +20,11 @@ Like the bridge, we began with sketches and then built the car in **Fusion
 **primarily responsible** for the model — most of the edits and iterations ran
 through me, which I'm proud of.
 
-![An early design render, marked up — the push-pole, painted flames, and the steering mechanism (pink).](/images/wooden-car/car-concept.jpg)
+![An early design render, marked up — the push-pole, painted flames, and the steering mechanism (pink).](/images/projects/wooden-car/car-concept.jpg)
 
-![Working the structure out by hand — plywood over vertical 2×4s, rope holes, and a foot support.](/images/wooden-car/car-sketch.jpg)
+![Working the structure out by hand — plywood over vertical 2×4s, rope holes, and a foot support.](/images/projects/wooden-car/car-sketch.jpg)
 
-![The car modeled in Fusion 360 — chassis, seat, seat-back, wheels, and all the hardware.](/images/wooden-car/car-fusion.jpg)
+![The car modeled in Fusion 360 — chassis, seat, seat-back, wheels, and all the hardware.](/images/projects/wooden-car/car-fusion.jpg)
 
 ## Steering: rope *and* foot
 
@@ -54,11 +54,11 @@ Sarah and I had fun giving the car personality — **"KACHOW"** and a lightning
 bolt down the spine, painted **flames** on the axles, and **"EAT my DUST"** on
 the seat-back. (I'm convinced the flames made it a little faster.)
 
-![The finished car, top-down — "KACHOW", a lightning bolt, painted flames, and the team's signatures.](/images/wooden-car/car-final-top.jpg)
+![The finished car, top-down — "KACHOW", a lightning bolt, painted flames, and the team's signatures.](/images/projects/wooden-car/car-final-top.jpg)
 
-![The finished car in the shop.](/images/wooden-car/car-final-side.jpg)
+![The finished car in the shop.](/images/projects/wooden-car/car-final-side.jpg)
 
-![The seat-back: "EAT my DUST."](/images/wooden-car/car-seatback.jpg)
+![The seat-back: "EAT my DUST."](/images/projects/wooden-car/car-seatback.jpg)
 
 I'm proudest of how much we iterated — before *and* during the build — and of
 how the merged rope-and-foot steering came together in the end.

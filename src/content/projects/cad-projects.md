@@ -21,19 +21,19 @@ The final organizer packs three drawers (one hidden), 3D-printed jewelry inserts
 a sliding secret compartment, and a hand-painted panel — all sized to still fit
 inside her drawer.
 
-![The finished organizer, filled — makeup, brushes, and jewelry each in their own compartment.](/images/cad-projects/organizer-filled.jpg)
+![The finished organizer, filled — makeup, brushes, and jewelry each in their own compartment.](/images/projects/cad-projects/organizer-filled.jpg)
 
-![Empty: the tiered compartments, the hand-painted hibiscus panel, and pyrography grasses on the body.](/images/cad-projects/organizer-empty.jpg)
+![Empty: the tiered compartments, the hand-painted hibiscus panel, and pyrography grasses on the body.](/images/projects/cad-projects/organizer-empty.jpg)
 
-![The 3D-printed dividers that drop into the jewelry section to keep small items and necklaces sorted.](/images/cad-projects/organizer-inserts.jpg)
+![The 3D-printed dividers that drop into the jewelry section to keep small items and necklaces sorted.](/images/projects/cad-projects/organizer-inserts.jpg)
 
-![The jewelry inserts in use — clips, rings, and hair ties in their slots.](/images/cad-projects/organizer-inserts-filled.jpg)
+![The jewelry inserts in use — clips, rings, and hair ties in their slots.](/images/projects/cad-projects/organizer-inserts-filled.jpg)
 
-![The left-hand drawer.](/images/cad-projects/organizer-drawer-left.jpg)
+![The left-hand drawer.](/images/projects/cad-projects/organizer-drawer-left.jpg)
 
-![The right-hand drawer, under the pyrography-etched lid.](/images/cad-projects/organizer-drawer-right.jpg)
+![The right-hand drawer, under the pyrography-etched lid.](/images/projects/cad-projects/organizer-drawer-right.jpg)
 
-![The hidden third drawer, tucked inside the frame.](/images/cad-projects/organizer-drawer-hidden.jpg)
+![The hidden third drawer, tucked inside the frame.](/images/projects/cad-projects/organizer-drawer-hidden.jpg)
 
 ## Parametric Pencil Box
 
@@ -43,24 +43,24 @@ detailing on the walls. I laid out all the walls first, then added the
 finger-joints last, which made the tedious joinery far easier to reason about.
 The final build stayed remarkably close to my concept sketch.
 
-![The finished pencil box — engraved side panel, compartments, and the pull-out drawer open.](/images/cad-projects/pencil-box-front.jpg)
+![The finished pencil box — engraved side panel, compartments, and the pull-out drawer open.](/images/projects/cad-projects/pencil-box-front.jpg)
 
-![The back, showing the laser-cut finger joints that hold the walls together.](/images/cad-projects/pencil-box-back.jpg)
+![The back, showing the laser-cut finger joints that hold the walls together.](/images/projects/cad-projects/pencil-box-back.jpg)
 
-![Top-down: the two compartments and the drawer bay.](/images/cad-projects/pencil-box-top.jpg)
+![Top-down: the two compartments and the drawer bay.](/images/projects/cad-projects/pencil-box-top.jpg)
 
-![The pull-out drawer.](/images/cad-projects/pencil-box-drawer.jpg)
+![The pull-out drawer.](/images/projects/cad-projects/pencil-box-drawer.jpg)
 
-![The little stopper inside the drawer that keeps it from sliding all the way out.](/images/cad-projects/pencil-box-stopper.jpg)
+![The little stopper inside the drawer that keeps it from sliding all the way out.](/images/projects/cad-projects/pencil-box-stopper.jpg)
 
-![Filled — a lot of storage in a small footprint.](/images/cad-projects/pencil-box-filled.jpg)
+![Filled — a lot of storage in a small footprint.](/images/projects/cad-projects/pencil-box-filled.jpg)
 
 I started from a concept sketch, built it up in Fusion 360, and the final piece
 came out remarkably close to that first drawing:
 
-![The initial concept sketch, drawn in OneNote.](/images/cad-projects/pencil-box-concept.jpg)
+![The initial concept sketch, drawn in OneNote.](/images/projects/cad-projects/pencil-box-concept.jpg)
 
-![The Fusion 360 model — every wall and finger-joint parameterized.](/images/cad-projects/pencil-box-fusion.jpg)
+![The Fusion 360 model — every wall and finger-joint parameterized.](/images/projects/cad-projects/pencil-box-fusion.jpg)
 
 ## 360° Phone Stand
 
@@ -69,26 +69,26 @@ hidden disk in the base that lets the whole stand **swivel 360°**, a slot that
 holds an AirPods case, and cutouts under the charger, speaker, and microphone so
 the phone stays usable — and audible — on calls while docked.
 
-![The finished phone-stand model, back three-quarter view — the jointed arm, swivel base, and AirPods slot.](/images/cad-projects/phone-stand-back.jpg)
+![The finished phone-stand model, back three-quarter view — the jointed arm, swivel base, and AirPods slot.](/images/projects/cad-projects/phone-stand-back.jpg)
 
-![The arm's range of motion — the hinged joints fold through a wide arc.](/images/cad-projects/phone-stand-angle-1.jpg)
+![The arm's range of motion — the hinged joints fold through a wide arc.](/images/projects/cad-projects/phone-stand-angle-1.jpg)
 
-![A side profile showing how far the phone tilts to change viewing angle.](/images/cad-projects/phone-stand-angle-2.jpg)
+![A side profile showing how far the phone tilts to change viewing angle.](/images/projects/cad-projects/phone-stand-angle-2.jpg)
 
-![The base shown transparent: the internal disk (red arrow) that lets the whole stand swivel 360°.](/images/cad-projects/phone-stand-swivel.jpg)
+![The base shown transparent: the internal disk (red arrow) that lets the whole stand swivel 360°.](/images/projects/cad-projects/phone-stand-swivel.jpg)
 
-![The AirPods-case slot cut into the base, empty…](/images/cad-projects/phone-stand-airpods-empty.jpg)
+![The AirPods-case slot cut into the base, empty…](/images/projects/cad-projects/phone-stand-airpods-empty.jpg)
 
-![…and with an AirPods case docked.](/images/cad-projects/phone-stand-airpods.jpg)
+![…and with an AirPods case docked.](/images/projects/cad-projects/phone-stand-airpods.jpg)
 
-![Orthographic view of the cutouts under the charger, speaker, and microphone so the phone stays usable while docked.](/images/cad-projects/phone-stand-ports.jpg)
+![Orthographic view of the cutouts under the charger, speaker, and microphone so the phone stays usable while docked.](/images/projects/cad-projects/phone-stand-ports.jpg)
 
 I started from the phone itself — measuring it by hand and sketching the back
 and front with all the cutouts before modeling the cradle in Fusion 360.
 
-![Hand-drawn dimension sketch of the phone's back — camera module, side buttons, and bottom port/speaker cutouts, with measurements in inches.](/images/cad-projects/phone-stand-sketch-back.jpg)
+![Hand-drawn dimension sketch of the phone's back — camera module, side buttons, and bottom port/speaker cutouts, with measurements in inches.](/images/projects/cad-projects/phone-stand-sketch-back.jpg)
 
-![Hand-drawn dimension sketch of the phone's front outline, used to size the cradle.](/images/cad-projects/phone-stand-sketch-front.jpg)
+![Hand-drawn dimension sketch of the phone's front outline, used to size the cradle.](/images/projects/cad-projects/phone-stand-sketch-front.jpg)
 
 ## Articulating LED Lamp
 
@@ -96,7 +96,7 @@ An articulating desk lamp with an upper and lower arm joined by circular metal
 plates, with **magnets epoxied into the joints** so the arm can rotate and hold
 its pose.
 
-![The finished LED lamp — a laser-cut plywood arm with rectangular cutouts, jointed to a stacked-ply round base with an on/off switch.](/images/cad-projects/led-lamp.jpg)
+![The finished LED lamp — a laser-cut plywood arm with rectangular cutouts, jointed to a stacked-ply round base with an on/off switch.](/images/projects/cad-projects/led-lamp.jpg)
 
 ---
 

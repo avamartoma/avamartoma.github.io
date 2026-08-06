@@ -20,7 +20,7 @@ negative space**, which is exactly what a fretwork lamp needs: the light only
 escapes where the material is cut away. It also let me put something personal
 and cultural into the piece.
 
-![Mehndi — henna applied to the hands — the visual language I drew the lamp's fretwork from.](/images/luminary/inspiration-henna.jpeg)
+![Mehndi — henna applied to the hands — the visual language I drew the lamp's fretwork from.](/images/projects/luminary/inspiration-henna.jpeg)
 
 Henna designs usually combine nature with geometric shapes. I studied a range
 of mehndi patterns, pulled the motifs I liked, and worked them into a sketch of
@@ -33,7 +33,7 @@ my scanned sketch, but I wanted exact measurements and clean, cuttable curves, s
 I redrew it by hand as vectors — tuning line thicknesses so the fine details
 wouldn't burn out or fall apart on the laser cutter.
 
-![The henna-inspired panel redrawn as precise vector fretwork in Illustrator.](/images/luminary/design.png)
+![The henna-inspired panel redrawn as precise vector fretwork in Illustrator.](/images/projects/luminary/design.png)
 
 I designed it as one large continuous panel, hoping the lines would carry across
 all four sides. Splitting it into four panels taught me something: even when the
@@ -41,25 +41,25 @@ lines technically match at the seams, the gaps break the illusion of continuity.
 Next time I'd simply drop the sections meant to read as negative space rather
 than trying to bridge them.
 
-![The single design split across the four panels — a lesson in how seams interrupt continuous linework.](/images/luminary/panels.png)
+![The single design split across the four panels — a lesson in how seams interrupt continuous linework.](/images/projects/luminary/panels.png)
 
 ## Cut, stain, assemble
 
 I cut the panels on the laser cutter, stained the wood, assembled the box, and
 added **vellum paper** behind the fretwork to diffuse the light.
 
-![Laser-cut fretwork pieces — the mandala face and layered geometric borders.](/images/luminary/laser-pieces.jpg)
+![Laser-cut fretwork pieces — the mandala face and layered geometric borders.](/images/projects/luminary/laser-pieces.jpg)
 
 Cut, stained, and assembled, the panels wrap into a lantern whose mehndi
 pattern is designed to read as light and shadow through the fretwork:
 
-![The panels straight out of the laser cutter — the full wrap of henna-inspired fretwork.](/images/luminary/process-1-cut.jpg)
+![The panels straight out of the laser cutter — the full wrap of henna-inspired fretwork.](/images/projects/luminary/process-1-cut.jpg)
 
-![Staining the wood.](/images/luminary/process-2-stain.jpg)
+![Staining the wood.](/images/projects/luminary/process-2-stain.jpg)
 
-![Dry assembly — checking the fit, held together with painter's tape.](/images/luminary/process-3-dry-assembly.jpg)
+![Dry assembly — checking the fit, held together with painter's tape.](/images/projects/luminary/process-3-dry-assembly.jpg)
 
-![Stained and glued up — banded together while the glue dries.](/images/luminary/process-4-drying.jpg)
+![Stained and glued up — banded together while the glue dries.](/images/projects/luminary/process-4-drying.jpg)
 
 ---
 

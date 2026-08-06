@@ -6,7 +6,7 @@ date: 2024-07-01
 tags: ["Rhino3D", "Architecture", "Design"]
 accent: "#5ce6a0"
 accentAlt: "#4361ee"
-# cover: "/images/architecture/cover.jpg"
+# cover: "/images/projects/architecture/cover.jpg"
 ---
 
 ## Overview
@@ -19,8 +19,8 @@ available).
 
 The project ended in a **final physical model** and a **project poster**.
 
-<!-- ![Project poster](/images/architecture/poster.jpg)
-![Final physical model](/images/architecture/model.jpg) -->
+<!-- ![Project poster](/images/projects/architecture/poster.jpg)
+![Final physical model](/images/projects/architecture/model.jpg) -->
 
 <!-- Beef up: what the brief was, the concept behind your design, and your role
      if it was a team project. Which summer program was it? -->

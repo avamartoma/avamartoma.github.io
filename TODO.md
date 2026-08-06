@@ -14,8 +14,9 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       Studies, and RC car (22, in a carousel), plus **Wooden Car** and **CAD
       Bridge** (from Ava's ME-class docs, 2026-08-06). **Remaining:**
       `penn-electric-racing`, `marquetry-*`, `architecture` still use generative
-      artwork. Drop images in `public/images/<slug>/` and reference inline in the
-      body (Markdown `![alt](/images/<slug>/x.jpg)`), or use a `<div class="carousel"
+      artwork. Drop images in `public/images/projects/<slug>/` and reference inline
+      in the body (Markdown `![alt](/images/projects/<slug>/x.jpg)`), or use a
+      `<div class="carousel"
       data-carousel>…</div>` block for a slideshow (see `rc-car.md`).
   - [x] **1a. ✅ Captioned the scraped photos (2026-08-05).** Viewed every RC-car
         carousel photo (build-02..22), CAD-studies, and Luminary shot (resized to
@@ -185,7 +186,7 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       from CDN) + `public/admin/config.yml` (a `projects` collection matching the
       `content.config.ts` schema — title, blurb, description, date, tags, repo,
       demo, cover, accent/accentAlt, featured, draft + Markdown body; per-project
-      image uploads → `public/images/<slug>/`). Editor lives at
+      image uploads → `public/images/projects/<slug>/`). Editor lives at
       **/admin/**. **Remaining (Ava, ~15 min, see `admin-setup.md`):** deploy the
       `sveltia-cms-auth` Cloudflare Worker + register a GitHub OAuth app, then log
       in. A no-worker PAT fallback is documented too.
