@@ -427,15 +427,27 @@ async function getRecentlyPlayedCached(token, env, ctx) {
     return fresh;
   }
 
-  // Spotify refused (usually 429). Prefer the last good real list, then fall
-  // back to the history this Worker built from the live track.
-  const backup = await readRecentBackup(env);
-  if (backup?.tracks?.length) {
+  // Spotify refused (usually 429). Fall back to whichever local source is
+  // FRESHER — not a fixed preference order. Preferring the snapshot
+  // unconditionally meant a stale recent_backup (frozen the moment Spotify
+  // started refusing, and never refreshed while it keeps refusing) shadowed the
+  // self-built history, which is still being updated every time a track plays.
+  // The symptom was a recent list missing songs AND showing ones that had since
+  // been removed.
+  const [backup, history] = await Promise.all([readRecentBackup(env), readHistory(env)]);
+  const newestAt = (tracks) => {
+    if (!Array.isArray(tracks) || !tracks.length) return -1;
+    const t = Date.parse(tracks[0].playedAt || '');
+    return Number.isFinite(t) ? t : 0;
+  };
+  const backupAt = newestAt(backup?.tracks);
+  const historyAt = newestAt(history);
+
+  if (backupAt >= 0 && backupAt >= historyAt) {
     lastRecentSource = 'kv-backup';
     return backup.tracks;
   }
-  const history = await readHistory(env);
-  if (history.length) {
+  if (historyAt >= 0) {
     lastRecentSource = 'self-history';
     return history;
   }
