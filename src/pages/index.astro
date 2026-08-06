@@ -553,7 +553,15 @@ const communities: Community[] = [
         <div class="comm__dialog-inner">
           <h3 class="comm__dialog-title">{c.name}</h3>
           {c.blurb && <p class="comm__dialog-blurb">{c.blurb}</p>}
-          <div class="comm__dialog-photos">
+          <div
+            class:list={[
+              'comm__dialog-photos',
+              /* A single item has no grid to fill: the 220px tile plus the 4/3
+                 cover crop shrinks it to a thumbnail and clips the edges out of
+                 frame. Show it whole instead. */
+              c.media.length === 1 && 'comm__dialog-photos--one',
+            ]}
+          >
             {c.media.map((m) => (
               <figure class="comm__photo">
                 {m.poster ? (
@@ -799,6 +807,14 @@ const communities: Community[] = [
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
     gap: 0.75rem;
+  }
+  /* Single-item modal: one full-width, uncropped image instead of a lone tile. */
+  .comm__dialog-photos--one { grid-template-columns: 1fr; }
+  .comm__dialog-photos--one .comm__photo img,
+  .comm__dialog-photos--one .comm__photo .comm__video {
+    aspect-ratio: auto;
+    max-height: 70vh;
+    object-fit: contain;
   }
   .comm__photo { margin: 0; }
   .comm__photo img,
