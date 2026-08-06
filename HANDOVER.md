@@ -48,6 +48,10 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >   a 60-photo set and a 28-photo set in the same chat will not fit.
 > - Everything is committed, so a fresh chat loses nothing. `git log` is the truth.
 >
+> **📋 Copy-paste prompts for the remaining work are in
+> [`NEXT-CHATS.md`](./NEXT-CHATS.md)** — one block per fresh chat, in order, with
+> a checklist. Start there rather than re-planning.
+>
 > ### What is DONE and committed (nothing to redo)
 >
 > | Commit | What |
@@ -148,6 +152,24 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > is finished, do ONE cleanup pass: uncomment the patterns *and* rewrite history
 > to strip the raw blobs (needs a force-push; invalidates her other clone).
 > **Do not rewrite history before she says the import is done.**
+>
+> ---
+
+> **Session 2026-08-06 (code, post-pt.7) — scroll-trap bug fixed on the "Where
+> I've been" timeline.** Reported symptom: scrolling down the homepage with the
+> cursor over the Experience cards froze the page — you stayed stuck until you
+> moved the mouse off the cards to the side. **Root cause:** the `wheel` handler
+> in `src/components/Experience.astro` converted *every* vertical wheel into
+> horizontal timeline scroll and always called `e.preventDefault()`, so the page
+> could never scroll vertically while hovering the timeline. **Fix:** the handler
+> now (a) ignores intentionally-horizontal (trackpad/shift) wheels, and (b)
+> detects when the timeline is at its left/right edge and stops calling
+> `preventDefault()` there, letting the wheel fall through to scroll the page. Net
+> behaviour: you scroll the cards to the end, then the page keeps scrolling — no
+> more trap. `npm run build` ✓ (17 pages, no errors). **Not committed** (ground
+> rule #5) and no Playwright/manual scroll pass was run — verify in `npm run dev`
+> if desired. Only `Experience.astro` was touched; unrelated in-flight image work
+> in the working tree was left alone.
 >
 > ---
 
