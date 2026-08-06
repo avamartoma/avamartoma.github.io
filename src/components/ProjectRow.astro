@@ -63,6 +63,13 @@ const dateLabel = date.toLocaleDateString('en-US', {
 </a>
 
 <style>
+  /* The /work filter hides rows with the `hidden` attribute. This rule MUST live
+     here, in the component that owns .row — Astro scopes styles per file, so the
+     same rule in work.astro compiled to `.row[hidden][data-astro-cid-jljc7dey]`
+     and matched nothing (the rows carry ProjectRow's own cid), which meant
+     filtering set the attribute but never actually hid anything. */
+  .row[hidden] { display: none !important; }
+
   .row {
     position: relative;
     display: grid;

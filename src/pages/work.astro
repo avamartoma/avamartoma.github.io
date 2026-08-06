@@ -112,7 +112,9 @@ const activeCats = CATEGORIES.filter((c) => (catCounts.get(c) ?? 0) > 0);
   .filter.is-active .filter__n { color: var(--bg); opacity: 0.7; }
 
   .proj-list { display: flex; flex-direction: column; }
-  .row[hidden] { display: none; }
+  /* NOTE: the `.row[hidden]` rule lives in ProjectRow.astro, not here. Astro
+     scopes styles per file and the rows carry ProjectRow's cid, so a rule
+     written here never matches them. */
   .work__empty { color: var(--ink-soft); }
 </style>
 
