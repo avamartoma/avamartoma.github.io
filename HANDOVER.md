@@ -185,6 +185,60 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > [`NEXT-CHATS.md`](./NEXT-CHATS.md)** — one block per fresh chat, in order, with
 > a checklist. Start there rather than re-planning.
 >
+> ### UI/UX fixes landed 2026-08-06 pt.8 (separate chat, alongside the photo work)
+>
+> These are all committed and verified. Listed because a couple are easy to undo
+> by accident.
+>
+> - **Communities badge is `◈` only, no photo count** (`d3ec56c`). ⚠️ The count
+>   came back once already in `5bc8c9b`/`fcc2f9b` while the new modals were being
+>   wired. There is now a comment beside it in `index.astro` — please don't
+>   re-add `{c.media.length}`.
+> - **`/work` filters by DISCIPLINE, not by tag** (`d3ec56c`). The bar used to be
+>   built from all 45 tags in the catalogue. Now: Mechanical · Electrical ·
+>   Software · CAD & Simulation · Fabrication · Woodworking · Design · Hackathon.
+>   Mapping lives in **`src/lib/categories.ts`**, and `categoriesFor()`
+>   **throws at build time on an unmapped tag** — so if you add a tag to a
+>   project you must map it there, or the build fails loudly rather than the
+>   project silently dropping out of the filter. Programme labels (e.g. `MITES`)
+>   map to `[]` on purpose. Projects still *display* their specific tags:
+>   `ProjectRow` has a `filterTags` prop that separates what a row shows from
+>   what it filters on.
+> - **The Experience timeline no longer traps page scroll** (`f0582c4`). It
+>   translated vertical wheel into horizontal scroll and only released at an
+>   edge — with 2507px (desktop) / 3241px (mobile) of overflow that meant
+>   grinding through the whole timeline before the page moved. Vertical wheel now
+>   always scrolls the page; only shift+wheel and a real horizontal wheel move
+>   the timeline. Drag, arrow keys and the "drag / scroll →" hint are unchanged.
+>   Added `overscroll-behavior-x: contain`.
+> - **Communities modal**: blurb spans the full popup width (needed
+>   `max-width: none` because global `p { max-width: 62ch }` was also clamping
+>   it), and a programme with a single photo renders it large at its natural
+>   aspect ratio instead of a cropped 4/3 thumbnail.
+> - **`/gallery` heading**: the "y" descender overlapped the text below by 18.9px
+>   (desktop) / 7.6px (mobile), because global `h1 { line-height: 1.02 }` is
+>   tighter than the font's descender and `.gallery__head` left no gap. Fixed
+>   with `margin-bottom: 0.25em` in **em** so it tracks the clamped font size
+>   (`23b27c1`). Checked `/work`, `/resume`, `/404` and a project page too — all
+>   clear.
+> - **Footer**: dropped "Built with Astro" (`fff0f37`) and the "Questions,
+>   collabs… Drop me a line." paragraph (`7a64cc0`). That paragraph was also
+>   supplying the 24px gap above the social links, so the heading carries it now.
+> - **15 per-role folders under `public/images/experience/`** (`7a64cc0`) — all 13
+>   timeline roles plus `penn/` and `lawrenceville/`. Each `.gitkeep` names its
+>   role and carries the exact `images: [{ src, alt }]` snippet.
+>
+> **Unresolved — Spotify "Lately" shows only one song.** The deployed Worker
+> returns `recent: []`, so the frontend has nothing else to render (verified
+> live). `getRecentlyPlayed()` does `if (!res.ok) return []`, swallowing the
+> error. Two candidates, untested: a **missing `user-read-recently-played`
+> scope** on the refresh token (separate from the currently-playing scope, which
+> works — this fits the symptom exactly), or the blocklist filtering the list
+> empty. ⚠️ `worker/src/index.js` has ~38 lines of **uncommitted** local changes
+> that predate this session — find out what they were for before touching it.
+> Diagnosing properly needs the Worker's real HTTP status from Spotify, i.e.
+> temporary logging + a redeploy.
+>
 > ### What is DONE and committed (nothing to redo)
 >
 > | Commit | What |
