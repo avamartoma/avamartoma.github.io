@@ -16,9 +16,6 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
     <div class="foot__intro">
       <p class="label">Contact</p>
       <h2 class="foot__title">Say hi 👋</h2>
-      <p class="foot__blurb">
-        Questions, collabs, or just want to talk shop? Drop me a line.
-      </p>
       <nav class="foot__socials" aria-label="Contact links">
         {socials.map((s) => (
           <a
@@ -78,8 +75,9 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
     gap: clamp(1.5rem, 5vw, 4rem);
     align-items: start;
   }
-  .foot__title { margin: 0.6rem 0 0.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
-  .foot__blurb { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 1.5rem; max-width: 34ch; }
+  /* The removed intro paragraph used to supply the gap before the social links,
+     so the heading carries it now. */
+  .foot__title { margin: 0.6rem 0 1.5rem; font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
   .foot__socials { display: flex; flex-wrap: wrap; gap: 1.25rem; }
 
   .foot__form { display: grid; gap: 0.85rem; }

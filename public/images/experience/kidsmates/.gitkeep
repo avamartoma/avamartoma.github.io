@@ -1,0 +1,9 @@
+# KidsMates Inc.
+#
+# Drop photos for this role here, then list them on its entry in
+# src/components/Experience.astro via the optional images field:
+#   images: [{ src: '/images/experience/kidsmates/file.jpg', alt: '…' }]
+# They render as a photo grid inside that role's detail modal.
+#
+# Process raw camera files FIRST (they must not be committed as-is):
+#   node scripts/process-community-media.mjs experience/kidsmates kidsmates --from <raw dir>
