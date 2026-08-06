@@ -40,7 +40,18 @@ interface Community {
 }
 
 const communities: Community[] = [
-  { name: 'Amazon Future Engineer' },
+  {
+    name: 'Amazon Future Engineer',
+    blurb:
+      "Amazon Future Engineer is Amazon's computer-science education and scholarship program. As part of it my cohort interned at Amazon together — the same group behind the Amazon Path hackathon (one of my projects). This is us on a rooftop at sunset.",
+    media: [
+      {
+        src: '/images/communities/amazon-future-engineer/afe-01.jpg',
+        alt: 'About a dozen Amazon Future Engineer scholars crowded together on a rooftop at sunset, arms around each other, a city skyline and orange sky behind them.',
+        caption: 'The AFE cohort at sunset',
+      },
+    ],
+  },
   { name: 'LinkedIn Possibilities in Tech' },
   { name: 'Coca-Cola Scholars' },
   {
