@@ -178,6 +178,10 @@ export default {
         getExtraBlockedSongs(env),
         getExtraBlockedArtists(env),
       ]);
+      // Observe the live track so a history builds up even while recently-played
+      // is rate-limited. Cheap: one KV read per request, a write only on change.
+      await recordNowPlaying(env, current && current.isPlaying ? current : null, ctx);
+
       const blockedSongs = [...BLOCKED_SONGS, ...extraBlocked];
       const blockedArtists = [...BLOCKED_ARTISTS, ...extraBlockedArtists];
 
@@ -203,6 +207,7 @@ export default {
           recentAfterFilters: recentList.length,
           recentError: lastRecentError,
           recentSource: lastRecentSource,
+          historyLength: (await readHistory(env)).length,
           droppedByFilters: recent.length - recentList.length,
         };
       }
@@ -307,6 +312,57 @@ async function writeRecentBackup(env, tracks, previous) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Self-built play history.
+//
+// Spotify rate-limits /recently-played hard (a single burst earned a ~16 hour
+// 429), but /currently-playing keeps working — and this Worker sees the live
+// track on every request anyway. So record each distinct track as it appears and
+// keep a rolling list. When recently-played is unavailable, that list IS the
+// recent list, so the widget degrades to "slightly behind" instead of "empty".
+//
+// Only writes when the track actually CHANGES, so a browser polling every 60s
+// costs one KV write per song rather than one per poll.
+// ---------------------------------------------------------------------------
+const HISTORY_KEY = 'play_history';
+const HISTORY_MAX = 12;
+
+async function readHistory(env) {
+  try {
+    if (!env || !env.BLOCKED_SONGS_KV) return [];
+    const raw = await env.BLOCKED_SONGS_KV.get(HISTORY_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed?.tracks) ? parsed.tracks : [];
+  } catch {
+    return [];
+  }
+}
+
+// Returns the history as it will be after this observation, and (via waitUntil)
+// persists it if the track changed.
+async function recordNowPlaying(env, current, ctx) {
+  const history = await readHistory(env);
+  if (!current || !current.songUrl || !env || !env.BLOCKED_SONGS_KV) return history;
+  if (history[0] && history[0].songUrl === current.songUrl) return history; // same song
+  const entry = {
+    title: current.title,
+    artist: current.artist,
+    album: current.album,
+    albumImageUrl: current.albumImageUrl,
+    songUrl: current.songUrl,
+    playedAt: new Date().toISOString(),
+  };
+  const next = [entry, ...history.filter((t) => t.songUrl !== current.songUrl)].slice(0, HISTORY_MAX);
+  const write = env.BLOCKED_SONGS_KV.put(
+    HISTORY_KEY,
+    JSON.stringify({ at: Date.now(), tracks: next }),
+  ).catch(() => {});
+  if (ctx && typeof ctx.waitUntil === 'function') ctx.waitUntil(write);
+  else await write;
+  return next;
+}
+
 async function getRecentlyPlayedCached(token, env, ctx) {
   const cache = caches.default;
   const cacheReq = new Request(RECENT_CACHE_KEY);
@@ -342,11 +398,17 @@ async function getRecentlyPlayedCached(token, env, ctx) {
     return fresh;
   }
 
-  // Spotify refused (usually 429). Show the last known list rather than nothing.
+  // Spotify refused (usually 429). Prefer the last good real list, then fall
+  // back to the history this Worker built from the live track.
   const backup = await readRecentBackup(env);
   if (backup?.tracks?.length) {
     lastRecentSource = 'kv-backup';
     return backup.tracks;
+  }
+  const history = await readHistory(env);
+  if (history.length) {
+    lastRecentSource = 'self-history';
+    return history;
   }
   lastRecentSource = 'none';
   return [];
