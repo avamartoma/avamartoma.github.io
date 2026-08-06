@@ -196,10 +196,15 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > | `6ab2b2c` | Processed the gallery (59) + luminary (16) batch; fixed script slug bug |
 > | `ff36473` | **Marquetry Lap Desk** full case study, 15 photos |
 >
-> **Seven** Communities modals are live and validated at `HEAD`: T-Mobile `◈12`,
-> Taco Bell `◈12`, MITES `◈12`, Coolidge `◈9`, Chick-fil-A `◈15`, **Phi Gamma Nu
-> `◈17`**, **Penn M&T `◈1`**. Verified 186/186, 42/42, 34/34 and 68/68 Playwright.
-> LinkedIn + Coca-Cola were **in flight and uncommitted** as of pt.8b.
+> **Ten** Communities modals are live at `HEAD`: T-Mobile `◈12`, Taco Bell `◈12`,
+> MITES `◈12`, Coolidge `◈9`, Chick-fil-A `◈15`, **Phi Gamma Nu `◈17`**, **Penn
+> M&T `◈1`**, Amazon Future Engineer `◈1`, and — new (pt.9, `5bc8c9b`) —
+> **LinkedIn Possibilities in Tech `◈25`** and **Coca-Cola Scholars `◈12`**
+> (25 photos; 11 photos + 1 banquet-stage clip). Earlier verified 186/186,
+> 42/42, 34/34, 68/68; the two new modals passed **80/80** Playwright at
+> 1440×900 + 390×844 (both chips open, no page-jump, blurb facts present, all
+> 25+11 images decode with real alt, the clip has poster+aria-label, captions
+> present, body scrolls, ×/Esc/backdrop close, no console errors).
 >
 > ### What is LEFT — processed assets sitting in `public/`, not yet on any page
 >
@@ -214,8 +219,8 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > | ~~`projects/cad-projects/cadnew-01..67` + 1 clip~~ | ✅ DONE | `cad-projects.md` | Only 2 pieces in the set (pencil box + makeup organizer); wired in, marquetry box covered too |
 > | ~~`projects/luminary/lum-01..16`~~ | ✅ DONE | `luminary.md` | Rebuilt around Ava's own finished + lit shots (10 used); 6 low-quality scraped process shots replaced; henna-hands inspiration + Illustrator vector kept |
 > | ~~`communities/chick-fil-a-community-scholars/cfa-01..28`~~ | ✅ DONE | modal `◈15` | 15 published, 13 dropped as personal/scenery |
-> | `communities/linkedin-possibilities-in-tech/lpit-01..25` | 25 | new modal | chip is currently inert |
-> | `communities/coca-cola-scholars/coke-01..11` + 1 clip | 12 | new modal | chip is currently inert |
+> | ~~`communities/linkedin-possibilities-in-tech/lpit-01..25`~~ | ✅ DONE | modal `◈25` | 25 photos, narrative order (hackathon `lpit-17` the climax); committed `5bc8c9b` |
+> | ~~`communities/coca-cola-scholars/coke-01..11` + 1 clip~~ | ✅ DONE | modal `◈12` | 11 photos + banquet-stage clip; "Coke Scholars" verified; committed `5bc8c9b` |
 > | ~~`communities/phi-gamma-nu/pgn-01..17`~~ | ✅ DONE | modal `◈17` | All 17 published; `pgn-11` was rotated 90° and fixed |
 > | ~~`communities/penn-m-t/pennmt-01`~~ | ✅ DONE | modal `◈1` | Single-photo modal; needed the `--one` uncropped CSS |
 >
@@ -914,6 +919,26 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (LinkedIn + Coca-Cola modals)** — **Two Communities modals wired
+  in and committed (`5bc8c9b`).** Viewed all 37 processed images and wrote
+  specific alt text + short captions for each. **LinkedIn Possibilities in Tech**
+  `◈ 25` — 25 photos ordered as a narrative (welcome swag → the campus "in" logos
+  → cohort/sessions → the Possibilities-in-Tech hackathon and the winning team
+  with prizes as the climax → socials: tent, Topgolf, s'mores, In-N-Out, karaoke,
+  wig night, crafts, games → golden-hour send-off → headshot). **Coca-Cola
+  Scholars** `◈ 12` — 11 photos + 1 banquet-stage clip in one ordered `media`
+  array (World of Coca-Cola truck/sign-wall/polar-bear → meeting fellow scholars
+  → service project → "2025 Coke Scholars" wall → banquet hall → stage-walk video
+  → seal backdrops). Program facts verified against the LinkedIn careers site and
+  coca-colascholarsfoundation.org (150 seniors/yr, $20k, 100k+ applicants,
+  Scholars Weekend in Atlanta). Only Ava is named — other, mostly-minor scholars
+  are left unnamed for privacy, matching the MITES/Taco Bell captions. Build ✓
+  (17 pages, with the in-flight `gallery.astro` isolated), **80/80** Playwright at
+  1440×900 + 390×844. Committed **only** `index.astro` as `HEAD` + my one hunk so
+  the parallel session's uncommitted `index.astro` work (a `◈ {count}` → `◈` badge
+  tweak) was **not** swept in; that badge tweak remained uncommitted and is the
+  other session's call.
 
 - **2026-08-06 (part 9)** — **`/gallery` photo wall wired.** Viewed all 60
   processed `gal-01..60.jpg`, wrote a hover label + accurate alt + a destination

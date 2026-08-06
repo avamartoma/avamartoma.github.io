@@ -13,8 +13,8 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       **⚠️ Processed assets are sitting in `public/` waiting to be wired in — see
       the red block at the top of `HANDOVER.md` for the full table and the
       one-set-per-chat plan (a chat can only include ~100 images).** Waiting:
-      flower press (16), clock (1),
-      LinkedIn Possibilities in Tech (25), Coca-Cola (12).
+      flower press (16), clock (1). ✅ **LinkedIn Possibilities in Tech (25)**
+      and **Coca-Cola (11 + 1 clip)** wired in + committed 2026-08-06 (`5bc8c9b`).
       ✅ Done this session: **Marquetry Lap Desk** (15 photos) and
       **Architecture / "The Grove"** (14 + carousel + clip). Photos now on:
       Amazon Path, LinkedIn (video + shots), Henna Luminary, CAD & Woodworking
@@ -100,12 +100,16 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         and stills interleave into a narrative. Process raws first with
         `node scripts/process-community-media.mjs <slug> <prefix>`, then list
         them. Any chip with `media` automatically becomes a modal button.
-      - **Remaining chips with no media yet (5):** Amazon Future Engineer,
-        LinkedIn Possibilities in Tech, Coca-Cola Scholars, NCWIT Aspirations in
-        Computing, Davidson Young Scholars. All have scaffolded folders under
-        `public/images/communities/<slug>/`. (LinkedIn + Coca-Cola were being
-        wired in by a **parallel session** and were still uncommitted as of
-        pt.8b — check `git log` before starting them.)
+      - **✅ LinkedIn Possibilities in Tech + Coca-Cola Scholars — DONE, built +
+        validated (2026-08-06, `5bc8c9b`).** LinkedIn shows `◈ 25` (25 photos,
+        narrative order, hackathon `lpit-17` as the climax); Coca-Cola shows
+        `◈ 12` (11 photos + 1 banquet-stage clip). Alt text + captions written
+        from the photos; program facts verified against the LinkedIn and
+        Coca-Cola Scholars Foundation sites. 80/80 Playwright at 1440×900 + 390×844.
+      - **Remaining chips with no media yet (2):** NCWIT Aspirations in Computing
+        and Davidson Young Scholars. Both have scaffolded folders under
+        `public/images/communities/<slug>/`. (Amazon Future Engineer got its
+        modal in `fcc2f9b`.)
       - **Phi Gamma Nu + Penn M&T — ✅ DONE, built + validated (2026-08-06
         pt.8b).** **Phi Gamma Nu** shows `◈ 17`: all 17 photos published with
         individual alt text and captions, ordered as a narrative (bid night →
