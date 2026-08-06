@@ -52,19 +52,27 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       gal-41/42/52/53, Amazon Future Engineer gal-48), **EXP** (10 squash +
       professional-headshot frames), **HOME** (19 personal: ski, climb, bake,
       travel, concerts, beaches, family, etc.). Used the 6 certain md5 links
-      (gal-18/41/42/49/52/53). **Left out gal-14 & gal-17** — the `HANDOVER`
-      md5 note ties them to Phi Gamma Nu, but their visible content is generic
-      (cabin s'mores / a dance-show cheer) and the PGN chip is inert, so
-      labelling them a program wasn't defensible.
-      **↻ OPEN follow-up (2026-08-06 pt.8b): the Phi Gamma Nu chip is now a live
-      modal and both photos are published in it (`pgn-04` = `gal-14` s'mores at
-      the A-frame, `pgn-06` = `gal-17` dance-show posters), so pointing gal-14 and
-      gal-17 at COMM is defensible now. They are still NOT in the wall — only
-      named in the comment at the top of `gallery.astro` (rationale there updated).
-      Add them if you want the wall to cover PGN.** Build ✓ (17 pages); Playwright
-      22/22 at 1440×900 + 390×844 + reduced-motion (rows scroll, hover pauses +
+      (gal-18/41/42/49/52/53). **gal-14 & gal-17 were initially left out** — the
+      `HANDOVER` md5 note ties them to Phi Gamma Nu, but their visible content is
+      generic on its own (cabin s'mores / a dance-show cheer) and the PGN chip was
+      inert, so labelling them a program wasn't defensible then.
+      **✅ NOW WIRED IN (2026-08-06, at Ava's request) — all 8 certain md5 links are
+      used and 38 photos are in the wall.** The PGN chip is a live modal publishing
+      both photos, so the link holds: `gal-17` → row 1, label "Phi Gamma Nu";
+      `gal-14` → row 5, label "Chapter retreat"; both → `COMM`. Rows 1 and 5 were
+      the only ones with a single community photo, so every row now has two. md5
+      identity re-checked before wiring. Verified **54/54** Playwright at 1440×900 +
+      390×844 + reduced-motion (all 84 rendered images decode with real alt text,
+      both new photos present twice for the loop, hrefs → `#recognition`, labels
+      correct, hover pauses the row and reveals the label, no console errors or
+      failed requests).
+      ⚠️ Doing that check surfaced a trap now recorded in HANDOVER §6: on
+      `/gallery`, **`locator.hover()`/`.click()` hang** because the rows animate
+      forever — use `page.mouse.move()` to coordinates measured *after* scrolling
+      the row into view. Build ✓ (17 pages); the earlier Playwright
+      22/22 at 1440×900 + 390×844 + reduced-motion still holds (rows scroll, hover pauses +
       reveals the label, reduced-motion → hand-scrollable, no console errors).
-      **~24 unused gal-NN.jpg remain** in `public/images/gallery/` if Ava wants
+      **~22 unused gal-NN.jpg remain** in `public/images/gallery/` if Ava wants
       to swap any in later.
 
 - [x] **1c. ✅ Gallery page — placeholders replaced (done in 1b, 2026-08-06).**

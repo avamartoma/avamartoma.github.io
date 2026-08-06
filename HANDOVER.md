@@ -311,14 +311,19 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > expect overlap with the projects/communities. `lpit-26` was deleted because it
 > was byte-identical to `lpit-20`.
 >
-> **✅ Gallery now wired (2026-08-06 pt.9).** All 60 viewed; 36 of the strongest
-> wired into `/gallery`. All 6 certain links used (gal-18/41/42/49/52/53).
-> **gal-14 (=pgn-04) and gal-17 (=pgn-06) were deliberately left out:** their
-> visible content is generic (an A-frame-cabin s'mores night; a dance-show cheer
-> with "ALPHA AVA" signs) and doesn't obviously read as Phi Gamma Nu, and the PGN
-> chip is inert anyway — so per Ava's "don't mislabel, leave it out" rule they
-> were dropped rather than asserted as PGN. If she wants them shown, point them
-> at `COMM` (Phi Gamma Nu).
+> **✅ Gallery now wired (2026-08-06 pt.9, extended pt.8b).** All 60 viewed; **38**
+> of the strongest wired into `/gallery`. **All 8 certain md5 links are now used**
+> (gal-18/41/42/49/52/53, plus gal-14 and gal-17).
+> **gal-14 (=pgn-04) and gal-17 (=pgn-06) were initially left out** because their
+> visible content is generic on its own (an A-frame s'mores night; a dance-show
+> cheer with "ALPHA AVA" signs) and the Phi Gamma Nu chip was an inert span, so
+> per Ava's "don't mislabel, leave it out" rule they weren't asserted as PGN.
+> **Both are now in the wall (2026-08-06, at Ava's request)** — the PGN chip is a
+> live modal and publishes both photos, so the link is defensible. md5 identity was
+> re-checked before wiring, not taken on trust. `gal-17` → row 1, label
+> **"Phi Gamma Nu"**; `gal-14` → row 5, label **"Chapter retreat"**; both → `COMM`.
+> Rows 1 and 5 were chosen because they were the only rows with a single community
+> photo — every row now has two.
 >
 > **Flower press (press-01..15), first 6 viewed.** It is a **laser-cut** lily
 > bouquet, not hand-cut: `press-01`/`02` veneer tape laid over a veneer sheet;
@@ -367,6 +372,26 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >   wait for the scroll to settle, and `locator.click()` cannot click a
 >   viewport-anchored element (scroll-into-view loops) → click measured centre
 >   pixels.
+> - 🔴 **`/gallery` hangs any `locator` action — cost three stalled runs on
+>   2026-08-06.** The marquee rows animate **forever**, so Playwright's
+>   actionability "stability" check never passes and **`locator.hover()` /
+>   `.click()` block until they time out** (measured: `locator.hover()` timed out
+>   at 6 s while `page.mouse.move()` returned in ~300 ms). Use `page.mouse.move()`
+>   with coordinates measured inside the page. **And the coordinates must be in the
+>   viewport** — the first row sits below the fold, so `scrollIntoView({block:
+>   'center'})` + a settle wait first, or the synthetic move lands nowhere and the
+>   `:hover` pause silently never fires. Working script:
+>   `/tmp/pgn-mt-work/verify-gallery.mjs` (54 checks). `goto` with
+>   `waitUntil:'networkidle'` is fine here (~1.3 s) — that was not the problem.
+> - 🔴 **Never `pkill -f "<pattern>"` from an agent shell — it kills the shell
+>   itself.** The pattern text appears in the shell's own command line, so `pkill`
+>   matches its own parent and the tool call dies with `signal: 15 (SIGTERM)`. This
+>   happened twice (`"astro preview"`, then `"chrome-linux64"`), and the second time
+>   it killed the shell *before* the heredoc in the same command had written its
+>   script. Use a bracket so the pattern cannot match itself:
+>   `pkill -f "chrome-linux6[4]"`. Also prefer running long Playwright jobs as
+>   `nohup timeout 120 node script.mjs > /tmp/log 2>&1 &` and then polling the log,
+>   so a hang can never block the session.
 > - Process a batch **without touching existing curated assets** by staging the
 >   raws outside the repo:
 >   `node scripts/process-community-media.mjs <slug|path> <prefix> --from /tmp/stage/...`
@@ -643,8 +668,9 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >    **public vs private** (private needs GitHub Pro for Pages, free-for-students
 >    but the site dies if that lapses; or $0 by moving to Cloudflare
 >    Pages/Netlify/Vercel). Full costing in §6, action items in `TODO.md` #25.
-> 2. **Gallery photos: ✅ DONE (2026-08-06 pt.9).** `/gallery` is now a real photo
->    wall — 36 of the 60 processed `gal-NN.jpg` wired across the 5 rows with the 4
+> 2. **Gallery photos: ✅ DONE (2026-08-06 pt.9, extended same day).** `/gallery` is
+>    now a real photo wall — **38** of the 60 processed `gal-NN.jpg` wired across the
+>    5 rows with the 4
 >    Wix covers. To add/swap later: drop a file in `public/images/gallery/`, LOOK
 >    at it, add a `photo('/images/gallery/x.jpg','alt',href,'Label')` to a row in
 >    `src/pages/gallery.astro`.

@@ -31,23 +31,23 @@ const COMM = `${base}#recognition`; // the Communities section (chips open modal
 const HOME = base; // personal / about — until a dedicated /living page exists
 
 // ---------------------------------------------------------------------------
-// All 60 processed gal-NN.jpg were viewed and captioned; 36 of the strongest
+// All 60 processed gal-NN.jpg were viewed and captioned; 38 of the strongest
 // are wired below (dropped near-duplicates + a few dark/ambiguous frames). The
 // four cover-*.jpg from the Wix portfolio anchor the first four rows.
 //
-// Six destinations were CERTAIN — those files are byte-identical to photos in
+// Eight destinations were CERTAIN — those files are byte-identical to photos in
 // other sets (found with md5sum), so their targets weren't re-derived:
+//   gal-14 = pgn-04    → COMM  (Phi Gamma Nu)
+//   gal-17 = pgn-06    → COMM  (Phi Gamma Nu)
 //   gal-18 = lpit-08   → COMM  (LinkedIn Possibilities in Tech)
 //   gal-41 = cfa-05    → COMM  (Chick-fil-A Community Scholars)
 //   gal-42 = cfa-07    → COMM  (Chick-fil-A Community Scholars)
 //   gal-49 = afenew-01 → P('afe-hackathon')
 //   gal-52 = cfa-25    → COMM  (Chick-fil-A Community Scholars)
 //   gal-53 = cfa-26    → COMM  (Chick-fil-A Community Scholars)
-// (gal-14 = pgn-04 and gal-17 = pgn-06 are also byte-identical to Phi Gamma Nu
-// photos. They were left out while the PGN chip was inert. The chip is now a
-// live modal (2026-08-06 pt.8b) and both photos are published in it — s'mores
-// at the A-frame and the dance-show posters — so pointing these two at COMM is
-// defensible now if you want them in the wall.)
+// (gal-14 and gal-17 were held back while the Phi Gamma Nu chip was still an
+// inert span. The chip became a live modal in pt.8b and both photos are
+// published in it, so they were wired in on 2026-08-06 — md5 re-checked.)
 //
 // Re-run this to spot overlap in any future batch:
 //   find public/images -name '*.jpg' | xargs md5sum | sort | uniq -w32 -D
@@ -61,6 +61,7 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
       photo('/images/gallery/gal-01.jpg', 'Ava holding a squash trophy on a glass court', EXP, 'Squash trophy'),
       photo('/images/gallery/gal-02.jpg', 'Ava and a friend showing off watercolor paintings at an outdoor paint session', HOME, 'Watercolors'),
       photo('/images/gallery/gal-08.jpg', 'Ava with the MITES cohort on the steps at MIT', COMM, 'MITES'),
+      photo('/images/gallery/gal-17.jpg', 'Ava and her Phi Gamma Nu chapter on the floor of a wood-panelled hall holding hand-made posters cheering for members performing in a dance showcase', COMM, 'Phi Gamma Nu'),
       photo('/images/gallery/gal-21.jpg', 'Ava skiing at the top of a run above a frozen lake', HOME, 'Skiing'),
       photo('/images/gallery/gal-38.jpg', 'Ava with her Penn squash teammates under the Penn "P"', EXP, 'Penn squash'),
       photo('/images/gallery/gal-49.jpg', 'Ava and fellow Amazon interns at the Spheres', P('afe-hackathon'), 'Amazon Path'),
@@ -108,6 +109,7 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
       photo('/images/gallery/gal-07.jpg', 'Ava with a group of Penn friends', HOME, 'Penn friends'),
       photo('/images/gallery/gal-58.jpg', 'Ava\'s Penn squash team celebrating in a high-five line', EXP, 'Team spirit'),
       photo('/images/gallery/gal-48.jpg', 'Ava hiking a foggy trail in an Amazon Future Engineer hoodie', COMM, 'Amazon Future Engineer'),
+      photo('/images/gallery/gal-14.jpg', 'Ava and her Phi Gamma Nu chapter holding marshmallow skewers outside a string-lit A-frame house at night, a fire pit burning to one side', COMM, 'Chapter retreat'),
       photo('/images/gallery/gal-29.jpg', 'Ava and friends at the start of a road race', HOME, 'Race day'),
       photo('/images/gallery/gal-32.jpg', 'Ava in a blazer for a professional headshot on campus', EXP, 'Suited up'),
       photo('/images/gallery/gal-37.jpg', 'Ava and a friend on the beach at sunset', HOME, 'Sunset beach'),
