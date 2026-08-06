@@ -45,7 +45,30 @@ const photo = (src: string, alt: string, href: string, label: string): Item => (
 // Destinations reused below.
 const P = (slug: string) => `${base}projects/${slug}/`;
 const EXP = `${base}#experience`;
+const COMM = `${base}#recognition`; // the Communities section (chips open modals)
 const HOME = base; // personal / about — until a dedicated /living page exists
+
+// ---------------------------------------------------------------------------
+// TODO — 60 real photos are already processed and waiting in
+// public/images/gallery/ as gal-01.jpg … gal-60.jpg. Each still needs a label,
+// alt text, and a destination, which means someone has to LOOK at all 60.
+// A chat can only hold ~100 inline images, so give this its own session
+// (see the red block at the top of HANDOVER.md).
+//
+// These six destinations are already CERTAIN — the files are byte-identical to
+// photos in other sets (found with md5sum), so no guessing is needed. Their alt
+// text still has to be written from the image:
+//
+//   gal-18  = lpit-08    → COMM  (LinkedIn Possibilities in Tech)
+//   gal-41  = cfa-05     → COMM  (Chick-fil-A Community Scholars)
+//   gal-42  = cfa-07     → COMM  (Chick-fil-A Community Scholars)
+//   gal-49  = afenew-01  → P('afe-hackathon')
+//   gal-52  = cfa-25     → COMM  (Chick-fil-A Community Scholars)
+//   gal-53  = cfa-26     → COMM  (Chick-fil-A Community Scholars)
+//
+// Re-run this to spot overlap in any future batch:
+//   find public/images -name '*.jpg' | xargs md5sum | sort | uniq -w32 -D
+// ---------------------------------------------------------------------------
 
 // 5 rows. `dir` alternates; `dur` is the loop time (bigger = slower).
 const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
@@ -68,12 +91,12 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
       ph('Wooden Car', P('wooden-car')),
       ph('Squash', HOME),
       ph('Amazon Path', P('afe-hackathon')),
-      ph('MIT', EXP),
+      ph('MITES', COMM),
     ],
   },
   {
     dir: 'left', dur: '64s', items: [
-      photo('/images/gallery/cover-changemaker.jpg', 'Ava at the T-Mobile Changemaker Challenge', EXP, 'Changemaker'),
+      photo('/images/gallery/cover-changemaker.jpg', 'Ava at the T-Mobile Changemaker Challenge', COMM, 'Changemaker'),
       ph('LinkedIn Career Discovery', P('linkedin-hackathon')),
       ph('Marquetry', P('marquetry-clock')),
       ph('Duke CFD', EXP),
@@ -156,6 +179,12 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
 
 <style>
   .gallery { overflow: clip; }
+  /* Headings globally use line-height 1.02, which is tighter than the font's
+     ascender+descender, so a descender (the "y" in Gallery) hangs BELOW its own
+     line box. With no gap, it collided with the label text underneath. The
+     margin is in em so it tracks the clamp()ed font size instead of only being
+     right at one viewport width. */
+  .gallery__head h1 { margin-bottom: 0.25em; }
   .gallery__head { margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
   .gallery__wip { color: var(--muted); }
 
