@@ -17,7 +17,10 @@ lid is a spray of **white lilies and purple irises** in oak, walnut and dyed
 veneers, and the whole thing is a small joke about its own job: I made it as a
 **just-for-fun promposal** ("...so *PRESSED* to prom").
 
-![The finished bouquet: white lilies with green stamens, two purple irises and a bud, walnut stems and leaves, all inlaid into an oak ground.](/images/projects/marquetry-flower-press/press-09.jpg)
+<div class="photo-grid">
+  <img src="/images/projects/marquetry-flower-press/press-15.jpg" alt="Handing over the finished press as a promposal at dusk, with balloons and a hand-lettered sign playing on 'so PRESSED to prom.'" loading="lazy" />
+  <img src="/images/projects/marquetry-flower-press/press-09.jpg" alt="The finished bouquet: white lilies with green stamens, two purple irises and a bud, walnut stems and leaves, all inlaid into an oak ground." loading="lazy" />
+</div>
 
 ## Drawing it for the laser
 
@@ -98,5 +101,3 @@ rather than a solid decorative panel.
 It was, in the end, a **just-for-fun promposal** — no grand romance, just a good
 pun and a handmade thing to go with it. A flower *press*, so the ask wrote
 itself: "so *PRESSED* to prom."
-
-![Handing over the finished press as a promposal at dusk, with balloons and a hand-lettered sign playing on 'so PRESSED to prom.'](/images/projects/marquetry-flower-press/press-15.jpg)

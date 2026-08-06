@@ -1,7 +1,7 @@
 ---
 title: "Henna-Inspired Luminary"
 blurb: "A laser-cut wooden lantern whose fretwork panels are drawn from mehndi — Indian henna art — where the whole design lives in the play of positive and negative space."
-description: "A design-and-fabrication project: a laser-cut wooden luminary lamp with fretwork panels inspired by mehndi (henna) art. Hand-drawn henna motifs redrawn as precise vectors in Illustrator, cut, stained, and assembled with vellum diffusers."
+description: "A design-and-fabrication project: a laser-cut wooden luminary lamp with fretwork panels inspired by mehndi (henna) art. Hand-drawn henna motifs redrawn as precise vectors in Illustrator, cut, stained, and assembled with vellum diffusers into a lit lantern."
 date: 2023-05-23
 tags: ["Laser Cutting", "Adobe Illustrator", "Woodworking", "CAD", "Design"]
 accent: "#ffd23f"
@@ -20,6 +20,8 @@ negative space**, which is exactly what a fretwork lamp needs: the light only
 escapes where the material is cut away. It also let me put something personal
 and cultural into the piece.
 
+![The finished luminary lit from within — warm light pushing out through the mehndi fretwork so the cut-away negative space becomes the pattern.](/images/projects/luminary/lum-12.jpg)
+
 ![Mehndi — henna applied to the hands — the visual language I drew the lamp's fretwork from.](/images/projects/luminary/inspiration-henna.jpeg)
 
 Henna designs usually combine nature with geometric shapes. I studied a range
@@ -35,31 +37,46 @@ wouldn't burn out or fall apart on the laser cutter.
 
 ![The henna-inspired panel redrawn as precise vector fretwork in Illustrator.](/images/projects/luminary/design.png)
 
-I designed it as one large continuous panel, hoping the lines would carry across
-all four sides. Splitting it into four panels taught me something: even when the
-lines technically match at the seams, the gaps break the illusion of continuity.
-Next time I'd simply drop the sections meant to read as negative space rather
-than trying to bridge them.
+## Cut, stained, assembled
 
-![The single design split across the four panels — a lesson in how seams interrupt continuous linework.](/images/projects/luminary/panels.png)
+I cut the panels on the laser cutter, stained the wood a warm amber, and joined
+them into a box with **finger-jointed corners**. Behind the fretwork sits
+**vellum paper** to diffuse the light, and the **lid lifts off** so the bulb can
+be reached — its centre is a mandala rosette of its own.
 
-## Cut, stain, assemble
+![Looking down at the finished box: four fretwork walls meeting in finger-jointed corners, capped by a removable lid with its own mandala.](/images/projects/luminary/lum-10.jpg)
 
-I cut the panels on the laser cutter, stained the wood, assembled the box, and
-added **vellum paper** behind the fretwork to diffuse the light.
+![Lifting the lid off the top of the lantern; its centre is a separate mandala rosette.](/images/projects/luminary/lum-11.jpg)
 
-![Laser-cut fretwork pieces — the mandala face and layered geometric borders.](/images/projects/luminary/laser-pieces.jpg)
+Each of the four faces is its own mehndi composition — borders, lattices,
+mandalas and paisley — rather than one drawing wrapped around the box. I'd
+originally hoped a single continuous design would carry across all four sides,
+but the finger-jointed corners interrupt any line that tries to cross them, so
+letting each face stand on its own reads far cleaner. Next time I'd design *to*
+the seams from the start rather than trying to bridge them.
 
-Cut, stained, and assembled, the panels wrap into a lantern whose mehndi
-pattern is designed to read as light and shadow through the fretwork:
+<div class="carousel" data-carousel>
+  <span class="carousel__count"></span>
+  <div class="carousel__track">
+    <img src="/images/projects/luminary/lum-01.jpg" alt="One face: diagonal geometric borders giving way to a scalloped mandala and dense paisley, vellum glowing pale behind the cut-outs." loading="lazy" />
+    <img src="/images/projects/luminary/lum-05.jpg" alt="Another face: a diamond lattice with dotted flowers on one half, a full henna floral spray on the other." loading="lazy" />
+    <img src="/images/projects/luminary/lum-07.jpg" alt="A third face: nested chevron borders over a dense field of henna paisley, hearts and spirals." loading="lazy" />
+    <img src="/images/projects/luminary/lum-03.jpg" alt="A fourth face, mandala-led: a six-petal rosette in concentric scalloped rings over a quatrefoil lattice." loading="lazy" />
+  </div>
+</div>
 
-![The panels straight out of the laser cutter — the full wrap of henna-inspired fretwork.](/images/projects/luminary/process-1-cut.jpg)
+## Lit up
 
-![Staining the wood.](/images/projects/luminary/process-2-stain.jpg)
+Switched on, the vellum spreads the bulb into an even glow and the fretwork
+finally does what it was drawn to do — the mehndi reads as light and shadow, and
+the pattern lifts off the wood. With a **colour-changing bulb** the whole thing
+shifts from warm amber to magenta.
 
-![Dry assembly — checking the fit, held together with painter's tape.](/images/projects/luminary/process-3-dry-assembly.jpg)
+![The lantern lit warm from the side, the light glowing up through the lid's mandala and throwing the fretwork into relief.](/images/projects/luminary/lum-15.jpg)
 
-![Stained and glued up — banded together while the glue dries.](/images/projects/luminary/process-4-drying.jpg)
+![Another warm-lit angle, the henna pattern reading as light and shadow across two faces.](/images/projects/luminary/lum-14.jpg)
+
+![The same lantern with the bulb set to magenta — the whole mehndi pattern shifts colour.](/images/projects/luminary/lum-13.jpg)
 
 ---
 
