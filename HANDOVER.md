@@ -12,7 +12,7 @@
 | **Branch** | `main` — every `git push` auto-deploys via GitHub Actions (~1–2 min) |
 | **Stack** | Astro 5.18.2 (static, root, no `base`), vanilla JS/CSS, no runtime deps; build-time integrations: `@astrojs/sitemap`, `@astrojs/rss` |
 | **Local dev** | `cd ~/personal-website && npm run dev` → http://localhost:4321/ |
-| **Last updated** | 2026-08-05 |
+| **Last updated** | 2026-08-06 |
 
 > Note: the local folder is still `~/personal-website` even though the GitHub
 > repo was renamed to `avamartoma.github.io`. That's fine.
@@ -33,21 +33,20 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 
 ---
 
-## 2. Current status (2026-08-05)
+## 2. Current status (2026-08-06)
 
-> **Session end 2026-08-05:** Big content + UX session (see §10 changelog for the
-> full list). **⚠️ Commits do NOT auto-sync to the remote** — an earlier note here
-> was wrong; you must run **`git push`** yourself. As of hand-off everything is
-> **committed AND pushed** to `origin/main`, so GitHub Actions is deploying it.
-> Working tree clean.
+> **Session 2026-08-06:** Captioned the scraped photos and built the self-serve
+> editor (see §10 changelog). **⚠️ Commits are NOT auto-pushed** — run **`git
+> push`** yourself. As of hand-off this session's work is **committed but NOT yet
+> pushed** (check `git status` / `git log origin/main..HEAD`). Push to deploy.
 >
-> **⚠️ Open follow-up (needs a fresh chat):** the RC-car build-log carousel, the
-> CAD-studies photos, and a couple of scraped shots have **generic captions**
-> because image *previews* broke mid-session (a >2000px image loaded early poisoned
-> the model's image context — see §6). In a new chat the agent can view/resize
-> images normally and caption them. **Two things to do next:** (1) caption those
-> photos, and (2) build the **self-serve editor** (see `TODO.md` #23) so Ava can
-> create/edit projects + add images herself without an AI.
+> **⚠️ Two follow-ups need Ava (not code):**
+> 1. **Editor auth (~15 min):** the Sveltia CMS editor at **/admin/** is built,
+>    but needs a one-time GitHub OAuth app + `sveltia-cms-auth` Cloudflare Worker
+>    before login works. Full walkthrough in **`admin-setup.md`**.
+> 2. **Privacy flag:** the CAD phone-stand render (`phone-stand.png`, live on the
+>    site) uses a **personal photo of two kids** as the phone-screen wallpaper.
+>    Left as-is — Ava's call whether to swap the render.
 
 The site is **live and looks polished**. Structure top-to-bottom on the homepage:
 **in-progress banner → nav → hero (the "about") → Work selection (compact list) →
@@ -67,8 +66,9 @@ Experience timeline → Honors + Publications → footer (contact form)**.
 - ✅ **Origins backlinks** on RC car (Wix build blog), Luminary + CAD studies
   (lvilledesign.org).
 - ✅ Hero, banner, email, forms, resume cooldown, SEO, `og:image` — all as before.
-- ⏳ **Photo captions** for the scraped RC/CAD/Luminary shots (see warning above).
-- ⏳ **Self-serve editor** not built yet (`TODO.md` #23).
+- ✅ **Photo captions** written for the scraped RC/CAD/Luminary shots (2026-08-06).
+- ✅ **Self-serve editor** (Sveltia CMS) built at `/admin/`; needs Ava's one-time
+  auth setup (`admin-setup.md`) before login works.
 - ⏳ **Email *sending*** (reply *as* `hello@`) not set up (see §6 / `TODO.md` 10a).
 - ⏳ Backlog in `TODO.md` (iFAQ, "Now" page, Living page, etc.).
 
@@ -107,8 +107,9 @@ src/
     ava-headshot.jpeg         old headshot (unused; safe to delete)
 public/
   favicon.svg                 AA/M monogram
-  robots.txt                  allow-all + Sitemap: .../sitemap-index.xml
-  images/<project-slug>/      per-project photo folders (empty, awaiting uploads)
+  robots.txt                  allow-all (Disallow /admin/) + Sitemap link
+  admin/                      Sveltia CMS self-serve editor (index.html + config.yml)
+  images/<project-slug>/      per-project photos (RC/CAD/Luminary/etc. populated)
 .github/workflows/deploy.yml  GitHub Pages deploy (runs on push to main)
 ```
 
@@ -297,6 +298,40 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (part 2)** — **Wooden Car + CAD Bridge fleshed out** from Ava's
+  Intro to Mechanical Engineering reflection + process log (two shared Google
+  Docs, Fall 2024). Extracted the embedded images, resized ≤1500px, viewed each,
+  and wrote full case studies: Bridge (sketch → Fusion → FEA, file hit v34, MDF
+  build, it broke) with 4 photos; Wooden Car (Fusion-led design, merged
+  rope+foot steering, teamwork/material-sharing, "KACHOW"/flames build) with 6
+  photos. Corrected both dates to Fall 2024. ⚠️ **Heads-up:** an **uncommitted
+  edit to `src/pages/index.astro`** appeared mid-session (honors→"communities",
+  Experience/Publications sections removed) — NOT made by this session; left it
+  untouched and unstaged. Review/commit or discard it as you see fit.
+
+- **2026-08-06** — **Photo captions + self-serve editor (Sveltia CMS).**
+  Viewed every scraped photo (resized to ≤1500px per §6) and wrote accurate
+  captions: all 21 RC-car carousel `alt`s (KiCad schematic/PCB, Voltera/MakerBot/
+  Phrozen prints, breadboard, ESC/battery, differential), plus verified the CAD +
+  Luminary sets. **Fixes found by actually viewing:** the two `led-lamp-*.jpg`
+  files were **phone dimension sketches** (misnamed) → renamed to
+  `phone-stand-sketch-{back,front}.jpg` and moved to the Phone Stand section;
+  fetched the **real finished LED lamp** photo from lvilledesign.org
+  (`led-lamp.jpg`). The Luminary "final" shots were process shots, not a lit
+  lantern → recaptioned (panels laid out / stained / dry-fit) + fixed the lead-in.
+  **Self-serve editor:** added **Sveltia CMS** at `/admin/`
+  (`public/admin/index.html` + `config.yml`, a `projects` collection matching the
+  schema, per-project image uploads to `public/images/<slug>/`) + `admin-setup.md`
+  walkthrough; `robots.txt` disallows `/admin/`. Editor works once Ava does the
+  one-time GitHub-OAuth-app + `sveltia-cms-auth` Cloudflare Worker setup.
+  ⚠️ Flagged: the phone-stand render has a personal kids photo as wallpaper (live).
+  **Then expanded the galleries** from more lvilledesign.org source photos, using
+  Ava's own captions: Organizer 3→7 (filled/empty, 3D inserts, three drawers),
+  Pencil box 3→8 (+ concept→Fusion arc), Phone stand → 7 **face-free** renders
+  (deliberately excluded the two renders showing the kids' faces — this removed
+  the old `phone-stand.png` hero; easy to re-add), Luminary → canonical 4-step
+  build sequence. Every image viewed (≤1500px) to confirm caption accuracy.
 
 - **2026-08-05 (part 2)** — **List view, new projects, scraped photos, carousel.**
   Switched project listings (homepage + `/work`) from cards to a **compact

@@ -11,14 +11,19 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 - [~] **1. Add project photos.** *(In progress — 2026-08-05.)* Photos now on:
       Amazon Path, LinkedIn (video + shots), Henna Luminary, CAD & Woodworking
-      Studies, and RC car (22, in a carousel). **Remaining:** `penn-electric-racing`,
-      `wooden-car`, `cad-bridge`, `marquetry-*`, `architecture` still use generative
+      Studies, and RC car (22, in a carousel), plus **Wooden Car** and **CAD
+      Bridge** (from Ava's ME-class docs, 2026-08-06). **Remaining:**
+      `penn-electric-racing`, `marquetry-*`, `architecture` still use generative
       artwork. Drop images in `public/images/<slug>/` and reference inline in the
       body (Markdown `![alt](/images/<slug>/x.jpg)`), or use a `<div class="carousel"
       data-carousel>…</div>` block for a slideshow (see `rc-car.md`).
-  - [ ] **1a. Caption the scraped photos.** RC-car carousel, CAD-studies, and some
-        Luminary shots have **generic alt text** because image previews broke this
-        session (see HANDOVER §6). In a fresh chat, view + caption them properly.
+  - [x] **1a. ✅ Captioned the scraped photos (2026-08-05).** Viewed every RC-car
+        carousel photo (build-02..22), CAD-studies, and Luminary shot (resized to
+        ≤1500px per HANDOVER §6) and wrote accurate captions. Fixed two
+        mislabeled CAD files (the "led-lamp" images were phone dimension sketches
+        → renamed + moved to the Phone Stand section) and fetched the real
+        finished **LED lamp** photo from lvilledesign.org. Corrected the Luminary
+        "final" shots (they're process shots, not a finished lit lantern).
 
 - [x] **2. ✅ Real resume/contact delivery live (Web3Forms, 2026-07-04).** Access
       key registered to `hello@avamartoma.com` (→ forwards to Gmail) and set in all
@@ -123,16 +128,17 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [ ] **22. Privacy-friendly analytics.** Cloudflare Web Analytics (free, one
       snippet, no cookies) to see which pages people visit.
 
-- [ ] **23. ⭐ Self-serve content editor (Ava wants this — NEXT UP).** A visual
-      interface so Ava can create/edit projects — text **and** image uploads —
-      **without** going through an AI. Recommended: **Sveltia CMS** (git-based,
-      single static `/admin` page, no build step; commits Markdown + images to the
-      repo → auto-deploys). Needs a one-time GitHub OAuth app + a tiny Cloudflare
-      Worker auth relay (Ava already has Cloudflare). Config the `projects`
-      collection to match the frontmatter schema in `src/content.config.ts` (title,
-      blurb, description, date, tags, accent/accentAlt, featured, draft) + a body
-      + image/media field. Alternative: **Pages CMS** (pagescms.org) — hosted, zero
-      self-hosting, but a third-party GitHub App gets repo write access.
+- [~] **23. ⭐ Self-serve content editor — BUILT (2026-08-05), needs 1 one-time
+      auth step.** Sveltia CMS is wired: `public/admin/index.html` (loads Sveltia
+      from CDN) + `public/admin/config.yml` (a `projects` collection matching the
+      `content.config.ts` schema — title, blurb, description, date, tags, repo,
+      demo, cover, accent/accentAlt, featured, draft + Markdown body; per-project
+      image uploads → `public/images/<slug>/`). Editor lives at
+      **/admin/**. **Remaining (Ava, ~15 min, see `admin-setup.md`):** deploy the
+      `sveltia-cms-auth` Cloudflare Worker + register a GitHub OAuth app, then log
+      in. A no-worker PAT fallback is documented too.
+      Alternative considered: **Pages CMS** (hosted, but a 3rd-party GitHub App
+      gets repo write access).
 
 ## 🔵 Later / infrastructure
 
