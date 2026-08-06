@@ -19,7 +19,107 @@
 
 ---
 
-> **Session 2026-08-06 (pt.8) — Chick-fil-A Community Scholars modal shipped.**
+> **Session 2026-08-06 (pt.8b) — Phi Gamma Nu + Penn M&T modals shipped.** Both
+> chips were inert `<span>`s; both are now `<button>`s with modals. Viewed all 18
+> processed photos and wrote frame-specific alt text and a caption for every one.
+> **Nothing was dropped — all 17 `pgn-*` and the 1 `pennmt-01` are published**, so
+> there is nothing to delete from `public/`.
+>
+> **Phi Gamma Nu (`◈ 17`).** Facts came off the photos, not from the web: a
+> projected slide reads **“PGN | Delta Lambda Chapter”** and lists the new-member
+> class — **15 names, Ava Martoma among them** — which is where "Delta Lambda" and
+> "one of fifteen new members" in the blurb come from. Both men and women appear
+> throughout, hence "co-ed". Ordered as a narrative rather than by filename: bid
+> night (hand-lettered "Welcome to ΦΓΝ" posters, one per new member) → the packed
+> house → the **Titans** family reveal → initiation (roses + the class slide) →
+> the full ~50-person chapter photo → chapter life (business formal on campus,
+> cake at a meeting, snow, a **Congee Village** dinner in New York, the Chinatown
+> gate, s'mores at an A-frame, a party, and posters made for each other's dance
+> showcase).
+> **Fixed `pgn-11.jpg`:** it was stored **rotated 90°**, so the bid-night signs
+> read sideways. Rotated counter-clockwise to upright, re-encoded at q82 to match
+> the batch (commit `763997b`).
+>
+> **Penn M&T (`◈ 1`) — chose a modal over leaving the chip inert.** Ava asked for a
+> judgement call. A modal won because the one photo is strong and legible (the
+> whole cohort on the Wharton steps, with **“The Wharton School — Steinberg Hall ·
+> Dietrich Hall”** carved above them) and because the *blurb* is the real payload:
+> it explains what M&T is, which is what the Penn education card's "School of
+> Engineering & Wharton" line refers to. Program facts were **verified against
+> fisher.wharton.upenn.edu** (dual degree across Penn Engineering + Wharton,
+> **50–55 admitted a year**), not guessed.
+> ⚠️ **This needed a CSS change** (commit `026fbdd`): a 1-item `media` array landed
+> in a 220 px grid tile with the shared `4/3` **cover** crop, so a 45-person cohort
+> photo rendered **254×190 with the carved lettering clipped off**. A one-item array
+> now gets `comm__dialog-photos--one` — single full-width column, `aspect-ratio:
+> auto`, `object-fit: contain`, capped at `70vh`. Verified: the image went from
+> **254×190 to 786×524** on desktop, uncropped.
+>
+> **✅ VALIDATED** against exactly what is committed (see the concurrency warning
+> below): built in a throwaway `git worktree` at HEAD so the other session's
+> uncommitted edits could not leak in. `npm run build` ✓ (17 pages, no errors);
+> all **204** image/video refs in `dist/` resolve, **0 missing, 0 orphans**, and
+> both folders are fully used (17/17 and 1/1). Playwright **68/68 green** at
+> **1440×900 and 390×844**: both chips are `<button>`s with the right `◈ n` badge,
+> modals open **without the page jumping to top**, blurb facts render, every image
+> decodes with real alt text and a caption, the PGN body scrolls (1656/792 desktop,
+> 4972/743 mobile), the **× stays on screen after scrolling to the bottom**, and
+> ×/Escape/backdrop all close. No console errors — *except* a pre-existing external
+> **403 from `api.github.com`** rate-limiting the "Lately" widget from this host,
+> which is excluded by name in the check.
+>
+> ### ⚠️⚠️ TWO AGENT SESSIONS WERE EDITING THIS REPO AT THE SAME TIME
+>
+> This is the thing to know before trusting any of today's commit messages.
+> A parallel session was doing **Chat 3 (Chick-fil-A) and Chat 4 (LinkedIn +
+> Coca-Cola)** in the *same working tree* while this session did Chat 4b. `HEAD`
+> moved **five times** mid-session and `src/pages/index.astro` was being written by
+> both of us. Consequences, all verified rather than assumed:
+>
+> - **My Phi Gamma Nu + Penn M&T `media` arrays were swept into someone else's
+>   commit** — they are in **`846b04b` "feat(communities): add Chick-fil-A
+>   Community Scholars photo modal"**, not in a Phi Gamma Nu commit. Nothing is
+>   lost (the block is in `HEAD` verbatim — checked), but **`git log` attribution
+>   for that commit is wrong**. The reverse also happened: that session
+>   deliberately used path-limited commits to avoid taking `pgn-11.jpg`.
+> - **Because of that, I could not commit `index.astro` from the working tree** —
+>   doing so would have published their half-finished LinkedIn/Coca-Cola arrays.
+>   `026fbdd` was therefore built as **`HEAD` + only my own hunk**, staged as a
+>   blob via `git hash-object` + `git update-index`, and committed from the index
+>   so the working tree was left alone. Asserted before committing that the blob
+>   contained **no `lpit-` or `coke-` references**.
+> - 🔴 **The other session's working tree removes the badge count**
+>   (`◈ {c.media.length}` → `◈`), which would make **all** chips render a bare
+>   `◈`. That contradicts the documented, previously-validated `◈ 12` design. It is
+>   **uncommitted** and **not mine to fix** — Ava should decide whether it was
+>   intentional. `HEAD` still has the count and my Playwright run asserts it.
+> - **Duplicate work to reconcile:** that session independently wrote an equivalent
+>   single-photo rule named **`.comm__dialog-photos--single`**; mine is committed as
+>   **`--one`**. When their change lands, **keep one and delete the other.**
+> - 🔴🔴 **THE NEXT COMMIT OF `index.astro` WILL SILENTLY REVERT TWO COMMITTED
+>   CHANGES.** The working-tree copy of `src/pages/index.astro` was written by the
+>   other session from an older base, so it contains **neither** the badge count
+>   (`◈ {c.media.length}`) **nor** my `comm__dialog-photos--one` rule — both of
+>   which *are* in `HEAD` (`026fbdd`). Committing that file as-is drops both.
+>   Before committing `index.astro`, run:
+>   ```bash
+>   grep -c 'photos--one' src/pages/index.astro      # want 2, not 0
+>   grep -c '◈ {c.media.length}' src/pages/index.astro  # want 1, not 0
+>   ```
+>   and re-add whichever is missing (or take `git show 026fbdd:src/pages/index.astro`
+>   as the base and re-apply the LinkedIn/Coca-Cola arrays on top).
+> - **Lesson for the next session: check `git log`/`git status` before *and* after
+>   every commit, and never run a bare `git commit` or `git commit -a` in this
+>   repo while another session may be live** — use path-limited commits.
+>
+> **Ava's instruction, received mid-session: _do not commit before asking._**
+> `763997b` and `026fbdd` had already landed when she said it; nothing has been
+> committed since. **The HANDOVER/TODO/NEXT-CHATS updates for this session are
+> uncommitted and awaiting her go-ahead.** Nothing was pushed.
+
+---
+
+
 > Viewed all 28 processed `cfa-*` photos, verified the program against
 > **chick-fil-a.com/community-scholars** (13 Community Scholars/yr, **$25K** each,
 > awarded for academic success + community service + financial need, plus a
@@ -96,8 +196,10 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > | `6ab2b2c` | Processed the gallery (59) + luminary (16) batch; fixed script slug bug |
 > | `ff36473` | **Marquetry Lap Desk** full case study, 15 photos |
 >
-> Four Communities modals are live and validated: T-Mobile `◈12`, Taco Bell
-> `◈12`, MITES `◈12`, Coolidge `◈9`. Verified 186/186 + 42/42 Playwright.
+> **Seven** Communities modals are live and validated at `HEAD`: T-Mobile `◈12`,
+> Taco Bell `◈12`, MITES `◈12`, Coolidge `◈9`, Chick-fil-A `◈15`, **Phi Gamma Nu
+> `◈17`**, **Penn M&T `◈1`**. Verified 186/186, 42/42, 34/34 and 68/68 Playwright.
+> LinkedIn + Coca-Cola were **in flight and uncommitted** as of pt.8b.
 >
 > ### What is LEFT — processed assets sitting in `public/`, not yet on any page
 >
@@ -106,16 +208,16 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >
 > | Set | Files | Where it goes | Notes |
 > |---|---|---|---|
-> | `gallery/gal-01..60` | 60 | `/gallery` wall | **6 links already known — see below.** Needs a label + link per photo |
+> | ~~`gallery/gal-01..60`~~ | ✅ DONE | `/gallery` wall | 36 of 60 wired (2026-08-06 pt.9); ~24 unused frames remain for later |
 > | ~~`projects/marquetry-flower-press/press-01..15` + 1 clip~~ | ✅ DONE | `marquetry-flower-press.md` | Full case study; press-15 (promposal sign, 3rd-party faces) deleted |
 > | ~~`projects/marquetry-clock/clock-01`~~ | ✅ DONE | `marquetry-clock.md` | Koi clock, single photo |
-> | `projects/cad-projects/cadnew-01..67` + 1 clip | 68 | `cad-projects.md` | biggest set; needs its own chat |
+> | ~~`projects/cad-projects/cadnew-01..67` + 1 clip~~ | ✅ DONE | `cad-projects.md` | Only 2 pieces in the set (pencil box + makeup organizer); wired in, marquetry box covered too |
 > | ~~`projects/luminary/lum-01..16`~~ | ✅ DONE | `luminary.md` | Rebuilt around Ava's own finished + lit shots (10 used); 6 low-quality scraped process shots replaced; henna-hands inspiration + Illustrator vector kept |
-> | `communities/chick-fil-a-community-scholars/cfa-01..28` | 28 | new modal | chip is currently inert |
+> | ~~`communities/chick-fil-a-community-scholars/cfa-01..28`~~ | ✅ DONE | modal `◈15` | 15 published, 13 dropped as personal/scenery |
 > | `communities/linkedin-possibilities-in-tech/lpit-01..25` | 25 | new modal | chip is currently inert |
 > | `communities/coca-cola-scholars/coke-01..11` + 1 clip | 12 | new modal | chip is currently inert |
-> | `communities/phi-gamma-nu/pgn-01..17` | 17 | new modal | arrived 2026-08-06 pt.8 |
-> | `communities/penn-m-t/pennmt-01` | 1 | new modal | one photo only |
+> | ~~`communities/phi-gamma-nu/pgn-01..17`~~ | ✅ DONE | modal `◈17` | All 17 published; `pgn-11` was rotated 90° and fixed |
+> | ~~`communities/penn-m-t/pennmt-01`~~ | ✅ DONE | modal `◈1` | Single-photo modal; needed the `--one` uncropped CSS |
 >
 > **Suggested chat plan (one row per chat):** clock + flower press → luminary →
 > Chick-fil-A → LinkedIn + Coca-Cola → gallery → CAD studies.
@@ -141,6 +243,15 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > expect overlap with the projects/communities. `lpit-26` was deleted because it
 > was byte-identical to `lpit-20`.
 >
+> **✅ Gallery now wired (2026-08-06 pt.9).** All 60 viewed; 36 of the strongest
+> wired into `/gallery`. All 6 certain links used (gal-18/41/42/49/52/53).
+> **gal-14 (=pgn-04) and gal-17 (=pgn-06) were deliberately left out:** their
+> visible content is generic (an A-frame-cabin s'mores night; a dance-show cheer
+> with "ALPHA AVA" signs) and doesn't obviously read as Phi Gamma Nu, and the PGN
+> chip is inert anyway — so per Ava's "don't mislabel, leave it out" rule they
+> were dropped rather than asserted as PGN. If she wants them shown, point them
+> at `COMM` (Phi Gamma Nu).
+>
 > **Flower press (press-01..15), first 6 viewed.** It is a **laser-cut** lily
 > bouquet, not hand-cut: `press-01`/`02` veneer tape laid over a veneer sheet;
 > `press-03`/`04` the laser head cutting lily outlines into oak/walnut veneer;
@@ -151,14 +262,25 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > laser work, so vector files existed. Reword rather than repeat that.
 > `press-07..15` + the 28 s clip are **not yet viewed**.
 >
-> **CAD studies naming clash.** `cad-projects/` already holds curated assets
-> (`organizer-*`, `pencil-box-*`, `phone-stand-*`, `led-lamp*`) referenced by
-> `cad-projects.md`. The 67 new ones are prefixed `cadnew-` to avoid collision —
-> **rename them to something meaningful when wiring them in.**
+> **CAD studies naming clash — ✅ RESOLVED (2026-08-06 pt.9).** The 67 `cadnew-`
+> photos turned out to be just **two pieces**, both already on the page: the
+> **pencil box** (`cadnew-01..18` + the clip — the laser-cut plywood caddy with
+> the chevron-engraved end panel) and the **makeup & jewelry organizer**
+> (`cadnew-19..67`). They were Ava's own high-res reshoot of the same objects the
+> page had lower-quality scraped photos of. Kept the best **8 pencil-box + 12
+> organizer** photos (renamed to meaningful `pencil-box-*` / `organizer-*`
+> names), **deleted the 47 redundant/near-duplicate `cadnew-` frames**, and
+> **deleted the 13 superseded old scraped files** (`pencil-box-front/back/top/
+> drawer/stopper/filled`, `organizer-filled/empty/inserts/inserts-filled/
+> drawer-left/right/hidden`). Kept `pencil-box-concept.jpg` (OneNote sketch) +
+> `pencil-box-fusion.jpg` (Fusion model) + all `phone-stand-*` + `led-lamp.jpg`
+> untouched. No `cadnew-*` or orphan files remain in the folder.
 >
-> **Marquetry desk.** Its photos show a second piece — a wavy-fronted two-drawer
-> walnut/maple box — which belongs to CAD & Woodworking Studies. The desk page
-> already links to it; make sure that piece gets covered in `cad-projects.md`.
+> **Marquetry desk box — ✅ COVERED (2026-08-06 pt.9).** The wavy-fronted
+> two-drawer walnut/maple box was **not** in the `cadnew-` set — its only photo
+> is `marquetry-desk/desk-03.jpg` (the box beside the lap desk). Added a
+> **"Wavy-Front Marquetry Box"** section to `cad-projects.md` that references that
+> cross-folder image and cross-links to `/projects/marquetry-desk/`.
 >
 > ### Tooling a fresh chat must install (none are site dependencies)
 >
@@ -189,6 +311,29 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > is finished, do ONE cleanup pass: uncomment the patterns *and* rewrite history
 > to strip the raw blobs (needs a force-push; invalidates her other clone).
 > **Do not rewrite history before she says the import is done.**
+>
+> ---
+
+> **Session 2026-08-06 (pt.9) — CAD & Woodworking Studies photo set wired in.**
+> The 67 `cadnew-` photos + 1 clip were viewed and sorted: they are just **two
+> pieces**, both already on the page — the **parametric pencil box** (the
+> laser-cut plywood caddy, `cadnew-01..18` + the clip) and the **makeup & jewelry
+> organizer** (`cadnew-19..67`). They're Ava's own high-res reshoot of objects the
+> page previously showed with scraped photos. Rebuilt `cad-projects.md` around
+> them: each piece now has a **carousel** (organizer 1 hero + 11; pencil box 1
+> hero + 7 + the build clip + the OneNote/Fusion process shots; phone stand 7 +
+> 2 sketches; LED lamp single). Kept the **8 best pencil-box + 12 best organizer**
+> photos (renamed to meaningful names), **deleted 47 redundant `cadnew-` frames**
+> and the **13 superseded old scraped files**. Added a new **"Wavy-Front
+> Marquetry Box"** section (the wavy walnut/maple two-drawer box wasn't in the
+> set — it's only in `marquetry-desk/desk-03.jpg`, referenced cross-folder with a
+> cross-link to the lap desk). Frontmatter blurb/description updated + **Pyrography**
+> tag added. **✅ VALIDATED:** `npm run build` passes (17 pages, no errors); all
+> **34 image + 1 mp4** refs on the CAD page resolve in `dist/` (incl. the
+> cross-folder `desk-03`), and a `dist/` grep confirms **no** references remain to
+> any deleted filename. **Not committed to push** (ground rule #5). No new
+> Playwright pass — the carousels + `<video>` reuse the same proven markup as the
+> desk/architecture pages.
 >
 > ---
 
@@ -430,9 +575,11 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >    **public vs private** (private needs GitHub Pro for Pages, free-for-students
 >    but the site dies if that lapses; or $0 by moving to Cloudflare
 >    Pages/Netlify/Vercel). Full costing in §6, action items in `TODO.md` #25.
-> 2. **Gallery photos:** `/gallery` is live with the 4 Wix cover photos + labeled
->    placeholders; drop real photos in `public/images/gallery/` and swap a
->    `ph(...)` entry for a `photo(...)` in `src/pages/gallery.astro`.
+> 2. **Gallery photos: ✅ DONE (2026-08-06 pt.9).** `/gallery` is now a real photo
+>    wall — 36 of the 60 processed `gal-NN.jpg` wired across the 5 rows with the 4
+>    Wix covers. To add/swap later: drop a file in `public/images/gallery/`, LOOK
+>    at it, add a `photo('/images/gallery/x.jpg','alt',href,'Label')` to a row in
+>    `src/pages/gallery.astro`.
 > 3. **Privacy:** the old phone-stand render showing two kids' faces was dropped
 >    when the phone-stand gallery was rebuilt **face-free**; two portfolio
 >    phone-stand renders with that wallpaper were intentionally NOT added. Re-add
@@ -533,7 +680,9 @@ public/
   images/communities/<slug>/  per-community photos; one folder per program.
                               t-mobile-changemaker/ (12), taco-bell-ambition-
                               accelerator/ (10 + 2 mp4 clips), mites/ (12),
-                              calvin-coolidge-senator/ (9) drive modals.
+                              calvin-coolidge-senator/ (9), chick-fil-a-
+                              community-scholars/ (15), phi-gamma-nu/ (17) and
+                              penn-m-t/ (1) drive modals.
                               Filenames are <prefix>-01.jpg / <prefix>-video-01
                               .mp4 — gaps in the numbering are intentional
                               (dropped shots); don't renumber.
@@ -765,6 +914,58 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (part 9)** — **`/gallery` photo wall wired.** Viewed all 60
+  processed `gal-01..60.jpg`, wrote a hover label + accurate alt + a destination
+  for each, and wired the **36 strongest** into the 5 alternating marquee rows
+  alongside the 4 Wix covers (**40 items**, balanced mix per row). Destinations
+  were worked out from photo contents: projects (`architecture`/`cad-projects`
+  covers + `afe-hackathon` = the Spheres shot), Communities (Changemaker, MITES,
+  LinkedIn PiT, Chick-fil-A ×4, Amazon Future Engineer), Experience (squash +
+  a professional headshot), and personal → HOME (ski/climb/bake/travel/beach/
+  family/etc.). Used the 6 certain md5 links; **left gal-14 & gal-17 out** (md5
+  ties them to Phi Gamma Nu but their content is generic and the PGN chip is
+  inert — didn't mislabel). Dropped ~24 near-duplicate/dark frames. Removed the
+  placeholder machinery (`ph()`/PALETTE/RATIOS/`.g-ph`) so the page is photo-only.
+  Build ✓ (17 pages); **Playwright 22/22** at 1440×900 + 390×844 + reduced-motion
+  (rows auto-scroll, hover pauses the row + reveals the label, reduced-motion →
+  hand-scrollable, no console errors). ~24 unused `gal-NN.jpg` remain for later.
+
+- **2026-08-06 (pt.8b)** — **Phi Gamma Nu + Penn M&T modals.** Both inert chips
+  became modal buttons. All 18 processed photos viewed and captioned individually;
+  **none dropped**. **Phi Gamma Nu `◈17`** — the blurb's facts are read off the
+  photos (a slide reading “PGN | Delta Lambda Chapter” lists the class of **15**
+  with Ava among them), ordered as a narrative: bid night → the Titans family
+  reveal → initiation with roses → the ~50-person chapter photo → chapter life
+  (New York dinner, Chinatown, retreat s'mores, dance-show posters). Fixed
+  **`pgn-11.jpg`, which was stored rotated 90°**. **Penn M&T `◈1`** — chose a
+  modal over an inert chip: one strong legible photo (the cohort on the carved
+  Wharton School steps) plus a blurb that explains what M&T is, verified against
+  fisher.wharton.upenn.edu (**50–55 admitted a year**, Penn Engineering + Wharton
+  dual degree). That needed new CSS — a 1-item array was being squeezed into a
+  220 px tile and `4/3` cover-cropped (**254×190, lettering clipped**); a
+  `comm__dialog-photos--one` modifier now shows it whole (**786×524**, contain,
+  70vh cap). Build ✓ (17 pages), 204/204 asset refs resolve with no orphans,
+  Playwright **68/68** at 1440×900 + 390×844 — all run in a throwaway
+  `git worktree` at HEAD, because ⚠️ **a second agent session was editing this
+  repo concurrently** (see the pt.8b block at the top: HEAD moved 5×, my arrays
+  ended up inside commit `846b04b`, and that session's uncommitted tree removes
+  the chip badge count and duplicates the single-photo CSS as `--single`).
+
+- **2026-08-06 (CAD studies)** — **CAD & Woodworking Studies photo set wired in.**
+  The 67 `cadnew-` photos + 1 clip resolved to just **two pieces** already on the
+  page: the **parametric pencil box** (laser-cut plywood caddy, chevron-engraved
+  end panel, box joints, pull-out drawer + internal stopper) and the **makeup &
+  jewelry organizer** (pyrography meadow, two hand-painted panels — sunflower +
+  hibiscus — 3D-printed jewelry dividers, tiered compartments, flip-up lid, secret
+  drawer) — Ava's own reshoot of what were scraped photos. Rebuilt
+  `cad-projects.md` with a **carousel per piece**, kept the **8 best pencil-box +
+  12 best organizer** photos (renamed meaningfully), **deleted 47 redundant
+  `cadnew-` frames + 13 superseded old scraped files**, and added a new
+  **"Wavy-Front Marquetry Box"** section (that walnut/maple two-drawer box wasn't
+  in the set — referenced from `marquetry-desk/desk-03.jpg` with a cross-link).
+  Added the **Pyrography** tag. Build ✓ (17 pages); all 34 image + 1 mp4 refs
+  resolve in `dist/`, no references to deleted files remain. Uncommitted push.
 
 - **2026-08-06 (Henna Luminary)** — **Rebuilt `luminary.md` around Ava's own
   photos.** Viewed all 16 new `lum-*` shots and replaced the lower-quality

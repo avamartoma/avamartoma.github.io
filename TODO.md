@@ -13,7 +13,7 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       **⚠️ Processed assets are sitting in `public/` waiting to be wired in — see
       the red block at the top of `HANDOVER.md` for the full table and the
       one-set-per-chat plan (a chat can only include ~100 images).** Waiting:
-      flower press (16), clock (1), CAD studies (68), gallery (60),
+      flower press (16), clock (1),
       LinkedIn Possibilities in Tech (25), Coca-Cola (12).
       ✅ Done this session: **Marquetry Lap Desk** (15 photos) and
       **Architecture / "The Grove"** (14 + carousel + clip). Photos now on:
@@ -24,7 +24,11 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       carousel + build clip, 2026-08-06). **Marquetry Clock + Flower Press now
       have photos too (2026-08-06):** the Koi clock uses its single `clock-01`
       shot, and the Flower Press is a full case study (8 inline + 6 carousel +
-      build clip). Still on generative artwork only:
+      build clip). **CAD & Woodworking Studies — ✅ its 67-photo reshoot + clip
+      wired in (2026-08-06):** turned out to be just the pencil box + makeup
+      organizer (both already on the page), now each in a carousel of Ava's own
+      photos; the wavy-front marquetry box got its own section. Still on
+      generative artwork only:
       `penn-electric-racing`. Drop images in `public/images/projects/<slug>/` and reference inline
       in the body (Markdown `![alt](/images/projects/<slug>/x.jpg)`), or use a
       `<div class="carousel"
@@ -37,24 +41,35 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         finished **LED lamp** photo from lvilledesign.org. Corrected the Luminary
         "final" shots (they're process shots, not a finished lit lantern).
 
-- [~] **1b. Gallery page (`/gallery`) — 60 REAL PHOTOS NOW PROCESSED, not yet
-      wired (2026-08-06 pt.7).** `gal-01..60` are in `public/images/gallery/`
-      alongside the 4 Wix covers. Ava's instruction: **work out each photo's link
-      from its contents**, expecting overlap with the projects/communities. Six
-      links are already certain (byte-identical duplicates — listed in
-      `HANDOVER.md`). Swap each `ph('Label', href)` for a
-      `photo('/images/gallery/gal-NN.jpg','alt',href,'Label')` in
-      `src/pages/gallery.astro`. Needs its own chat: 60 photos ≈ the whole
-      per-chat image budget.
+- [x] **1b. ✅ Gallery page (`/gallery`) — 60 REAL PHOTOS WIRED (2026-08-06 pt.9).**
+      Viewed all `gal-01..60`, wrote a hover label + accurate alt text + a
+      destination for each, and wired the **36 strongest** into the 5 marquee
+      rows alongside the 4 Wix covers (**40 items total**). Dropped 24
+      (near-duplicate graduation/group shots, a few dark or ambiguous frames).
+      Destinations worked out from photo contents: **P** (`architecture`,
+      `cad-projects` covers + `afe-hackathon` = gal-49 "the Spheres"), **COMM**
+      (Changemaker cover, MITES gal-08, LinkedIn gal-18, Chick-fil-A
+      gal-41/42/52/53, Amazon Future Engineer gal-48), **EXP** (10 squash +
+      professional-headshot frames), **HOME** (19 personal: ski, climb, bake,
+      travel, concerts, beaches, family, etc.). Used the 6 certain md5 links
+      (gal-18/41/42/49/52/53). **Left out gal-14 & gal-17** — the `HANDOVER`
+      md5 note ties them to Phi Gamma Nu, but their visible content is generic
+      (cabin s'mores / a dance-show cheer) and the PGN chip is inert, so
+      labelling them a program wasn't defensible.
+      **↻ Now revisitable (2026-08-06 pt.8b): the Phi Gamma Nu chip is live
+      (`◈ 17`) and both photos are published in its modal (`pgn-04` = `gal-14`
+      s'mores at the A-frame, `pgn-06` = `gal-17` dance-show posters), so
+      pointing gal-14 and gal-17 at COMM is now defensible.** Build ✓ (17 pages); Playwright
+      22/22 at 1440×900 + 390×844 + reduced-motion (rows scroll, hover pauses +
+      reveals the label, reduced-motion → hand-scrollable, no console errors).
+      **~24 unused gal-NN.jpg remain** in `public/images/gallery/` if Ava wants
+      to swap any in later.
 
-- [~] **1c. Gallery page — original placeholder note (2026-08-06).**
-      Rows of photos auto-scroll in alternating directions; each photo links to a
-      project / experience / personal page. Seeded with 4 Wix cover photos +
-      labeled placeholders. **To finish:** drop real photos into
-      `public/images/gallery/` and swap `ph('Label', href)` →
-      `photo('/images/gallery/x.jpg','alt',href,'Label')` in
-      `src/pages/gallery.astro`. Personal photos could later point at a dedicated
-      `/living` page (#8b).
+- [x] **1c. ✅ Gallery page — placeholders replaced (done in 1b, 2026-08-06).**
+      Rows of photos auto-scroll in alternating directions; each links to a
+      project / experience / community / personal destination. The seeded Holi
+      placeholders are gone — all cells are now real photos. Personal photos
+      could later re-point at a dedicated `/living` page (#8b).
 
 - [x] **2. ✅ Real resume/contact delivery live (Web3Forms, 2026-07-04).** Access
       key registered to `hello@avamartoma.com` (→ forwards to Gmail) and set in all
@@ -85,11 +100,30 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         and stills interleave into a narrative. Process raws first with
         `node scripts/process-community-media.mjs <slug> <prefix>`, then list
         them. Any chip with `media` automatically becomes a modal button.
-      - **Remaining chips with no media yet (7):** Amazon Future Engineer,
-        LinkedIn Possibilities in Tech, Coca-Cola Scholars, **Penn M&T**,
-        **Phi Gamma Nu**, NCWIT Aspirations in Computing, Davidson Young
-        Scholars. All have scaffolded folders under
-        `public/images/communities/<slug>/`.
+      - **Remaining chips with no media yet (5):** Amazon Future Engineer,
+        LinkedIn Possibilities in Tech, Coca-Cola Scholars, NCWIT Aspirations in
+        Computing, Davidson Young Scholars. All have scaffolded folders under
+        `public/images/communities/<slug>/`. (LinkedIn + Coca-Cola were being
+        wired in by a **parallel session** and were still uncommitted as of
+        pt.8b — check `git log` before starting them.)
+      - **Phi Gamma Nu + Penn M&T — ✅ DONE, built + validated (2026-08-06
+        pt.8b).** **Phi Gamma Nu** shows `◈ 17`: all 17 photos published with
+        individual alt text and captions, ordered as a narrative (bid night →
+        Titans family reveal → initiation with roses → the ~50-person chapter
+        photo → chapter life). The blurb is read off the photos — a slide reading
+        “PGN | Delta Lambda Chapter” lists the class of **15** with Ava among
+        them — not from the web. `pgn-11.jpg` **was stored rotated 90°** and was
+        fixed. **Penn M&T** shows `◈ 1`: kept as a modal rather than an inert
+        chip because the single photo is strong and legible (the cohort on the
+        carved Wharton School steps) and the blurb explains what M&T is, which
+        is what the education card's "School of Engineering & Wharton" refers to
+        (verified against fisher.wharton.upenn.edu: 50–55 admitted a year). That
+        required a **`comm__dialog-photos--one`** CSS modifier — a lone item was
+        being `4/3` cover-cropped into a 220 px tile (254×190 with the carved
+        lettering clipped); it now renders whole at 786×524. Build ✓ (17 pages),
+        204/204 asset refs resolve, Playwright **68/68** at 1440×900 + 390×844.
+        ⚠️ A parallel session independently wrote the same rule as
+        `--single`; **de-duplicate when its work lands.**
       - **Chick-fil-A Community Scholars — ✅ DONE, built + validated
         (2026-08-06 pt.8).** Chip now shows `◈ 15` and opens a modal with a blurb
         (verified against chick-fil-a.com/community-scholars: 13 scholars/yr,
