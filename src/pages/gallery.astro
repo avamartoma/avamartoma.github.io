@@ -1,0 +1,274 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+
+// ---------------------------------------------------------------------------
+// Gallery items. Each photo links somewhere: a project, an experience, or a
+// personal page.
+//
+//   • Real photo:  photo('/images/gallery/file.jpg', 'alt text', href)
+//   • Placeholder: ph('Label', href)   ← swap these for real photos as you add
+//     files to public/images/gallery/. To convert a placeholder, just change
+//     it to a photo(...) entry with the same href.
+//
+// Rows alternate scroll direction (row 1 →, row 2 ←, …). Hover a photo to
+// pause the row and reveal its label.
+// ---------------------------------------------------------------------------
+
+type Item =
+  | { kind: 'photo'; src: string; alt: string; href: string; label: string }
+  | { kind: 'ph'; label: string; href: string; a: string; b: string; ratio: string };
+
+// Placeholder styling cycles through the Holi palette + a few aspect ratios so
+// the wall looks varied until real photos drop in.
+const PALETTE: [string, string][] = [
+  ['#a855f7', '#4361ee'],
+  ['#4361ee', '#5ce6a0'],
+  ['#ff5cc4', '#a855f7'],
+  ['#ffd23f', '#ff5cc4'],
+  ['#5ce6a0', '#ffd23f'],
+  ['#4361ee', '#ff5cc4'],
+];
+const RATIOS = ['4 / 3', '3 / 4', '1 / 1', '16 / 10', '5 / 6', '7 / 5'];
+let _i = 0;
+const ph = (label: string, href: string): Item => {
+  const [a, b] = PALETTE[_i % PALETTE.length];
+  const ratio = RATIOS[_i % RATIOS.length];
+  _i++;
+  return { kind: 'ph', label, href, a, b, ratio };
+};
+const photo = (src: string, alt: string, href: string, label: string): Item => ({
+  kind: 'photo', src, alt, href, label,
+});
+
+// Destinations reused below.
+const P = (slug: string) => `${base}projects/${slug}/`;
+const EXP = `${base}#experience`;
+const HOME = base; // personal / about — until a dedicated /living page exists
+
+// 5 rows. `dir` alternates; `dur` is the loop time (bigger = slower).
+const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
+  {
+    dir: 'left', dur: '72s', items: [
+      photo('/images/gallery/cover-architecture.jpg', 'Ava presenting her architecture site-analysis project', P('architecture'), 'Architecture'),
+      ph('RC Car', P('rc-car')),
+      ph('Kesem', EXP),
+      ph('Henna Luminary', P('luminary')),
+      ph('Amazon · Kuiper', EXP),
+      ph('Beach days', HOME),
+      ph('Penn Electric Racing', P('penn-electric-racing')),
+    ],
+  },
+  {
+    dir: 'right', dur: '88s', items: [
+      photo('/images/gallery/cover-woodshop.jpg', 'Ava at the drill press in the wood shop', P('cad-projects'), 'Wood shop'),
+      ph('CAD Bridge', P('cad-bridge')),
+      ph('KidsMates', EXP),
+      ph('Wooden Car', P('wooden-car')),
+      ph('Squash', HOME),
+      ph('Amazon Path', P('afe-hackathon')),
+      ph('MIT', EXP),
+    ],
+  },
+  {
+    dir: 'left', dur: '64s', items: [
+      photo('/images/gallery/cover-changemaker.jpg', 'Ava at the T-Mobile Changemaker Challenge', EXP, 'Changemaker'),
+      ph('LinkedIn Career Discovery', P('linkedin-hackathon')),
+      ph('Marquetry', P('marquetry-clock')),
+      ph('Duke CFD', EXP),
+      ph('Skiing', HOME),
+      ph('CAD & Woodworking', P('cad-projects')),
+      ph('Henna Luminary', P('luminary')),
+    ],
+  },
+  {
+    dir: 'right', dur: '92s', items: [
+      photo('/images/gallery/cover-beach.jpg', 'Ava on the beach at sunset', HOME, 'Off the clock'),
+      ph('Penn', EXP),
+      ph('RC Car', P('rc-car')),
+      ph('Woodworking', HOME),
+      ph('Kesem', EXP),
+      ph('Amazon · Kuiper', EXP),
+      ph('CAD Bridge', P('cad-bridge')),
+    ],
+  },
+  {
+    dir: 'left', dur: '78s', items: [
+      ph('Golf', HOME),
+      ph('Henna Luminary', P('luminary')),
+      ph('Penn Squash', EXP),
+      ph('Wooden Car', P('wooden-car')),
+      ph('Running', HOME),
+      ph('KidsMates', EXP),
+      ph('Architecture', P('architecture')),
+    ],
+  },
+];
+---
+
+<Layout
+  title="Gallery — Ava Martoma"
+  description="A wall of photos from Ava Martoma's projects, work, and life — click through to the story behind each one."
+>
+  <section class="section gallery">
+    <div class="wrap">
+      <header class="gallery__head" data-reveal>
+        <h1>Gallery</h1>
+        <p class="label">
+          A wall of moments — projects, work, and life. Click any photo to jump
+          to its story. <span class="gallery__wip">(More photos on the way.)</span>
+        </p>
+      </header>
+    </div>
+
+    <!-- Full-bleed marquee rows; each row scrolls on its own, alternating -->
+    <div class="marquee-rows" data-reveal>
+      {rows.map((row) => (
+        <div class="marquee" data-dir={row.dir} style={`--dur:${row.dur}`}>
+          <ul class="marquee__track">
+            {[...row.items, ...row.items].map((item, i) => (
+              <li class="marquee__cell" aria-hidden={i >= row.items.length ? 'true' : undefined}>
+                <a
+                  class="g-item"
+                  href={item.href}
+                  tabindex={i >= row.items.length ? -1 : undefined}
+                >
+                  {item.kind === 'photo' ? (
+                    <img src={`${base.replace(/\/$/, '')}${item.src}`} alt={item.alt} loading="lazy" />
+                  ) : (
+                    <span
+                      class="g-ph"
+                      style={`--a:${item.a};--b:${item.b};aspect-ratio:${item.ratio}`}
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  <span class="g-item__cap">{item.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .gallery { overflow: clip; }
+  .gallery__head { margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
+  .gallery__wip { color: var(--muted); }
+
+  .marquee-rows {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.6rem, 1.5vw, 1rem);
+  }
+
+  .marquee {
+    position: relative;
+    overflow: hidden;
+    /* soft fade at both edges so photos scroll in/out gracefully */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    gap: clamp(0.6rem, 1.5vw, 1rem);
+    width: max-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    will-change: transform;
+    animation: marquee var(--dur, 80s) linear infinite;
+  }
+  /* right-moving rows just run the same loop in reverse */
+  .marquee[data-dir='right'] .marquee__track { animation-direction: reverse; }
+
+  /* pause the row while hovering so it's easy to aim + click */
+  .marquee:hover .marquee__track,
+  .marquee:focus-within .marquee__track { animation-play-state: paused; }
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  .marquee__cell { flex: 0 0 auto; }
+
+  .g-item {
+    --row-h: clamp(120px, 15vw, 190px);
+    position: relative;
+    display: block;
+    height: var(--row-h);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface, #17151b);
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  }
+  .g-item img,
+  .g-ph {
+    display: block;
+    height: 100%;
+    width: auto;
+  }
+  .g-item img { object-fit: cover; }
+  .g-ph {
+    /* aspect-ratio set inline; height fixed → width follows the ratio */
+    background: linear-gradient(135deg, var(--a), var(--b));
+    position: relative;
+  }
+  /* faint film-grain-ish sheen on placeholders so they don't read as flat */
+  .g-ph::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 80% at 20% 10%, rgba(255,255,255,0.22), transparent 60%);
+    mix-blend-mode: screen;
+  }
+
+  .g-item:hover,
+  .g-item:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px -12px rgba(0,0,0,0.6);
+    outline: none;
+  }
+
+  /* label chip — always legible on placeholders, reveal-on-hover for photos */
+  .g-item__cap {
+    position: absolute;
+    left: 0.5rem;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+    padding: 0.3em 0.55em;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--bg) 62%, transparent);
+    backdrop-filter: blur(4px);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* on real photos, keep the chip hidden until hover/focus for a cleaner wall */
+  .g-item:has(img) .g-item__cap {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+  .g-item:has(img):hover .g-item__cap,
+  .g-item:has(img):focus-visible .g-item__cap {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Motion off: no auto-scroll — let people scroll each row by hand instead. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { overflow-x: auto; scrollbar-width: thin; }
+    .marquee__track { animation: none; }
+    /* the duplicated set is redundant without motion, but harmless */
+  }
+</style>
