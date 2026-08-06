@@ -116,6 +116,11 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         `◈ 12` (11 photos + 1 banquet-stage clip). Alt text + captions written
         from the photos; program facts verified against the LinkedIn and
         Coca-Cola Scholars Foundation sites. 80/80 Playwright at 1440×900 + 390×844.
+      - [ ] **`afe-02.jpg` needs a caption + wiring (2026-08-06 pt.8).** A second
+        Amazon Future Engineer photo arrived and was processed, but the modal
+        still lists only `afe-01.jpg`. Someone has to view `afe-02.jpg`, write
+        its alt text and caption, and add it to that programme's `media` array
+        in `src/pages/index.astro`.
       - **Remaining chips with no media yet (2):** NCWIT Aspirations in Computing
         and Davidson Young Scholars. Both have scaffolded folders under
         `public/images/communities/<slug>/`. (Amazon Future Engineer got its
