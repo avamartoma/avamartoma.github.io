@@ -15,6 +15,7 @@ Progress: tick these off as they land.
 - [ ] 2. Henna Luminary (16 photos)
 - [ ] 3. Chick-fil-A Community Scholars (28 photos)
 - [ ] 4. LinkedIn Possibilities in Tech + Coca-Cola Scholars (38 photos)
+- [ ] 4b. Phi Gamma Nu + Penn M&T (18 photos)
 - [ ] 5. Gallery wall (60 photos)
 - [ ] 6. CAD & Woodworking Studies (69 photos — may need splitting)
 
@@ -124,6 +125,38 @@ against the web rather than guessing. Note that lpit-08 is byte-identical to
 gal-18 in the gallery.
 
 Delete unused processed photos, npm run build, run a Playwright check of both
+modals at 1440x900 and 390x844, update HANDOVER.md and TODO.md, and commit.
+Don't push.
+```
+
+---
+
+## Chat 4b — Phi Gamma Nu + Penn M&T
+
+```
+Read HANDOVER.md (start with the red block at the top), then build two more
+Communities photo modals in src/pages/index.astro, following the MITES / Taco
+Bell pattern already in that file.
+
+  Phi Gamma Nu — 17 photos, public/images/communities/phi-gamma-nu/pgn-01..17.jpg
+  Penn M&T — 1 photo, public/images/communities/penn-m-t/pennmt-01.jpg
+
+Phi Gamma Nu is a professional business fraternity chapter at Penn; Penn M&T is
+the Jerome Fisher Program in Management & Technology (Penn Engineering +
+Wharton). Both chips are currently inert spans and become modal buttons as soon
+as they have a `media` array.
+
+View every photo, write specific alt text and a short caption for each, and
+order the array as a narrative. Write each blurb from evidence visible in the
+photos rather than guessing.
+
+Note for the gallery chat: pgn-04 is byte-identical to gal-04's neighbour gal-14,
+and pgn-06 to gal-17.
+
+With a single photo, consider whether Penn M&T is better as a modal or left as
+an inert chip until more arrive — use your judgement and say which you chose.
+
+Delete unused processed photos, npm run build, run a Playwright check of the new
 modals at 1440x900 and 390x844, update HANDOVER.md and TODO.md, and commit.
 Don't push.
 ```

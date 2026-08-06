@@ -81,17 +81,21 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > | `communities/chick-fil-a-community-scholars/cfa-01..28` | 28 | new modal | chip is currently inert |
 > | `communities/linkedin-possibilities-in-tech/lpit-01..25` | 25 | new modal | chip is currently inert |
 > | `communities/coca-cola-scholars/coke-01..11` + 1 clip | 12 | new modal | chip is currently inert |
+> | `communities/phi-gamma-nu/pgn-01..17` | 17 | new modal | arrived 2026-08-06 pt.8 |
+> | `communities/penn-m-t/pennmt-01` | 1 | new modal | one photo only |
 >
 > **Suggested chat plan (one row per chat):** clock + flower press → luminary →
 > Chick-fil-A → LinkedIn + Coca-Cola → gallery → CAD studies.
 >
 > ### 🎁 Findings already banked — do NOT re-derive these
 >
-> **Gallery overlap.** Six gallery photos are **byte-identical** to photos already
+> **Gallery overlap.** Eight gallery photos are **byte-identical** to photos already
 > in other sets, so their link targets are certain (found with `md5sum`, worth
 > re-running for future batches):
 >
 > ```
+> gal-14 = pgn-04    → COMMUNITY: Phi Gamma Nu
+> gal-17 = pgn-06    → COMMUNITY: Phi Gamma Nu
 > gal-18 = lpit-08   → COMMUNITY: LinkedIn Possibilities in Tech
 > gal-41 = cfa-05    → COMMUNITY: Chick-fil-A Community Scholars
 > gal-42 = cfa-07    → COMMUNITY: Chick-fil-A Community Scholars
@@ -698,6 +702,16 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (code)** — **Fixed the homepage scroll trap on the "Where I've
+  been" timeline.** The `wheel` handler in `src/components/Experience.astro` was
+  hijacking *all* vertical wheel input into horizontal timeline scroll and always
+  calling `preventDefault()`, so the page couldn't scroll vertically while the
+  cursor was over the Experience cards (you had to move the mouse to the side).
+  Now it ignores horizontal-intent (trackpad/shift) wheels and releases the wheel
+  to the page once the timeline is at its left/right edge — preserving the
+  scroll-to-scrub feature without trapping the page. Build ✓ (17 pages).
+  Uncommitted.
 
 - **2026-08-06 (part 6)** — **`images/` restructured + Taco Bell / MITES /
   Coolidge / Architecture shipped.** `public/images/` now contains exactly four
