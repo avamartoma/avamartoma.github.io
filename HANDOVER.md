@@ -110,7 +110,7 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > | ~~`projects/marquetry-flower-press/press-01..15` + 1 clip~~ | ✅ DONE | `marquetry-flower-press.md` | Full case study; press-15 (promposal sign, 3rd-party faces) deleted |
 > | ~~`projects/marquetry-clock/clock-01`~~ | ✅ DONE | `marquetry-clock.md` | Koi clock, single photo |
 > | `projects/cad-projects/cadnew-01..67` + 1 clip | 68 | `cad-projects.md` | biggest set; needs its own chat |
-> | `projects/luminary/lum-01..16` | 16 | `luminary.md` | Ava's own shots; likely replace the 8 scraped lvilledesign ones |
+> | ~~`projects/luminary/lum-01..16`~~ | ✅ DONE | `luminary.md` | Rebuilt around Ava's own finished + lit shots (10 used); 6 low-quality scraped process shots replaced; henna-hands inspiration + Illustrator vector kept |
 > | `communities/chick-fil-a-community-scholars/cfa-01..28` | 28 | new modal | chip is currently inert |
 > | `communities/linkedin-possibilities-in-tech/lpit-01..25` | 25 | new modal | chip is currently inert |
 > | `communities/coca-cola-scholars/coke-01..11` + 1 clip | 12 | new modal | chip is currently inert |
@@ -765,6 +765,21 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (Henna Luminary)** — **Rebuilt `luminary.md` around Ava's own
+  photos.** Viewed all 16 new `lum-*` shots and replaced the lower-quality
+  scraped lvilledesign process shots (which had stood in as "final" but were
+  never a lit lantern). Used 10: a hero lit front-on, a top/lid form shot, a
+  lid-lift detail, a 4-face carousel of the distinct mehndi panels, and three
+  lit angles (warm amber + a colour-changing magenta — the **first lit shots the
+  page ever had**). Kept the two irreplaceable scraped assets (mehndi-on-hands
+  inspiration, Illustrator vector redraw) and the Origins backlink to
+  lvilledesign.org. Deleted the 6 unused new shots + 6 scraped ones
+  (`panels.png`, `laser-pieces.jpg`, `process-1..4`). `npm run build` ✓ (17
+  pages, all refs resolve, no orphans). ⚠️ The working-tree index was shared with
+  a concurrent session, so the change rode into a concurrent commit
+  (`luminary.md` last touched by `3266167`) rather than a dedicated one — content
+  is correct and live.
 
 - **2026-08-06 (part 8)** — **Chick-fil-A Community Scholars photo modal.**
   Viewed all 28 `cfa-*` shots, verified the program against

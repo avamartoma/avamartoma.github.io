@@ -13,7 +13,7 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       **⚠️ Processed assets are sitting in `public/` waiting to be wired in — see
       the red block at the top of `HANDOVER.md` for the full table and the
       one-set-per-chat plan (a chat can only include ~100 images).** Waiting:
-      flower press (16), clock (1), CAD studies (68), luminary (16), gallery (60),
+      flower press (16), clock (1), CAD studies (68), gallery (60),
       LinkedIn Possibilities in Tech (25), Coca-Cola (12).
       ✅ Done this session: **Marquetry Lap Desk** (15 photos) and
       **Architecture / "The Grove"** (14 + carousel + clip). Photos now on:
