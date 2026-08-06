@@ -149,7 +149,7 @@ const getExtraBlockedArtists = (env) => getExtraFromKV(env, 'artists');
 // Strip internal-only fields (id, explicit, isPlaying) before sending to the client.
 function publicTrack(t) {
   if (!t) return null;
-  const { id, explicit, isPlaying, ...rest } = t;
+  const { id, explicit, isPlaying, progressMs, durationMs, ...rest } = t;
   return rest;
 }
 
@@ -208,6 +208,9 @@ export default {
           recentError: lastRecentError,
           recentSource: lastRecentSource,
           historyLength: (await readHistory(env)).length,
+          nowProgressMs: current ? current.progressMs : null,
+          nowDurationMs: current ? current.durationMs : null,
+          nowCountsAsPlayed: current ? countsAsPlayed(current) : null,
           droppedByFilters: recent.length - recentList.length,
         };
       }
@@ -264,7 +267,15 @@ async function getCurrentlyPlaying(token) {
   // Skip podcasts/ads if MUSIC_ONLY — only surface actual tracks as "now playing".
   if (MUSIC_ONLY && data.currently_playing_type && data.currently_playing_type !== 'track') return null;
   const t = mapTrack(data.item);
-  return t ? { ...t, isPlaying: Boolean(data.is_playing) } : null;
+  return t
+    ? {
+        ...t,
+        isPlaying: Boolean(data.is_playing),
+        // How far into the track we are — used to ignore skipped songs.
+        progressMs: Number(data.progress_ms) || 0,
+        durationMs: Number(data.item.duration_ms) || 0,
+      }
+    : null;
 }
 
 // Records why the recent list came back empty, so /now-playing?debug=1 can say
@@ -341,9 +352,24 @@ async function readHistory(env) {
 
 // Returns the history as it will be after this observation, and (via waitUntil)
 // persists it if the track changed.
+// A track only counts as played once you have actually listened to it, so
+// skipping through a queue doesn't fill the widget with songs you rejected.
+// 30s matches Spotify's own definition of a play; short tracks need half their
+// length instead, so a 40s interlude isn't impossible to register.
+const MIN_PLAY_MS = 30_000;
+
+function countsAsPlayed(t) {
+  if (!t) return false;
+  const needed = t.durationMs > 0 ? Math.min(MIN_PLAY_MS, t.durationMs * 0.5) : MIN_PLAY_MS;
+  return (t.progressMs || 0) >= needed;
+}
+
 async function recordNowPlaying(env, current, ctx) {
   const history = await readHistory(env);
   if (!current || !current.songUrl || !env || !env.BLOCKED_SONGS_KV) return history;
+  // Skipped past quickly → don't record it. A later poll will catch the same
+  // track once it has been playing long enough.
+  if (!countsAsPlayed(current)) return history;
   if (history[0] && history[0].songUrl === current.songUrl) return history; // same song
   const entry = {
     title: current.title,
