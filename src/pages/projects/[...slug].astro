@@ -204,6 +204,24 @@ const dateLabel = d.date.toLocaleDateString('en-US', {
     border: 1px solid var(--line);
     background: #000;
   }
+  /* Two-up (or more) image rows so a run of photos isn't a tall single stack. */
+  .prose :global(.photo-grid) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-block: 1.5rem;
+  }
+  .prose :global(.photo-grid img) {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    max-height: none;
+    margin: 0;
+  }
+  @media (max-width: 620px) {
+    .prose :global(.photo-grid) { grid-template-columns: 1fr; }
+  }
   .prose :global(hr) {
     border: 0;
     height: 1px;

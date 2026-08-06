@@ -1,7 +1,7 @@
 ---
 title: "Marquetry Flower Press"
-blurb: "A working flower press whose lid is a marquetry bouquet of lilies and irises — laser-cut veneer, made as a promposal."
-description: "A functional flower press built from plywood and threaded rods, its lid inlaid with a marquetry bouquet of white lilies and purple irises in oak, walnut and dyed veneers. The pieces were drawn as vector art, laser-cut, taped up, glued to an oak ground and finished. Made as a promposal."
+blurb: "A working flower press whose lid is a marquetry bouquet of lilies and irises — laser-cut veneer, made as a just-for-fun promposal."
+description: "A functional flower press built from plywood and threaded rods, its lid inlaid with a marquetry bouquet of white lilies and purple irises in oak, walnut and dyed veneers. The pieces were drawn as vector art, laser-cut, taped up, glued to an oak ground and finished. Made as a just-for-fun promposal."
 date: 2025-05-15
 tags: ["Woodworking", "Marquetry", "Veneer", "Laser Cutting"]
 accent: "#7c5cff"
@@ -15,7 +15,7 @@ A **working flower press** — two rigid boards you tighten down to flatten and
 dry real flowers — with the top board given over to a marquetry bouquet. The
 lid is a spray of **white lilies and purple irises** in oak, walnut and dyed
 veneers, and the whole thing is a small joke about its own job: I made it as a
-**promposal** ("...so *PRESSED* to prom").
+**just-for-fun promposal** ("...so *PRESSED* to prom").
 
 ![The finished bouquet: white lilies with green stamens, two purple irises and a bud, walnut stems and leaves, all inlaid into an oak ground.](/images/projects/marquetry-flower-press/press-09.jpg)
 
@@ -28,32 +28,29 @@ page said the design files were lost; they weren't the point anyway — the burn
 edges in these photos are the tell that this was laser work, so the vectors
 existed.) The clip below is me marking out placement on the veneer in the studio.
 
-<video controls preload="none" poster="/images/projects/marquetry-flower-press/press-video-01-poster.jpg" aria-label="Marking out the veneer bouquet by hand in the studio before laser cutting.">
+<video controls preload="none" poster="/images/projects/marquetry-flower-press/press-video-01-poster.jpg" aria-label="Marking out the veneer bouquet by hand in the studio before laser cutting." style="max-width: 340px; margin-inline: auto;">
   <source src="/images/projects/marquetry-flower-press/press-video-01.mp4" type="video/mp4" />
   Your browser can't play embedded video —
   <a href="/images/projects/marquetry-flower-press/press-video-01.mp4">download the build clip</a> instead.
 </video>
 
-![The laser tracing a lily outline into the taped-up oak and walnut veneer.](/images/projects/marquetry-flower-press/press-03.jpg)
+<div class="photo-grid">
+  <img src="/images/projects/marquetry-flower-press/press-03.jpg" alt="The laser tracing a lily outline into the taped-up oak and walnut veneer." loading="lazy" />
+  <img src="/images/projects/marquetry-flower-press/press-05.jpg" alt="Freshly cut veneer pieces with laser-charred edges, still nested in the surrounding sheet." loading="lazy" />
+</div>
 
-![Freshly cut veneer pieces with laser-charred edges, still nested in the surrounding sheet.](/images/projects/marquetry-flower-press/press-05.jpg)
-
-## Taping up the bouquet
+## Taping and gluing it down
 
 Cut veneer is fragile and wants to curl, so the pieces are held face-up with
-**veneer tape** — a low-tack paper tape — while the bouquet is assembled and
-before it goes down onto the ground. Here the taped lily heads sit on the
-cutting mat next to two loose iris pieces, their edges charred from the beam.
+**veneer tape** — a low-tack paper tape — while the bouquet is assembled. Then
+the whole thing is glued onto a solid **oak** ground panel: a household iron
+does the pressing, and heat through the tape sets the glue and pulls the pieces
+flat against the board in one pass.
 
-![The taped-up lily heads on the cutting mat beside two loose laser-cut iris pieces, edges charred from the laser.](/images/projects/marquetry-flower-press/press-07.jpg)
-
-## Gluing it to the ground
-
-The taped bouquet is glued onto a solid **oak** ground panel. A household iron
-does the pressing — heat and pressure through the veneer tape set the glue and
-pull the pieces flat against the board in one pass.
-
-![Gluing the veneer down on the shop bench — a household iron sets the glue through the veneer tape, calipers and clamps at hand.](/images/projects/marquetry-flower-press/press-08.jpg)
+<div class="photo-grid">
+  <img src="/images/projects/marquetry-flower-press/press-07.jpg" alt="The taped-up lily heads on the cutting mat beside two loose laser-cut iris pieces, edges charred from the laser." loading="lazy" />
+  <img src="/images/projects/marquetry-flower-press/press-08.jpg" alt="Gluing the veneer down on the shop bench — a household iron sets the glue through the veneer tape, calipers and clamps at hand." loading="lazy" />
+</div>
 
 ## The press itself
 
@@ -62,9 +59,10 @@ The object isn't just a decorated panel — it's a **real press**. Two thick
 draw them down to squeeze whatever's between them. So the marquetry lid is also
 the working top of the tool.
 
-![Side on: the two thick plywood boards and four threaded rods that make it an actual press.](/images/projects/marquetry-flower-press/press-13.jpg)
-
-![The panel closed up as a working flower press — boards drawn together on threaded rods and wing nuts.](/images/projects/marquetry-flower-press/press-11.jpg)
+<div class="photo-grid">
+  <img src="/images/projects/marquetry-flower-press/press-13.jpg" alt="Side on: the two thick plywood boards and four threaded rods that make it an actual press." loading="lazy" />
+  <img src="/images/projects/marquetry-flower-press/press-11.jpg" alt="The panel closed up as a working flower press — boards drawn together on threaded rods and wing nuts." loading="lazy" />
+</div>
 
 ## Finishing
 
@@ -90,8 +88,15 @@ stems.
 ## Why a flower press
 
 A press is a good gift object: it's useful, it lasts, and it quietly keeps
-giving — you press flowers from an occasion and keep them. Making *this* one a
-promposal let the pun do some work ("*pressed*"), but the constraint was real —
-it had to actually clamp and hold flat, not just look like a plaque. That's why
-it ended up as plywood, rods and wing nuts under a marquetry face rather than a
-solid decorative panel.
+giving — you press flowers from an occasion and keep them. The constraint was
+real, too — it had to actually clamp and hold flat, not just look like a plaque,
+which is why it ended up as plywood, rods and wing nuts under a marquetry face
+rather than a solid decorative panel.
+
+## The promposal
+
+It was, in the end, a **just-for-fun promposal** — no grand romance, just a good
+pun and a handmade thing to go with it. A flower *press*, so the ask wrote
+itself: "so *PRESSED* to prom."
+
+![Handing over the finished press as a promposal at dusk, with balloons and a hand-lettered sign playing on 'so PRESSED to prom.'](/images/projects/marquetry-flower-press/press-15.jpg)
