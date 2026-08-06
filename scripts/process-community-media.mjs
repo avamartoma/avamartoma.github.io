@@ -33,7 +33,7 @@
 
 import sharp from 'sharp';
 import { readdirSync, mkdirSync, existsSync, statSync, readFileSync, rmSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, isAbsolute } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -49,14 +49,19 @@ if (!slug || !prefix) {
 }
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-// A bare name means a community folder; a path with a slash is taken as
-// relative to public/images/ so project galleries work too, e.g.
-// `projects/architecture`.
-const outDir = slug.includes('/')
+// A bare name means a community folder, EXCEPT for the reserved top-level
+// groupings under public/images/ (see public/images/README.md). A path with a
+// slash is taken as relative to public/images/, so project galleries work too,
+// e.g. `projects/architecture`.
+const TOP_LEVEL = ['gallery', 'experience', 'projects', 'communities'];
+const outDir = slug.includes('/') || TOP_LEVEL.includes(slug)
   ? join(root, 'public/images', slug)
   : join(root, 'public/images/communities', slug);
 const fromFlag = rest.indexOf('--from');
-const srcDir = fromFlag === -1 ? outDir : join(root, rest[fromFlag + 1]);
+const fromArg = fromFlag === -1 ? null : rest[fromFlag + 1];
+// Absolute --from paths are used as-is; relative ones resolve against the repo
+// root so `--from public/raw/...` works from anywhere.
+const srcDir = !fromArg ? outDir : isAbsolute(fromArg) ? fromArg : join(root, fromArg);
 
 if (!existsSync(srcDir)) {
   console.error(`No such source directory: ${srcDir}`);
