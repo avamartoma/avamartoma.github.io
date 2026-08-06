@@ -363,20 +363,49 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       - [ ] **25c. Optional: verify the HEIC/MOV files** for GPS with a tool that
             can decode them (`exiftool`) — the audit couldn't read those.
 
-- [ ] **24. Fold in the Wix portfolio content** (scraped 2026-08-06 from
-      `avarmartoma.wixstudio.com/portfolio`).
-      - **Stranded — A Board Game** (TSA; 1st at FL states, 5th nationally) → add
-        as a NEW project. Photos available: board, risky/chance card decks,
-        volcano dice centerpiece. ⚠️ Skip the team-group photos (minors' faces).
-      - **CAD Bridge** → the Wix post has a far richer **5-version FEA** writeup
-        (per-version mass + safety factor, sliding-vs-bonded contacts, slice-plane
-        analysis, caliper MDF thickness) + real **FEA stress-plot images**. Upgrade
-        `cad-bridge.md` and add the FEA screenshots.
-      - **OSU / Prof. Emily Dringenberg** engineering-education internship (BERG
-        Lab, summer 2023) → **Experience timeline** entry (research), not a project.
-      - **KidsMates** (~16 Chronicle posts + Miami Herald / Forbes features / Taco
-        Bell) → consider a separate **"Writing"** section rather than the project
-        catalogue.
+- [ ] **24. Fold in the Wix portfolio content** — *re-raised by Ava 2026-08-06
+      pt.8: she can still see things on the Wix site that aren't on this one.*
+      Sources: `avarmartoma.wixstudio.com/portfolio` and the sub-page
+      **`avarmartoma.wixstudio.com/portfolio/innovator`**. Status checked
+      2026-08-06 pt.8 — two of the four are still outstanding:
+
+      - [ ] **Stranded — A Board Game** → **still missing, add as a NEW project.**
+        TSA competition: 1st at FL states, 5th nationally. Photos available on the
+        Wix post: the board, the risky/chance card decks, the volcano dice
+        centerpiece. ⚠️ Skip the team-group photos (minors' faces).
+      - [ ] **CAD Bridge FEA detail** → **still outstanding.** `cad-bridge.md`
+        describes FEA in general terms but not the Wix post's **5-version**
+        breakdown: per-version mass + safety factor, sliding-vs-bonded contacts,
+        slice-plane analysis, caliper-measured MDF thickness. The real **FEA
+        stress-plot images** are also still missing (the folder has only sketch /
+        fusion / iterations / built).
+      - [x] **OSU / Dr. Emily Dringenberg** (BERG Lab, Jun–Jul 2023) → ✅ **DONE**,
+        it is in the Experience timeline as "OSU Belief in Engineering Groups Lab
+        — Research Intern".
+      - [ ] **KidsMates writing** (~16 Chronicle posts + Miami Herald / Forbes
+        features / Taco Bell coverage) → **Ava's preference (2026-08-06 pt.8):
+        either leave it out, or distil it down to a few lines on the existing
+        KidsMates Experience card** — NOT a separate "Writing" section and not in
+        the project catalogue. Pick the two or three strongest credits.
+      - [ ] **Dates and copy.** Ava notes the Wix posts carry **better dates and
+        wording** than some entries here. Several project dates in this repo are
+        still estimates (see item 3). Use the Wix posts to correct them.
+
+- [ ] **24a. Accuracy pass over every project and community.** *(Ava, 2026-08-06
+      pt.8.)* A lot of content landed fast across several parallel sessions —
+      13+ project pages and 10 Communities modals, much of it written from photos.
+      Go through **all of them** and confirm each is accurate and reads the way
+      she wants:
+      - Titles, dates, collaborator credits and any claimed result/award.
+      - Photo captions and alt text actually match the image (two mislabelled CAD
+        files were caught this way once already, and one photo's orientation was
+        wrong).
+      - Programme facts in the Communities blurbs — verify against the programme's
+        own site rather than inferring from the photos, as was done for the
+        Coolidge Senators blurb.
+      - Anything written by an agent from photos alone, which is most of the
+        recent project copy, should be read once by Ava.
+      - Flag anything that should be cut rather than corrected.
 
 ## 🔵 Later / infrastructure
 
