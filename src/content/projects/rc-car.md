@@ -79,27 +79,27 @@ Use the arrows to step through:
 <div class="carousel" data-carousel>
   <span class="carousel__count"></span>
   <div class="carousel__track">
-    <img src="/images/rc-car/build-02.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-03.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-04.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-05.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-06.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-07.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-08.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-09.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-10.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-11.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-12.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-13.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-14.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-15.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-16.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-17.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-18.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-19.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-20.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-21.jpg" alt="RC car build photo" loading="lazy" />
-    <img src="/images/rc-car/build-22.jpg" alt="RC car build photo" loading="lazy" />
+    <img src="/images/rc-car/build-02.jpg" alt="Two of the 3D-printed parts in hand — a drilled motor/servo mounting bracket and a small printed clip." loading="lazy" />
+    <img src="/images/rc-car/build-03.jpg" alt="Fusion 360 model of the front corner: the red steering upright and arm, the servo on its mount, and the chassis tub holding the battery." loading="lazy" />
+    <img src="/images/rc-car/build-04.jpg" alt="Bench work — checking the small brushless motor and its pinion gear beside my hand-sketched L293D motor-driver pinout." loading="lazy" />
+    <img src="/images/rc-car/build-05.jpg" alt="The treaded rubber RC tires on black rims with red bead rings." loading="lazy" />
+    <img src="/images/rc-car/build-06.jpg" alt="The wiring worked out on paper — a hand-drawn breadboard layout beside the real breadboarded circuit with the motor, servo, and microcontroller." loading="lazy" />
+    <img src="/images/rc-car/build-07.jpg" alt="Fusion 360 views of the steering linkage — the upright and servo-horn arm in perspective and top-down." loading="lazy" />
+    <img src="/images/rc-car/build-08.jpg" alt="3D-printing parts on the MakerBot — the print running on the bed and a close-up of the extruder head." loading="lazy" />
+    <img src="/images/rc-car/build-09.jpg" alt="Two soldered perfboard versions of the control board — a green build and a red build — each with the microcontroller and an RF receiver coil." loading="lazy" />
+    <img src="/images/rc-car/build-10.jpg" alt="The full KiCad schematic — ATmega328P, L7805 regulator, RF receiver, ESC and servo headers, and the crystal." loading="lazy" />
+    <img src="/images/rc-car/build-11.jpg" alt="Placing footprints in the KiCad PCB editor — the L293D driver (U1) and the pin-header connectors." loading="lazy" />
+    <img src="/images/rc-car/build-12.jpg" alt="The resin-printed chassis plate (left) and an orange 3D-printed bracket (right)." loading="lazy" />
+    <img src="/images/rc-car/build-13.jpg" alt="Routing the board in KiCad — copper traces laid out on the 35 × 43 mm PCB." loading="lazy" />
+    <img src="/images/rc-car/build-14.jpg" alt="Parts curing on the Phrozen Sonic Mini 8K resin printer." loading="lazy" />
+    <img src="/images/rc-car/build-15.jpg" alt="Near-final assembly — chassis, wheels, motor, ESC, and wiring in place (left); the finished etched PCB in hand (right)." loading="lazy" />
+    <img src="/images/rc-car/build-16.jpg" alt="The KiCad schematic sheet open in the editor." loading="lazy" />
+    <img src="/images/rc-car/build-17.jpg" alt="The 7.2 V NiMH battery pack and the brushless ESC that drive the car." loading="lazy" />
+    <img src="/images/rc-car/build-18.jpg" alt="A slice of the control firmware — the C code that decodes the RF command and drives the PWM." loading="lazy" />
+    <img src="/images/rc-car/build-19.jpg" alt="Printing a part on the MakerBot (left); the printed chassis plate with its two suspension arms (right)." loading="lazy" />
+    <img src="/images/rc-car/build-20.jpg" alt="The drilled and etched PCB in hand (left) and the two soldered controller boards wired to a joystick (right)." loading="lazy" />
+    <img src="/images/rc-car/build-21.jpg" alt="Printing our own PCB on the Voltera — the chassis and mounts, the Voltera measuring board height, conductive ink being printed, and the finished Voltera-printed board." loading="lazy" />
+    <img src="/images/rc-car/build-22.jpg" alt="The assembled gear differential — bevel gears and shafts that split drive to the rear wheels." loading="lazy" />
   </div>
   <button class="carousel__btn carousel__btn--prev" aria-label="Previous photo">←</button>
   <button class="carousel__btn carousel__btn--next" aria-label="Next photo">→</button>

@@ -50,13 +50,16 @@ added **vellum paper** behind the fretwork to diffuse the light.
 
 ![Laser-cut fretwork pieces — the mandala face and layered geometric borders.](/images/luminary/laser-pieces.jpg)
 
-The result is a lantern that throws its mehndi pattern as light and shadow:
+Cut, stained, and assembled, the panels wrap into a lantern whose mehndi
+pattern is designed to read as light and shadow through the fretwork:
 
-![The finished luminary — assembled, stained, and lit, casting the henna fretwork as light.](/images/luminary/final.jpg)
+![The panels straight out of the laser cutter — the full wrap of henna-inspired fretwork.](/images/luminary/process-1-cut.jpg)
 
-![Another angle of the finished lantern.](/images/luminary/final-2.jpg)
+![Staining the wood.](/images/luminary/process-2-stain.jpg)
 
-![Detail of the mandala top and side panels.](/images/luminary/final-3.jpg)
+![Dry assembly — checking the fit, held together with painter's tape.](/images/luminary/process-3-dry-assembly.jpg)
+
+![Stained and glued up — banded together while the glue dries.](/images/luminary/process-4-drying.jpg)
 
 ---
 
