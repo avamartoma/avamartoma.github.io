@@ -90,20 +90,26 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >   cropped out of the check-acceptance thumbnail even though he's in the full
 >   photo and in its alt text). Fine as-is; a lightbox is the fix if it bugs her.
 >
-> **Git state (⚠️ nothing pushed):** work landed across **several local commits** —
-> run `git log origin/main..HEAD` to see them. **Kiro commits but never pushes;
-> run `git push` yourself to deploy.** Per Ava's request the **editor page was kept
-> OUT of the commits** (only the caption / photo / project / gallery work is
-> committed).
+> **Git state (2026-08-06, pt.5): ✅ PUSHED and in sync.** `main` and
+> `origin/main` are both at **`e12aa7d`** ("feat(communities): add T-Mobile
+> Changemaker modal") — `git rev-list --left-right --count origin/main...HEAD`
+> reports `0 0`. The earlier 4 local commits (merge, gallery, captions, Wooden
+> Car / CAD Bridge) went up with it, so the GitHub Actions deploy covers all of
+> it. Normally **Kiro commits but never pushes** — this push was explicitly
+> requested. Per Ava the **Sveltia editor was kept OUT of the commit** (only the
+> photo / caption / project / gallery / Changemaker work is committed).
 >
-> **⚠️ Uncommitted in the working tree (left for Ava):**
-> - **Editor page** — `public/admin/` + `admin-setup.md` + the robots `/admin`
->   line (untracked/modified; commit once the auth below is set up).
-> - **`src/pages/index.astro` + `src/components/Experience.astro`** — broader
->   uncommitted homepage/timeline restructuring began outside the Changemaker
->   task. The Changemaker work **does deliberately extend `index.astro`**; do not
->   discard that file wholesale. `Experience.astro` remains unrelated work that
->   should be preserved and reviewed separately.
+> **⚠️ Still uncommitted in the working tree (left for Ava):**
+> - **Sveltia editor** — `public/admin/` + `admin-setup.md` (untracked) and the
+>   `robots.txt` `Disallow: /admin/` line (modified). Commit once the OAuth setup
+>   below is done. Checked and safe to commit whenever: no secrets in those
+>   files, only the public repo name and Worker URL.
+> - **`src/components/Experience.astro`** — the click-into timeline work from
+>   earlier in the session. Unrelated to Changemaker; preserve and review
+>   separately. (`src/pages/index.astro` **is** now committed.)
+> - **`scripts/process-changemaker-photos.mjs`** — untracked one-off that
+>   documents the resize recipe (EXIF-aware, long edge ≤1500 px, q82). Keep it or
+>   delete it; nothing depends on it.
 >
 > **⚠️ Follow-ups that need Ava (not code):**
 > 1. **Editor auth (~15 min):** the /admin editor needs a one-time GitHub OAuth
@@ -163,12 +169,11 @@ Communities (color-lit tags) → footer (contact form)**.
 - ⏳ **Email *sending*** (reply *as* `hello@`) not set up (see §6 / `TODO.md` 10a).
 - ⏳ Backlog in `TODO.md` (iFAQ, "Now" page, Living page, etc.).
 
-> **⚠️ Git-state note (2026-08-06 pt.2):** during this session a merge with
-> `origin/main` pulled in newer work (galleries, Wooden Car, CAD Bridge, more
-> captions), and the earlier **Sveltia CMS commit was un-committed** — `admin-setup.md`
-> and `public/admin/` are **untracked** again and `public/robots.txt` shows
-> modified. The homepage + timeline edits above are in the working tree but **not
-> yet committed**. Run `git status` and commit deliberately before pushing.
+> **⚠️ Git-state note:** see the pt.5 git-state block above — `main` is pushed and
+> in sync at `e12aa7d`. What remains uncommitted is the Sveltia editor
+> (`public/admin/`, `admin-setup.md`, the `robots.txt` `/admin` line),
+> `Experience.astro`, and the one-off photo-processing script. Run `git status`
+> and commit those deliberately.
 
 ---
 
@@ -210,6 +215,11 @@ public/
   robots.txt                  allow-all (Disallow /admin/) + Sitemap link
   admin/                      Sveltia CMS self-serve editor (index.html + config.yml)
   images/<project-slug>/      per-project photos (RC/CAD/Luminary/etc. populated)
+  images/communities/<slug>/  per-community photos; one .gitkeep'ed folder per
+                              program. t-mobile-changemaker/ holds the 12 modal
+                              photos (filenames run 01..13 minus 06 — the
+                              dropped Space Needle shot; don't renumber)
+  images/experience/<slug>/   per-role photos for the timeline detail modals
   images/gallery/             cover photos for the /gallery wall (+ your future adds)
 .github/workflows/deploy.yml  GitHub Pages deploy (runs on push to main)
 ```
