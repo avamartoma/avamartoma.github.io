@@ -1,0 +1,4 @@
+# Penn M&T — the Jerome Fisher Program in Management & Technology
+# (Penn Engineering + Wharton dual degree).
+# Drop processed photos here, then list them in the `media` array for this
+# program in src/pages/index.astro to turn the chip into a modal.

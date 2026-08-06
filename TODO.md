@@ -13,8 +13,9 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       Amazon Path, LinkedIn (video + shots), Henna Luminary, CAD & Woodworking
       Studies, and RC car (22, in a carousel), plus **Wooden Car** and **CAD
       Bridge** (from Ava's ME-class docs, 2026-08-06). **Remaining:**
-      `penn-electric-racing`, `marquetry-*`, `architecture` still use generative
-      artwork. Drop images in `public/images/projects/<slug>/` and reference inline
+      **`architecture` is now a full case study** ("The Grove", 14 photos +
+      carousel + build clip, 2026-08-06). Still on generative artwork only:
+      `penn-electric-racing` and `marquetry-*`. Drop images in `public/images/projects/<slug>/` and reference inline
       in the body (Markdown `![alt](/images/projects/<slug>/x.jpg)`), or use a
       `<div class="carousel"
       data-carousel>…</div>` block for a slideshow (see `rc-car.md`).
@@ -52,9 +53,31 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [~] **3c. Communities + Experience click-through content (2026-08-06).**
       Click-into infrastructure now exists for both sections; content is being
       added program by program:
+      - **✅ FOUR modals live + validated (2026-08-06 pt.6):** **T-Mobile
+        Changemaker Challenge** (`◈ 12`), **Taco Bell Ambition Accelerator**
+        (`◈ 12` — 10 photos + **2 video clips**), **MITES** (`◈ 12`), and
+        **Calvin Coolidge Senator** (`◈ 9`). Every item has specific alt text and
+        a caption. Playwright **186/186** at 1440×900 + 390×844.
+      - **Pattern to copy for the next program:** the `photos` field became one
+        ordered **`media`** array in `src/pages/index.astro` — an entry with a
+        `poster` renders as a `<video>`, everything else as an `<img>`, so clips
+        and stills interleave into a narrative. Process raws first with
+        `node scripts/process-community-media.mjs <slug> <prefix>`, then list
+        them. Any chip with `media` automatically becomes a modal button.
+      - **Remaining chips with no media yet (8):** Amazon Future Engineer,
+        LinkedIn Possibilities in Tech, Coca-Cola Scholars, Chick-fil-A Community
+        Scholars, **Penn M&T**, **Phi Gamma Nu**, NCWIT Aspirations in
+        Computing, Davidson Young Scholars. All have scaffolded folders under
+        `public/images/communities/<slug>/`.
+      - **Photos deliberately NOT published (Ava's call to reverse):** 9 MITES,
+        1 Coolidge and 1 architecture processed shot were dropped rather than
+        shipped — mostly informal night shots of other participants. The raws
+        are permanently in commit `0f9c4c4`, so any can be re-processed on ask.
+      - **Experience modals** already open (native `<dialog>`) and render bullets;
+        add **photos** per role via the optional `images:[{src,alt}]` field in
+        `Experience.astro` (drop files in `public/images/experience/<slug>/`).
       - **T-Mobile Changemaker Challenge — ✅ DONE, built + validated
-        (2026-08-06).** The homepage chip shows a `◈ 12` badge and opens a native
-        `<dialog>` with a KIDSMATES/$15,000 grant blurb plus 12 captioned photos
+        (2026-08-06).** The homepage chip shows a `◈ 12` badge and opens a native        `<dialog>` with a KIDSMATES/$15,000 grant blurb plus 12 captioned photos
         from `public/images/communities/t-mobile-changemaker/`. Photos were
         resized to ≤1500 px; photo 02's orientation was corrected. Ava asked to
         drop the "At the Space Needle" shot, so `changemaker-06.jpg` was pulled
@@ -68,14 +91,6 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       - **Photo folders scaffolded (2026-08-06):** `public/images/communities/`
         now has a slugified, `.gitkeep`-ed folder per community, so adding a
         program is just "drop photos in the folder + list them in `index.astro`".
-      - **Next Communities program:** pick one with photos on hand and follow the
-        typed-object + `photos` pattern in `src/pages/index.astro`; photo-bearing
-        entries automatically become clickable modal buttons.
-      - **Experience modals** already open (native `<dialog>`) and render bullets;
-        add **photos** per role via the optional `images:[{src,alt}]` field in
-        `Experience.astro` (drop files in `public/images/experience/<slug>/`).
-      - Other **Communities** chips still display as non-modal tags until they
-        have photos or a blurb.
 
 - [ ] **3d. Resume/LinkedIn reconciliation (flagged 2026-08-06).** The LinkedIn
       export on hand is only a *Basic* profile (headline only), so a full diff
@@ -181,17 +196,87 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 - [ ] **22. Privacy-friendly analytics.** Cloudflare Web Analytics (free, one
       snippet, no cookies) to see which pages people visit.
 
-- [~] **23. ⭐ Self-serve content editor — BUILT (2026-08-05), needs 1 one-time
-      auth step.** Sveltia CMS is wired: `public/admin/index.html` (loads Sveltia
-      from CDN) + `public/admin/config.yml` (a `projects` collection matching the
-      `content.config.ts` schema — title, blurb, description, date, tags, repo,
-      demo, cover, accent/accentAlt, featured, draft + Markdown body; per-project
-      image uploads → `public/images/projects/<slug>/`). Editor lives at
-      **/admin/**. **Remaining (Ava, ~15 min, see `admin-setup.md`):** deploy the
-      `sveltia-cms-auth` Cloudflare Worker + register a GitHub OAuth app, then log
-      in. A no-worker PAT fallback is documented too.
-      Alternative considered: **Pages CMS** (hosted, but a 3rd-party GitHub App
-      gets repo write access).
+- [ ] **23. ⭐ In-context editor — "edit the site from the site" (planned
+      2026-08-06; replaces the deleted Sveltia dashboard).**
+      **Decision:** the Sveltia CMS `/admin/` build was **removed** — Ava doesn't
+      want a separate dashboard with forms. She wants a small, unobvious trigger
+      that logs her in with GitHub and flips the *live site* into an editable
+      state: same design, but a `+` on the work list and an Edit affordance on
+      each project, editing inline in the site's own UI, inline image uploads,
+      and **accent colors auto-assigned** rather than chosen. Ruled out
+      **TinaCMS** (the only real off-the-shelf option for in-context editing): it
+      needs an **SSR adapter** for its per-keystroke island re-render endpoint —
+      so we'd have to leave GitHub Pages — plus a generated GraphQL client, an
+      island registry, rewiring content collections, and either TinaCloud or a
+      self-hosted backend **with a database adapter**. Way past "static site, no
+      backend, minimal deps," and its UX is still an iframe-in-a-dashboard.
+      **Planned architecture (4 parts):**
+      1. **Trigger + session** — `?edit=1` or a key sequence sets a session flag
+         and `import()`s the editor chunk, so normal visitors download **zero**
+         editor bytes. Obscurity is UX, not security — the real gate is (2).
+      2. **Auth** — GitHub OAuth through a Cloudflare Worker (same pattern as the
+         Spotify worker, which already exists). Worker holds the client secret,
+         verifies the authenticated login is Ava's, returns a short-lived token
+         held in `sessionStorage`. Prefer a **GitHub App** (user tokens expire in
+         8h) over an OAuth App. Quick-and-dirty alternative: paste a fine-grained
+         PAT — revocable and repo-scoped, but exposed to any XSS.
+      3. **Edit surfaces** — `+ New project` on the work list; per-project Edit;
+         editable regions on the detail page. **Scope v1 to the `projects`
+         collection only** — Communities/Experience are arrays inside `.astro`
+         files, so editing them means rewriting source and is riskier.
+      4. **Save** — one commit via the GitHub **Trees API** (Markdown + any new
+         images together) → Actions rebuild → live. Toast should say "live in
+         ~90s" and link the Actions run; optimistically update the DOM.
+      **The hard part / main risk:** true inline WYSIWYG. Editing rendered HTML
+      and converting back to Markdown mangles exactly the content we have
+      (rc-car's hand-written carousel `<div>`, captions, code blocks). Mitigation:
+      make only block-level *text* nodes contenteditable, keep a DOM→source range
+      map, and **patch only the touched ranges** in the original Markdown so
+      untouched blocks survive byte-for-byte. Structural blocks stay opaque
+      (click → small source panel).
+      **Nice win:** image drop resizes client-side on a canvas to ≤1500px / q82 —
+      automating the convention currently done by hand (see HANDOVER §6).
+      **Accent auto-assign:** derive `accent`/`accentAlt` deterministically from a
+      slug hash into the 5 Holi accents; make both **optional** in
+      `content.config.ts` with a computed fallback so new posts don't set them.
+      **Suggested staging:** (0) accent auto-derivation + optional schema fields —
+      independently useful, zero risk; (1) trigger + auth + edit one existing
+      project body via source panel + save → proves the pipeline; (2) inline text
+      editing with range patching; (3) `+ New project` + inline image drop;
+      (4) optional: Communities/Experience.
+      **Explicitly not building:** instant publish (a rebuild is ~1–2 min; going
+      instant would mean client-side content rendering and losing static+SEO),
+      multi-user, editorial workflow (the `draft: true` flag already hides posts),
+      a media library. Authoring is desktop-first — mobile `contenteditable` is
+      rough.
+      **Open decision before starting:** Worker OAuth vs. paste-a-PAT for v1.
+
+- [ ] **25. ⚠️ Stop committing raw camera originals + decide repo visibility
+      (audited 2026-08-06; full detail in HANDOVER §6).**
+      The repo is public, so **every committed raw is world-readable forever** —
+      deleting it in a later commit does NOT remove it from history. Audit result:
+      the **published** images are clean (no EXIF, ≤1500 px — Sharp strips it),
+      but ~15 **raws in history** carry GPS. All coordinates resolve to program
+      venues the content already names (T-Mobile HQ Bellevue, Taco Bell HQ Irvine,
+      Coolidge site Plymouth Notch VT, MIT campus) — **no home address** — so
+      history rewriting was judged **not worth it**. `.HEIC`/`.mov` remain
+      unverified.
+      - [ ] **25a. Add gitignore rules so raws stop accumulating.** Ignore
+            camera-pattern files under `public/images/**` (`IMG_*`, `DSC_*`,
+            `*_Original*`, `*.HEIC`, `*.heic`, `*.mov`, `100_*`) or better, keep
+            originals in a gitignored `raw/` folder outside `public/`. Commit only
+            the processed, EXIF-stripped derivatives. ⚠️ Note a parallel session
+            has been committing raws for MITES / architecture / Coolidge / Taco
+            Bell — this keeps growing until the habit changes.
+      - [ ] **25b. Decide public vs private.** Private needs **GitHub Pro** for
+            Pages (~$4/mo; **free via Student Developer Pack**, but the site
+            **goes dark if student status lapses**) — or **$0** by moving to
+            Cloudflare Pages / Netlify / Vercel (all deploy from private repos on
+            free tiers; DNS is already at Cloudflare and `netlify.toml` exists;
+            ~30–60 min). Private does **not** hide the site itself and does
+            **not** retract anything already public.
+      - [ ] **25c. Optional: verify the HEIC/MOV files** for GPS with a tool that
+            can decode them (`exiftool`) — the audit couldn't read those.
 
 - [ ] **24. Fold in the Wix portfolio content** (scraped 2026-08-06 from
       `avarmartoma.wixstudio.com/portfolio`).

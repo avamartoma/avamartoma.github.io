@@ -35,6 +35,102 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 
 ## 2. Current status (2026-08-06)
 
+> **Session 2026-08-06 (pt.6) — `images/` restructured + three more media sets
+> shipped.** Two commits, the first already pushed:
+>
+> **1. `55c8623` (PUSHED) — `refactor(images): group project photos under
+> images/projects/`.** `public/images/` had a dozen bare project-slug folders
+> sitting next to `communities/`, so it wasn't obvious what was what. All 12
+> moved to **`images/projects/<slug>/`**, and `images/` now contains exactly
+> four things: **`projects/`, `communities/`, `experience/`, `gallery/`**. 85
+> path references rewritten across the project Markdown, the per-folder
+> `.gitkeep` hints, the Sveltia upload paths, and the docs. `images/experience/`
+> (documented but missing) was created.
+>
+> **2. `7f9d243` + a follow-up (NOT pushed) — Taco Bell, MITES, Coolidge, and
+> the Architecture project.** Ava committed 331 MB of raw camera files across
+> two commits (`2384669`, `0f9c4c4`); all of it is now processed into **~18 MB**
+> of web assets and the raws are deleted from `public/`.
+> - **Taco Bell Ambition Accelerator** — 10 photos + **2 video clips**. KidsMates
+>   was a **Top 50 semi-finalist** in the Taco Bell Foundation × Ashoka Ambition
+>   Accelerator; the 2024 summit was at Taco Bell HQ (1 Glen Bell Way, Irvine).
+> - **MITES** — 12 photos. MIT Introduction to Technology, Engineering, and
+>   Science; six-week residential program.
+> - **Calvin Coolidge Senator** — 9 photos. The **Coolidge Senators Program**
+>   recognises 100 of the top Coolidge Scholarship applicants; the 2024 Senators
+>   Summit was at **Plymouth Notch, Vermont** (verified against
+>   coolidgescholars.org, not guessed).
+> - **`architecture.md` rewritten as a full case study** → **"The Grove — A
+>   Charles River Pavilion"**, designed with **Aster Dean at MITES**. The
+>   presentation boards were legible in the photos, so the concept, the
+>   two-storey program, the materials list, the site analysis (sun/wind/noise,
+>   Charles Eliot's 1894 redesign), and the drawing set are all taken from Ava's
+>   own board text rather than invented. 14 inline photos + a 7-slide carousel +
+>   a build clip.
+>
+> **Modal work is now a shared pattern.** `photos` was generalised into one
+> ordered **`media`** array so clips and stills interleave into a narrative; an
+> entry with a `poster` renders as `<video>`, everything else as `<img>`. Adding
+> a program is: drop processed files in `public/images/communities/<slug>/`, add
+> a `media` array. Also added **Penn M&T** and **Phi Gamma Nu** chips (no photos
+> yet, so both stay inert `<span>`s).
+>
+> **Two real modal bugs found and fixed** (both affected T-Mobile too):
+> - **Clicking a chip jumped the page to the top.** A modal `<dialog>` gets
+>   `inset: 0` from the UA, and top-layer elements have `position: relative`
+>   **coerced to `absolute`** — so the dialog was anchored to the *document* and
+>   the browser scrolled the page to reveal it. Now explicitly `position: fixed`.
+>   ⚠️ Don't "tidy" that to `relative`; the comment in `index.astro` says why.
+> - **The × scrolled out of reach** in a 12-item modal. It was `position:absolute`
+>   inside the scrolling inner div; it's now a **direct child of the `<dialog>`**.
+> - Video playback also now **stops on close** (closing a `<dialog>` hides it but
+>   does not pause media).
+>
+> **✅ VALIDATED:** `npm run build` passes (**17 pages**, no Astro/TS errors);
+> all **139** image/video references in `dist/` resolve, with **no orphans** and
+> **no raw originals** shipping. A Playwright pass at **1440×900 and 390×844**
+> went **186/186**: all four modals open without moving the page, every photo
+> decodes with real alt text and a caption, both Taco Bell clips play, ×/backdrop/
+> Escape all close, and the architecture page's 14 photos + 7 carousel slides +
+> build clip all decode. No console errors.
+>
+> **Tooling notes for the next session** (all needed, none are site deps):
+> - `ffmpeg` is **not** on this box → `npm i --no-save ffmpeg-static`.
+> - **HEIC needs `pip install --user pillow-heif`.** Sharp has no HEVC decoder,
+>   and **ffmpeg gets HEIC wrong** — an iPhone HEIC is a tile grid with auxiliary
+>   streams, so ffmpeg silently returns a washed-out greyscale aux image or a
+>   single 640 px tile. pillow-heif assembles the real photo and applies EXIF
+>   orientation. (This is why one architecture photo and three others looked
+>   broken on the first pass.)
+> - Playwright: `npm i --no-save playwright`, and pass
+>   `executablePath: ~/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome`.
+>   **Device descriptors are broken** with that older build (a 390 px viewport
+>   reports `innerWidth` 481 and `touchscreen.tap` fires nothing) → use plain
+>   viewport sizes with mouse input. Also `html{scroll-behavior:smooth}` means
+>   **scroll assertions must wait for the scroll to settle**, and
+>   `locator.click()` cannot click a viewport-anchored element (its
+>   scroll-into-view loops forever) → click measured centre pixels instead.
+> - **`.gitignore` now blocks raw camera files** under `public/images/` (`*.HEIC`,
+>   `*.mov`, `IMG_*`, `DSC_*`, `100_*`, …), acting on the audit item below.
+>   Processed names (`<prefix>-01.jpg`) are unaffected.
+>
+> **⚠️ Left for Ava:**
+> - **Unused processed photos were deleted rather than shipped** — 9 MITES, 1
+>   Coolidge, 1 architecture. They were mostly informal/night shots of other
+>   people's teenagers; publishing them uncaptioned wasn't my call. **Nothing is
+>   lost**: the raws are permanently in commit `0f9c4c4`, so any of them can be
+>   re-processed on request.
+> - **Two new chips, both inert until they have photos:** **Penn M&T** (the
+>   Jerome Fisher Program in Management & Technology — Penn Engineering +
+>   Wharton dual degree, which is also what the Penn education card's "School of
+>   Engineering & Wharton" refers to) and **Phi Gamma Nu**. Folders scaffolded at
+>   `public/images/communities/penn-m-t/` and `.../phi-gamma-nu/`, so each
+>   becomes a modal as soon as photos land in it.
+> - The MITES modal and the Architecture project **overlap by design** — the
+>   capstone came out of MITES. The 10 photos Ava had copied into *both* folders
+>   were byte-identical duplicates; they now live only under
+>   `images/projects/architecture/`.
+
 > **Session 2026-08-06 (big one):** captioned the scraped photos, fixed mislabeled
 > CAD images + fetched the real LED-lamp photo, **expanded the CAD + Luminary
 > galleries** from portfolio source photos, **fleshed out Wooden Car + CAD Bridge**
@@ -96,14 +192,10 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > reports `0 0`. The earlier 4 local commits (merge, gallery, captions, Wooden
 > Car / CAD Bridge) went up with it, so the GitHub Actions deploy covers all of
 > it. Normally **Kiro commits but never pushes** — this push was explicitly
-> requested. Per Ava the **Sveltia editor was kept OUT of the commit** (only the
-> photo / caption / project / gallery / Changemaker work is committed).
+> requested. Per Ava the Sveltia editor was kept OUT of the commit — and has
+> since been **deleted entirely** (see the "editor direction" note below).
 >
 > **⚠️ Still uncommitted in the working tree (left for Ava):**
-> - **Sveltia editor** — `public/admin/` + `admin-setup.md` (untracked) and the
->   `robots.txt` `Disallow: /admin/` line (modified). Commit once the OAuth setup
->   below is done. Checked and safe to commit whenever: no secrets in those
->   files, only the public repo name and Worker URL.
 > - **`src/components/Experience.astro`** — the click-into timeline work from
 >   earlier in the session. Unrelated to Changemaker; preserve and review
 >   separately. (`src/pages/index.astro` **is** now committed.)
@@ -111,10 +203,28 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >   documents the resize recipe (EXIF-aware, long edge ≤1500 px, q82). Keep it or
 >   delete it; nothing depends on it.
 >
+> **🔄 Editor direction changed (2026-08-06):** the **Sveltia CMS editor was
+> removed** — `public/admin/`, `admin-setup.md`, and the `robots.txt`
+> `Disallow: /admin/` line are all gone, and `robots.txt` is back to its
+> committed state. Nothing about it was ever committed or deployed, so there's no
+> history to unwind. Reason: Ava wants **in-context editing on the site itself**
+> (a hidden login that flips the live site into an editable state, with a `+` on
+> the work list and an Edit affordance per project, inline image drop, and
+> auto-assigned accent colors) — not a separate `/admin` dashboard with forms,
+> which is the only shape Sveltia/Decap/Keystatic offer. The replacement plan
+> lives in **`TODO.md` #23**. A copy of the deleted files is parked at
+> `/tmp/sveltia-removed/` for the rest of this session only.
+>
 > **⚠️ Follow-ups that need Ava (not code):**
-> 1. **Editor auth (~15 min):** the /admin editor needs a one-time GitHub OAuth
->    app + `sveltia-cms-auth` Cloudflare Worker before login works — full
->    walkthrough in **`admin-setup.md`**.
+> 1. **Photo privacy + repo visibility (audited 2026-08-06 — decision needed):**
+>    the repo is public, so **committed raw camera files are permanently readable
+>    in git history** even after being deleted. The **published** images are clean
+>    (no EXIF, ≤1500 px), and the ~15 geotagged **raws** all point at program
+>    venues the content already names — no home address — so history rewriting
+>    wasn't recommended. Two open calls: **stop committing raws** (gitignore) and
+>    **public vs private** (private needs GitHub Pro for Pages, free-for-students
+>    but the site dies if that lapses; or $0 by moving to Cloudflare
+>    Pages/Netlify/Vercel). Full costing in §6, action items in `TODO.md` #25.
 > 2. **Gallery photos:** `/gallery` is live with the 4 Wix cover photos + labeled
 >    placeholders; drop real photos in `public/images/gallery/` and swap a
 >    `ph(...)` entry for a `photo(...)` in `src/pages/gallery.astro`.
@@ -145,8 +255,9 @@ Communities (color-lit tags) → footer (contact form)**.
   (lvilledesign.org).
 - ✅ Hero, banner, email, forms, resume cooldown, SEO, `og:image` — all as before.
 - ✅ **Photo captions** written for the scraped RC/CAD/Luminary shots (2026-08-06).
-- ✅ **Self-serve editor** (Sveltia CMS) built at `/admin/`; needs Ava's one-time
-  auth setup (`admin-setup.md`) before login works. **Kept uncommitted** per Ava.
+- ❌ **Self-serve editor — REMOVED (2026-08-06).** The Sveltia CMS `/admin/`
+  dashboard was deleted (never committed, never deployed). Ava wants in-context
+  editing on the site itself instead — see `TODO.md` #23.
 - ✅ **Gallery page** (`/gallery`, in nav) — rows of photos auto-scrolling in
   **alternating** directions; each photo links to a project / experience /
   personal page. Seeded with 4 Wix cover photos + labeled placeholders (hover to
@@ -169,11 +280,11 @@ Communities (color-lit tags) → footer (contact form)**.
 - ⏳ **Email *sending*** (reply *as* `hello@`) not set up (see §6 / `TODO.md` 10a).
 - ⏳ Backlog in `TODO.md` (iFAQ, "Now" page, Living page, etc.).
 
-> **⚠️ Git-state note:** see the pt.5 git-state block above — `main` is pushed and
-> in sync at `e12aa7d`. What remains uncommitted is the Sveltia editor
-> (`public/admin/`, `admin-setup.md`, the `robots.txt` `/admin` line),
-> `Experience.astro`, and the one-off photo-processing script. Run `git status`
-> and commit those deliberately.
+> **⚠️ Git-state note:** the Changemaker work is pushed. What remains
+> uncommitted is `Experience.astro` and the one-off photo-processing script (the
+> Sveltia editor was deleted, not stashed). Note a **parallel session** has since
+> pushed Taco Bell photo/video work on top — run `git log` and `git status`
+> before assuming this is current.
 
 ---
 
@@ -212,13 +323,15 @@ src/
     ava-headshot.jpeg         old headshot (unused; safe to delete)
 public/
   favicon.svg                 AA/M monogram
-  robots.txt                  allow-all (Disallow /admin/) + Sitemap link
-  admin/                      Sveltia CMS self-serve editor (index.html + config.yml)
-  images/projects/<slug>/     per-project photos (RC/CAD/Luminary/etc. populated)
-  images/communities/<slug>/  per-community photos; one .gitkeep'ed folder per
-                              program. t-mobile-changemaker/ holds the 12 modal
-                              photos (filenames run 01..13 minus 06 — the
-                              dropped Space Needle shot; don't renumber)
+  robots.txt                  allow-all + Sitemap link
+  images/projects/<slug>/     per-project photos (RC/CAD/Luminary/Architecture…)
+  images/communities/<slug>/  per-community photos; one folder per program.
+                              t-mobile-changemaker/ (12), taco-bell-ambition-
+                              accelerator/ (10 + 2 mp4 clips), mites/ (12),
+                              calvin-coolidge-senator/ (9) drive modals.
+                              Filenames are <prefix>-01.jpg / <prefix>-video-01
+                              .mp4 — gaps in the numbering are intentional
+                              (dropped shots); don't renumber.
   images/experience/<slug>/   per-role photos for the timeline detail modals
   images/gallery/             cover photos for the /gallery wall (+ your future adds)
 .github/workflows/deploy.yml  GitHub Pages deploy (runs on push to main)
@@ -302,6 +415,43 @@ Experience roles + Education are inlined arrays in `Experience.astro`.
   3 marquetry pieces).
 - **Privacy:** no home address / phone / birthday on the site. The LinkedIn data
   export (`*.zip`) is gitignored — never commit it.
+- **⚠️ Raw camera originals are PERMANENTLY PUBLIC once committed (audited
+  2026-08-06).** The repo is **public**, so every raw photo/video that gets
+  committed is world-readable **forever** — staging it for deletion later removes
+  it from the current tree but **not from history** (e.g. anyone can check out
+  `85512f6` and pull the full-res originals). What the audit found:
+  - **Published images are clean.** The processed files actually served
+    (`changemaker-*.jpg` etc.) have **no EXIF at all** and are capped at 1500 px —
+    Sharp strips metadata by default. No location/device/timestamp leaks from the
+    site itself.
+  - **The committed raws are not.** ~15 carry GPS. Coordinates were checked and
+    all resolve to **program venues the content already names** — `47.578,
+    -122.165` T-Mobile HQ (Bellevue WA), `33.678/33.657, -117.84/-117.75` Taco
+    Bell HQ (Irvine CA), `43.535, -72.721` Coolidge site (Plymouth Notch VT),
+    `42.359, -71.093` MIT campus. **None looks like a home address.** Residual
+    exposure is device model (iPhone 13), exact timestamps and full-res frames
+    (4032×3024). `.HEIC`/`.mov` files couldn't be decoded during the audit, so
+    those are **unverified**.
+  - **Verdict:** low enough risk that history rewriting was NOT recommended.
+    Rewriting (git filter-repo/BFG + force-push + asking GitHub Support to GC
+    unreachable objects) is destructive, rewrites published history, and still
+    can't recall forks/caches/scrapers. Don't do it without Ava's explicit ask.
+  - **The fix that costs nothing:** stop committing raws. Keep originals outside
+    the repo (or in a gitignored folder), process them, commit only the derived
+    EXIF-stripped files. See `TODO.md` #25.
+- **Repo visibility — public vs private (costed 2026-08-06).** Per GitHub's docs,
+  Pages serves from **public** repos on Free, and from **private** repos only on
+  **Pro or above**. So going private means either (a) **GitHub Pro** — ~$4/mo,
+  currently **free via the Student Developer Pack**, but ⚠️ if student status
+  lapses the private Pages site **stops serving** and the site goes dark; or
+  (b) **move hosting** to Cloudflare Pages / Netlify / Vercel, all of which deploy
+  from private repos on their free tiers — **$0 forever**, ~30–60 min of work,
+  and easy here because DNS is already at Cloudflare and a `netlify.toml` already
+  exists. Two things private does **NOT** buy: the **site stays publicly
+  visible** either way (a private Pages *site* needs Enterprise Cloud), and it
+  **retracts nothing already published** (forks/caches/scrapers). Side effect:
+  this repo would drop out of the "Lately" GitHub widget, which lists public
+  repos.
 - **Astro advisories** in `npm audit` only fix in Astro 7 (major). Fine on static;
   upgrade deliberately later.
 - **Agent image previews & the 2000px cap** ⚠️ — when an agent *views* images, each
@@ -410,6 +560,35 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (part 6)** — **`images/` restructured + Taco Bell / MITES /
+  Coolidge / Architecture shipped.** `public/images/` now contains exactly four
+  folders — **`projects/`, `communities/`, `experience/`, `gallery/`** — with the
+  12 bare project-slug folders moved under `projects/<slug>/` and 85 references
+  rewritten (`55c8623`, **pushed**). Then processed **331 MB of raw camera files**
+  (committed by Ava in `2384669` + `0f9c4c4`) down to **~18 MB** of web assets and
+  deleted the raws from `public/`: **Taco Bell Ambition Accelerator** (10 photos +
+  **2 mp4 clips**; KidsMates was a Top 50 semi-finalist of the Taco Bell
+  Foundation × Ashoka program), **MITES** (12), **Calvin Coolidge Senator** (9,
+  Coolidge Senators Program at Plymouth Notch, VT — verified against
+  coolidgescholars.org), and a full rewrite of `architecture.md` into **"The Grove
+  — A Charles River Pavilion"** (with Aster Dean at MITES; concept, materials and
+  site analysis transcribed from Ava's own presentation boards, 14 photos + a
+  7-slide carousel + a build clip). Generalised the modal's `photos` field into
+  one ordered **`media`** array so video and stills interleave. **Fixed two real
+  modal bugs** that also affected T-Mobile: clicking a chip **scrolled the page to
+  the top** (a top-layer `<dialog>` has `position:relative` coerced to `absolute`
+  and inherits `inset:0`, anchoring it to the document → now explicitly
+  `position:fixed`), and the **× scrolled out of reach** in a long modal (now a
+  direct child of the `<dialog>`); video also now pauses on close. Added a **Penn
+  M&T** chip and **`.gitignore` rules blocking raw camera files** under
+  `public/images/`. Also added **Penn M&T** and **Phi Gamma Nu** chips. Build ✓
+  (17 pages), 139/139 asset refs resolve with no orphans and no raws in `dist/`,
+  Playwright **186/186** then **42/42** (chip inventory) at 1440×900 + 390×844.
+  ⚠️ Needed tooling (none are site deps): `npm i --no-save ffmpeg-static
+  playwright` and **`pip install --user pillow-heif`** — Sharp can't decode HEIC
+  and **ffmpeg decodes it wrongly** (tile grid + aux streams → greyscale or a
+  single 640 px tile).
 
 - **2026-08-06 (part 5)** — **T-Mobile Changemaker photo modal — validated +
   shipped.** Finished the interrupted modal work: `npm run build` passes (17

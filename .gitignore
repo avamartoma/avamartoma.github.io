@@ -22,6 +22,27 @@ pnpm-debug.log*
 *.zip
 Basic_LinkedInDataExport*
 
+# Never commit RAW camera originals into public/. Two reasons: they are huge
+# (one batch was 319 MB) and, because this repo is public, anything committed
+# stays readable in git history forever even after deletion — including EXIF
+# GPS. Process them into web assets FIRST:
+#   node scripts/process-community-media.mjs <slug> <prefix> --from <raw dir>
+# Processed assets are named <prefix>-01.jpg / <prefix>-video-01.mp4, so they
+# are unaffected by these patterns. Keep raws outside the repo (or in /tmp).
+public/images/**/*.[Hh][Ee][Ii][Cc]
+public/images/**/*.[Hh][Ee][Ii][Ff]
+public/images/**/*.[Mm][Oo][Vv]
+public/images/**/*.[Tt][Ii][Ff]
+public/images/**/*.[Tt][Ii][Ff][Ff]
+public/images/**/IMG_*
+public/images/**/DSC_*
+public/images/**/DCIM*
+public/images/**/100_*
+
+# Local-only verification harnesses (Playwright; needs `npm i --no-save playwright`)
+verify-*.mjs
+diag.mjs
+
 # Personal research scratch (not part of the site)
 whiskers.md
 REV 12 Aero Notes.pdf
