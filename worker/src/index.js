@@ -160,8 +160,11 @@ export default {
       // Public, read-only data (what Ava is playing). '*' avoids CORS friction
       // between the prod site and local dev; lock to the site origin if desired.
       'Access-Control-Allow-Origin': '*',
-      // Cache briefly so we don't hammer Spotify (widget polls ~60s).
-      'Cache-Control': 'public, max-age=30',
+      // Keep this SHORT: it governs how stale the "right now" track can be. The
+      // expensive call (recently-played) is protected by its own edge cache
+      // inside the Worker, so this header no longer has to do that job — a long
+      // max-age here just meant a newly started song showed up late.
+      'Cache-Control': 'public, max-age=5',
     };
 
     if (request.method === 'OPTIONS') {

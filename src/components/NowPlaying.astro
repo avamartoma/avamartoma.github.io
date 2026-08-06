@@ -218,7 +218,21 @@ const render = Boolean(SPOTIFY_ENDPOINT) || showDemo;
       };
       refresh();
       // Light polling so "now playing" stays fresh without hammering the endpoint.
-      setInterval(refresh, 60_000);
+      // Poll while the tab is open, but ALSO refresh the moment the page
+      // becomes visible or regains focus — that is when someone is actually
+      // looking, and it makes a newly started track appear immediately instead
+      // of up to a poll-interval late. Throttled so tab-flicking can't spam it.
+      setInterval(refresh, 30_000);
+
+      let lastRefresh = Date.now();
+      const refreshIfStale = () => {
+        if (document.hidden) return;
+        if (Date.now() - lastRefresh < 5_000) return;
+        lastRefresh = Date.now();
+        refresh();
+      };
+      document.addEventListener('visibilitychange', refreshIfStale);
+      window.addEventListener('focus', refreshIfStale);
     }
   }
 </script>
