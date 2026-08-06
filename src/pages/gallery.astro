@@ -53,10 +53,17 @@ const HOME = base; // personal / about — until a dedicated /living page exists
 //   find public/images -name '*.jpg' | xargs md5sum | sort | uniq -w32 -D
 // ---------------------------------------------------------------------------
 
-// 5 rows. `dir` alternates; `dur` is the loop time (bigger = slower).
-const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
+// Seconds of travel per photo. The loop time is derived from this and the row's
+// length, NOT hardcoded — a fixed duration means a row silently speeds up every
+// time a photo is added to it, because the same distance is covered in the same
+// time over a longer track. Raise this to slow every row at once.
+const SECONDS_PER_ITEM = 13;
+
+// 5 rows. `dir` alternates. `speed` is a small per-row multiplier so the rows
+// drift out of sync with each other (1 = the baseline above; >1 = slower).
+const rows: { dir: 'left' | 'right'; speed: number; items: Item[] }[] = [
   {
-    dir: 'left', dur: '72s', items: [
+    dir: 'left', speed: 1, items: [
       photo('/images/gallery/cover-architecture.jpg', 'Ava presenting her architecture site-analysis project', P('architecture'), 'Architecture'),
       photo('/images/gallery/gal-01.jpg', 'Ava holding a squash trophy on a glass court', EXP, 'Squash trophy'),
       photo('/images/gallery/gal-02.jpg', 'Ava and a friend showing off watercolor paintings at an outdoor paint session', HOME, 'Watercolors'),
@@ -69,7 +76,7 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
     ],
   },
   {
-    dir: 'right', dur: '88s', items: [
+    dir: 'right', speed: 1.12, items: [
       photo('/images/gallery/cover-woodshop.jpg', 'Ava at the drill press in the wood shop', P('cad-projects'), 'Wood shop'),
       photo('/images/gallery/gal-41.jpg', 'Chick-fil-A Community Scholars celebrating a $25,000 award with the Chick-fil-A cow and confetti', COMM, 'Chick-fil-A Scholars'),
       photo('/images/gallery/gal-19.jpg', 'Ava bouldering on an indoor climbing wall', HOME, 'Bouldering'),
@@ -81,7 +88,7 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
     ],
   },
   {
-    dir: 'left', dur: '64s', items: [
+    dir: 'left', speed: 0.95, items: [
       photo('/images/gallery/cover-changemaker.jpg', 'Ava at the T-Mobile Changemaker Challenge', COMM, 'Changemaker'),
       photo('/images/gallery/gal-09.jpg', 'Studio squash portrait of Ava with her racket', EXP, 'Squash'),
       photo('/images/gallery/gal-04.jpg', 'Ava and a friend at a Joy Crookes concert', HOME, 'Concert'),
@@ -93,7 +100,7 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
     ],
   },
   {
-    dir: 'right', dur: '92s', items: [
+    dir: 'right', speed: 1.15, items: [
       photo('/images/gallery/cover-beach.jpg', 'Ava on the beach at sunset', HOME, 'Off the clock'),
       photo('/images/gallery/gal-23.jpg', 'Ava and squash teammates holding handmade senior-day posters', EXP, 'Senior day'),
       photo('/images/gallery/gal-42.jpg', 'Ava and fellow scholars at the Chick-fil-A Backstage Tour', COMM, 'CFA Backstage'),
@@ -105,7 +112,7 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
     ],
   },
   {
-    dir: 'left', dur: '78s', items: [
+    dir: 'left', speed: 1.05, items: [
       photo('/images/gallery/gal-07.jpg', 'Ava with a group of Penn friends', HOME, 'Penn friends'),
       photo('/images/gallery/gal-58.jpg', 'Ava\'s Penn squash team celebrating in a high-five line', EXP, 'Team spirit'),
       photo('/images/gallery/gal-48.jpg', 'Ava hiking a foggy trail in an Amazon Future Engineer hoodie', COMM, 'Amazon Future Engineer'),
@@ -138,7 +145,11 @@ const rows: { dir: 'left' | 'right'; dur: string; items: Item[] }[] = [
     <!-- Full-bleed marquee rows; each row scrolls on its own, alternating -->
     <div class="marquee-rows" data-reveal>
       {rows.map((row) => (
-        <div class="marquee" data-dir={row.dir} style={`--dur:${row.dur}`}>
+        <div
+          class="marquee"
+          data-dir={row.dir}
+          style={`--dur:${Math.round(row.items.length * SECONDS_PER_ITEM * row.speed)}s`}
+        >
           <ul class="marquee__track">
             {[...row.items, ...row.items].map((item, i) => (
               <li class="marquee__cell" aria-hidden={i >= row.items.length ? 'true' : undefined}>
