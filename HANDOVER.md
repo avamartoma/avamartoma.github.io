@@ -74,8 +74,8 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > | Set | Files | Where it goes | Notes |
 > |---|---|---|---|
 > | `gallery/gal-01..60` | 60 | `/gallery` wall | **6 links already known — see below.** Needs a label + link per photo |
-> | `projects/marquetry-flower-press/press-01..15` + 1 clip | 16 | `marquetry-flower-press.md` | **Partly catalogued, see below** |
-> | `projects/marquetry-clock/clock-01` | 1 | `marquetry-clock.md` | one photo only, quick win |
+> | ~~`projects/marquetry-flower-press/press-01..15` + 1 clip~~ | ✅ DONE | `marquetry-flower-press.md` | Full case study; press-15 (promposal sign, 3rd-party faces) deleted |
+> | ~~`projects/marquetry-clock/clock-01`~~ | ✅ DONE | `marquetry-clock.md` | Koi clock, single photo |
 > | `projects/cad-projects/cadnew-01..67` + 1 clip | 68 | `cad-projects.md` | biggest set; needs its own chat |
 > | `projects/luminary/lum-01..16` | 16 | `luminary.md` | Ava's own shots; likely replace the 8 scraped lvilledesign ones |
 > | `communities/chick-fil-a-community-scholars/cfa-01..28` | 28 | new modal | chip is currently inert |
@@ -159,6 +159,36 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >
 > ---
 
+> **Session 2026-08-06 (marquetry finish) — Koi clock + Flower press pages
+> completed.** Two project pages that were still on generative artwork now have
+> real photos and rewritten copy:
+> - **Koi-Fish Veneer Clock** (`marquetry-clock.md`) — the one processed photo
+>   (`clock-01.jpg`). Two calico koi (orange/cream/near-black veneer) circle
+>   nose-to-tail in a yin-yang ring on a pond-blue ground, with a layered wooden
+>   lotus as the center hub. Accent → warm orange/blue. Kept a one-line mention of
+>   the matching laser-cut koi box scene (from the old blurb; no photo of it).
+> - **Marquetry Flower Press** (`marquetry-flower-press.md`) — full case study in
+>   the shape of `marquetry-desk.md`: 8 inline photos + a 6-image carousel + the
+>   28 s build clip (using architecture.md's `<video>` pattern). Reframed it as a
+>   **working flower press** (plywood boards + threaded rods + wing nuts) whose
+>   lid is a laser-cut marquetry bouquet of white lilies and purple irises, made
+>   as a **promposal**. **Reworded the old "the CAD for this one is lost" line** —
+>   the charred veneer edges are laser work, so vector files existed; the page now
+>   says so instead of claiming loss.
+>   - ⚠️ **`press-15.jpg` deleted** (not shipped): a blurry, dark evening photo of
+>     two identifiable people holding the promposal sign ("...so *PRESSED* to
+>     prom"). Used the *story* (and the pun) in the copy but not the photo, and
+>     **did not name the recipient**. Raw is still in commit `0f9c4c4` if wanted.
+>   - Date corrected to **2025-05-15** (the promposal sign is timestamped
+>     2025/05/18), which also moves it out of the old 2024 estimate.
+> - **✅ VALIDATED:** `npm run build` passes (17 pages, no errors); all 17 asset
+>   refs across both pages resolve in `dist/` (clock-01 + press-01..14 + clip +
+>   poster), `press-15` referenced nowhere. **Not committed to push** (ground rule
+>   #5). No Playwright/visual pass this session — carousel + video render is the
+>   same proven markup as the desk/architecture pages.
+>
+> ---
+
 > **Session 2026-08-06 (code, post-pt.7) — scroll-trap bug fixed on the "Where
 > I've been" timeline.** Reported symptom: scrolling down the homepage with the
 > cursor over the Experience cards froze the page — you stayed stuck until you
@@ -170,8 +200,8 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 > detects when the timeline is at its left/right edge and stops calling
 > `preventDefault()` there, letting the wheel fall through to scroll the page. Net
 > behaviour: you scroll the cards to the end, then the page keeps scrolling — no
-> more trap. `npm run build` ✓ (17 pages, no errors). **Not committed** (ground
-> rule #5) and no Playwright/manual scroll pass was run — verify in `npm run dev`
+> more trap. `npm run build` ✓ (17 pages, no errors). **Committed** (own commit,
+> not pushed); no Playwright/manual scroll pass was run — verify in `npm run dev`
 > if desired. Only `Experience.astro` was touched; unrelated in-flight image work
 > in the working tree was left alone.
 >
@@ -702,6 +732,18 @@ Fastest context: read this → `TODO.md` → `src/pages/index.astro` → `Hero.a
 ---
 
 ## 10. Changelog (condensed, newest first)
+
+- **2026-08-06 (marquetry finish)** — **Koi clock + Flower press pages done.**
+  `marquetry-clock.md` rewritten around its single photo (two calico koi in a
+  yin-yang ring on a pond-blue ground, wooden-lotus hub). `marquetry-flower-press.md`
+  rewritten as a full case study (8 inline + 6-carousel photos + the 28 s build
+  clip): reframed as a **working flower press** (plywood + threaded rods + wing
+  nuts) with a laser-cut marquetry lily/iris lid, made as a **promposal**. The
+  old *"the CAD for this one is lost"* line was reworded — the charred veneer is
+  laser work, so vectors existed. **Deleted `press-15.jpg`** (blurry promposal
+  sign with two identifiable faces); used the story/pun in copy without the photo
+  or the recipient's name. Date corrected to 2025-05-15. Build ✓ (17 pages), all
+  17 asset refs resolve. Uncommitted push (ground rule #5).
 
 - **2026-08-06 (code)** — **Fixed the homepage scroll trap on the "Where I've
   been" timeline.** The `wheel` handler in `src/components/Experience.astro` was

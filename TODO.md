@@ -21,8 +21,11 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       Studies, and RC car (22, in a carousel), plus **Wooden Car** and **CAD
       Bridge** (from Ava's ME-class docs, 2026-08-06). **Remaining:**
       **`architecture` is now a full case study** ("The Grove", 14 photos +
-      carousel + build clip, 2026-08-06). Still on generative artwork only:
-      `penn-electric-racing` and `marquetry-*`. Drop images in `public/images/projects/<slug>/` and reference inline
+      carousel + build clip, 2026-08-06). **Marquetry Clock + Flower Press now
+      have photos too (2026-08-06):** the Koi clock uses its single `clock-01`
+      shot, and the Flower Press is a full case study (8 inline + 6 carousel +
+      build clip). Still on generative artwork only:
+      `penn-electric-racing`. Drop images in `public/images/projects/<slug>/` and reference inline
       in the body (Markdown `![alt](/images/projects/<slug>/x.jpg)`), or use a
       `<div class="carousel"
       data-carousel>…</div>` block for a slideshow (see `rc-car.md`).
@@ -65,7 +68,8 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
     on-site Texas install with Intellian. Placeholder gone.
   - **LinkedIn Hackathon** — add a demo/live link if there is one.
   - Confirm estimated dates: **CAD Bridge**, **CAD & Woodworking Studies**, and
-    the 3 marquetry pieces.
+    the marquetry pieces. *(Flower Press dated 2025-05-15 from the promposal sign
+    timestamp 2025/05/18; Koi Clock still an estimate at 2024-11-01.)*
 
 - [~] **3c. Communities + Experience click-through content (2026-08-06).**
       Click-into infrastructure now exists for both sections; content is being
