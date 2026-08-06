@@ -8,6 +8,10 @@ interface Exp {
   start: string;
   end: string;
   highlights: string[];
+  // Optional photos shown in the click-through detail modal.
+  // Drop files in public/images/experience/<slug>/ and reference them here, e.g.
+  //   images: [{ src: '/images/experience/kuiper/install.jpg', alt: 'On-site install' }]
+  images?: { src: string; alt: string }[];
 }
 
 const experiences: Exp[] = [
@@ -170,20 +174,41 @@ const experiences: Exp[] = [
   <div class="wrap">
     <div class="exp__scroll" data-reveal tabindex="0" aria-label="Experience timeline, scroll horizontally">
       <div class="exp__track">
-        {experiences.map((e) => (
-          <article class="exp__card">
+        {experiences.map((e, i) => (
+          <button class="exp__card" type="button" data-exp-open={i} aria-haspopup="dialog">
             <span class="exp__node" aria-hidden="true"></span>
             <p class="exp__date label">{e.start} — {e.end}</p>
             <h3 class="exp__org">{e.org}</h3>
             <p class="exp__role">{e.role}{e.location ? ` · ${e.location}` : ''}</p>
-            <ul class="exp__list">
-              {e.highlights.map((h) => <li>{h}</li>)}
-            </ul>
-          </article>
+            <span class="exp__more" aria-hidden="true">Details →</span>
+          </button>
         ))}
       </div>
     </div>
   </div>
+
+  {/* Click-through detail modals (one per role). Native <dialog> = free
+      Escape-to-close, backdrop, and focus handling. */}
+  {experiences.map((e, i) => (
+    <dialog class="exp__dialog" id={`exp-dialog-${i}`} aria-label={`${e.org} — details`}>
+      <div class="exp__dialog-inner">
+        <button class="exp__dialog-close" type="button" aria-label="Close" data-exp-close>×</button>
+        <p class="exp__date label">{e.start} — {e.end}</p>
+        <h3 class="exp__dialog-org">{e.org}</h3>
+        <p class="exp__dialog-role">{e.role}{e.location ? ` · ${e.location}` : ''}</p>
+        {e.images && e.images.length > 0 && (
+          <div class="exp__dialog-photos">
+            {e.images.map((img) => (
+              <img src={img.src} alt={img.alt} loading="lazy" />
+            ))}
+          </div>
+        )}
+        <ul class="exp__dialog-list">
+          {e.highlights.map((h) => <li>{h}</li>)}
+        </ul>
+      </div>
+    </dialog>
+  ))}
 
   <div class="wrap">
     <div class="exp__edu" data-reveal>
@@ -191,7 +216,7 @@ const experiences: Exp[] = [
       <div class="exp__edu-row">
         <div class="exp__edu-card">
           <p class="exp__date label">2025 — 2029 (expected)</p>
-          <h3 class="exp__org">University of Pennsylvania</h3>
+          <h3 class="exp__org">University of Pennsylvania (School of Engineering &amp; Wharton)</h3>
           <p class="exp__role">B.S. Mechanical Engineering &amp; B.S. Economics · Jerome Fisher M&amp;T Program</p>
         </div>
         <div class="exp__edu-card">
@@ -241,15 +266,42 @@ const experiences: Exp[] = [
   .exp__card {
     position: relative;
     flex: 0 0 auto;
-    width: min(78vw, 320px);
+    width: min(72vw, 260px);
     scroll-snap-align: start;
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 1.2rem 1.25rem 1.35rem;
+    padding: 1.2rem 1.25rem 1.15rem;
+    /* button resets */
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
     transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
   }
-  .exp__card:hover { border-color: color-mix(in srgb, var(--signal) 60%, var(--line)); transform: translateY(-4px); }
+  .exp__card:hover,
+  .exp__card:focus-visible {
+    border-color: color-mix(in srgb, var(--signal) 60%, var(--line));
+    transform: translateY(-4px);
+    outline: none;
+  }
+
+  .exp__more {
+    margin-top: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--signal);
+    opacity: 0.75;
+    transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+  .exp__card:hover .exp__more,
+  .exp__card:focus-visible .exp__more {
+    opacity: 1;
+    transform: translateX(3px);
+  }
 
   .exp__node {
     position: absolute;
@@ -263,16 +315,72 @@ const experiences: Exp[] = [
 
   .exp__date { margin-bottom: 0.5rem; color: var(--signal); }
   .exp__org { font-size: 1.1rem; line-height: 1.15; margin-bottom: 0.25rem; }
-  .exp__role { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 0.9rem; }
-  .exp__list { list-style: none; display: grid; gap: 0.5rem; }
-  .exp__list li {
-    font-size: 0.82rem;
+  .exp__role { font-size: 0.82rem; color: var(--ink-soft); }
+
+  /* ===== Click-through detail modal ===== */
+  .exp__dialog {
+    max-width: min(92vw, 640px);
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    padding: 0;
+    /* centered */
+    margin: auto;
+  }
+  .exp__dialog::backdrop {
+    background: rgba(5, 5, 8, 0.66);
+    backdrop-filter: blur(3px);
+  }
+  .exp__dialog-inner {
+    position: relative;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+  }
+  .exp__dialog-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.9rem;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+    line-height: 1;
     color: var(--ink-soft);
-    line-height: 1.5;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  .exp__dialog-close:hover { border-color: var(--signal); color: var(--signal); }
+  .exp__dialog-org { font-size: 1.4rem; line-height: 1.15; margin-bottom: 0.25rem; padding-right: 2rem; }
+  .exp__dialog-role { font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 1.25rem; }
+
+  .exp__dialog-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
+    gap: 0.6rem;
+    margin-bottom: 1.4rem;
+  }
+  .exp__dialog-photos img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: calc(var(--radius) * 0.6);
+    border: 1px solid var(--line);
+  }
+
+  .exp__dialog-list { list-style: none; display: grid; gap: 0.6rem; }
+  .exp__dialog-list li {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
     padding-left: 0.9rem;
     position: relative;
   }
-  .exp__list li::before {
+  .exp__dialog-list li::before {
     content: '▸';
     position: absolute;
     left: 0;
@@ -307,8 +415,9 @@ const experiences: Exp[] = [
   // Drag-to-scroll (desktop) + shift/vertical wheel → horizontal. Native touch
   // scroll works on its own; this just makes the mouse feel nice.
   const scroller = document.querySelector<HTMLElement>('.exp__scroll');
+  let moved = false;
   if (scroller) {
-    let down = false, startX = 0, startLeft = 0, moved = false;
+    let down = false, startX = 0, startLeft = 0;
 
     scroller.addEventListener('pointerdown', (e) => {
       down = true; moved = false;
@@ -326,15 +435,40 @@ const experiences: Exp[] = [
       down = false;
       scroller.classList.remove('is-dragging');
     });
-    // Prevent a drag from also triggering clicks inside cards
-    scroller.addEventListener('click', (e) => { if (moved) e.preventDefault(); }, true);
 
-    // Vertical wheel scrolls the timeline horizontally when hovering it
+    // Vertical wheel scrolls the timeline horizontally when hovering it —
+    // but only while the timeline still has room to scroll in that direction.
+    // Once it hits either edge, let the event through so the PAGE scrolls
+    // vertically instead of the cursor getting "stuck" over the cards.
     scroller.addEventListener('wheel', (e) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        scroller.scrollLeft += e.deltaY;
-        e.preventDefault();
-      }
+      // Ignore intentionally-horizontal wheels (trackpad / shift-scroll).
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+      const atStart = scroller.scrollLeft <= 0;
+      const atEnd = scroller.scrollLeft >= maxScroll - 1;
+      // At an edge and pushing further past it → don't trap the page scroll.
+      if ((e.deltaY < 0 && atStart) || (e.deltaY > 0 && atEnd)) return;
+      scroller.scrollLeft += e.deltaY;
+      e.preventDefault();
     }, { passive: false });
   }
+
+  // Click-through detail modals. A card only opens if the pointer wasn't dragged.
+  document.querySelectorAll<HTMLButtonElement>('[data-exp-open]').forEach((card) => {
+    card.addEventListener('click', () => {
+      if (moved) return; // was a drag, not a click
+      const i = card.getAttribute('data-exp-open');
+      const dialog = document.getElementById(`exp-dialog-${i}`) as HTMLDialogElement | null;
+      dialog?.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('.exp__dialog').forEach((dialog) => {
+    // Close button
+    dialog.querySelector('[data-exp-close]')?.addEventListener('click', () => dialog.close());
+    // Click on the backdrop (outside the inner panel) closes it
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  });
 </script>
