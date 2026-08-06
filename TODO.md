@@ -421,7 +421,7 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
 
 - [ ] **10a. Email SENDING — send-as `hello@avamartoma.com` via free SMTP relay.**
       ✅ RECEIVING done: Cloudflare Email Routing live — `hello@avamartoma.com`
-      + catch-all forward to `ava.martoma@gmail.com` (tested, working). Cloudflare
+      + catch-all forward to Ava's personal Gmail (tested, working). Cloudflare
       manages/locks the MX + SPF + DKIM records.
       ⏳ REMAINING (deferred) — reply *from* `hello@` inside Gmail. Cloudflare
       can't send (receive/forward only), so this needs a free SMTP relay:
