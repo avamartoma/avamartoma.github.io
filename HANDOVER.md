@@ -60,7 +60,8 @@
 > uncommitted edits could not leak in. `npm run build` ✓ (17 pages, no errors);
 > all **204** image/video refs in `dist/` resolve, **0 missing, 0 orphans**, and
 > both folders are fully used (17/17 and 1/1). Playwright **68/68 green** at
-> **1440×900 and 390×844**: both chips are `<button>`s with the right `◈ n` badge,
+> **1440×900 and 390×844**: both chips are `<button>`s with a badge (at the time
+> that badge still carried the count; it is a bare `◈` by design as of `d3ec56c`),
 > modals open **without the page jumping to top**, blurb facts render, every image
 > decodes with real alt text and a caption, the PGN body scrolls (1656/792 desktop,
 > 4972/743 mobile), the **× stays on screen after scrolling to the bottom**, and
@@ -88,34 +89,42 @@
 >   blob via `git hash-object` + `git update-index`, and committed from the index
 >   so the working tree was left alone. Asserted before committing that the blob
 >   contained **no `lpit-` or `coke-` references**.
-> - 🔴 **The other session's working tree removes the badge count**
->   (`◈ {c.media.length}` → `◈`), which would make **all** chips render a bare
->   `◈`. That contradicts the documented, previously-validated `◈ 12` design. It is
->   **uncommitted** and **not mine to fix** — Ava should decide whether it was
->   intentional. `HEAD` still has the count and my Playwright run asserts it.
-> - **Duplicate work to reconcile:** that session independently wrote an equivalent
->   single-photo rule named **`.comm__dialog-photos--single`**; mine is committed as
->   **`--one`**. When their change lands, **keep one and delete the other.**
-> - 🔴🔴 **THE NEXT COMMIT OF `index.astro` WILL SILENTLY REVERT TWO COMMITTED
->   CHANGES.** The working-tree copy of `src/pages/index.astro` was written by the
->   other session from an older base, so it contains **neither** the badge count
->   (`◈ {c.media.length}`) **nor** my `comm__dialog-photos--one` rule — both of
->   which *are* in `HEAD` (`026fbdd`). Committing that file as-is drops both.
->   Before committing `index.astro`, run:
->   ```bash
->   grep -c 'photos--one' src/pages/index.astro      # want 2, not 0
->   grep -c '◈ {c.media.length}' src/pages/index.astro  # want 1, not 0
->   ```
->   and re-add whichever is missing (or take `git show 026fbdd:src/pages/index.astro`
->   as the base and re-apply the LinkedIn/Coca-Cola arrays on top).
+> - **✅ RESOLVED — the badge count removal was intentional, not a regression.**
+>   Mid-session the other tree changed `◈ {c.media.length}` → `◈`, which looked
+>   like it would break the documented `◈ 12` design. It has since landed in
+>   **`d3ec56c`** as a deliberate design change, with a code comment in
+>   `index.astro` saying *"Diamond only — deliberately no photo count … please
+>   don't add `{c.media.length}` back"*. **Every chip badge is now a bare `◈`** and
+>   the verification asserts that rather than a count. Any `◈ 17` / `◈ 12` style
+>   references elsewhere in this file are historical.
+> - **✅ RESOLVED — the duplicated single-photo rule was deduped.** That session had
+>   written an equivalent `.comm__dialog-photos--single`; **mine (`--one`, commit
+>   `026fbdd`) is the one that survived** and `--single` is gone. Neither my rule
+>   nor anything else of mine was reverted by the merge — re-checked after all the
+>   other terminals finished.
 > - **Lesson for the next session: check `git log`/`git status` before *and* after
 >   every commit, and never run a bare `git commit` or `git commit -a` in this
 >   repo while another session may be live** — use path-limited commits.
 >
+> **✅ Post-merge re-verification (2026-08-06 21:40, after all other terminals
+> finished).** `npm run build` ✓ (17 pages); **293 image/video refs in `dist/` all
+> resolve, 0 missing**, and both of my folders are still fully used (17/17, 1/1)
+> with no orphans. A Playwright pass over **all 10 Communities modals** at
+> **1440×900 and 390×844** went **220/220**: every chip opens without the page
+> jumping to top, every media item decodes with alt text and a caption, the × stays
+> reachable, and ×/Escape/backdrop all close. My two blurbs still carry their
+> verified facts, and the Penn M&T single photo still renders wide and uncropped
+> (**786 px** desktop / **317 px** mobile). Script kept at
+> `/tmp/pgn-mt-work/verify-merged.mjs`.
+>
 > **Ava's instruction, received mid-session: _do not commit before asking._**
-> `763997b` and `026fbdd` had already landed when she said it; nothing has been
-> committed since. **The HANDOVER/TODO/NEXT-CHATS updates for this session are
-> uncommitted and awaiting her go-ahead.** Nothing was pushed.
+> `763997b` and `026fbdd` had already landed when she said it; nothing was
+> committed after that without asking. We then **waited for the other terminals to
+> finish** before reconciling. The pt.8b doc sections were swept into another
+> terminal's commit while waiting (same collision as `index.astro`, content
+> intact); the post-merge reconciliation was committed with her go-ahead.
+> `NEXT-CHATS.md` has since been deleted (`b477882`), so its checklist is moot.
+> **Nothing has been pushed.**
 
 ---
 

@@ -56,10 +56,12 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       md5 note ties them to Phi Gamma Nu, but their visible content is generic
       (cabin s'mores / a dance-show cheer) and the PGN chip is inert, so
       labelling them a program wasn't defensible.
-      **↻ Now revisitable (2026-08-06 pt.8b): the Phi Gamma Nu chip is live
-      (`◈ 17`) and both photos are published in its modal (`pgn-04` = `gal-14`
-      s'mores at the A-frame, `pgn-06` = `gal-17` dance-show posters), so
-      pointing gal-14 and gal-17 at COMM is now defensible.** Build ✓ (17 pages); Playwright
+      **↻ OPEN follow-up (2026-08-06 pt.8b): the Phi Gamma Nu chip is now a live
+      modal and both photos are published in it (`pgn-04` = `gal-14` s'mores at
+      the A-frame, `pgn-06` = `gal-17` dance-show posters), so pointing gal-14 and
+      gal-17 at COMM is defensible now. They are still NOT in the wall — only
+      named in the comment at the top of `gallery.astro` (rationale there updated).
+      Add them if you want the wall to cover PGN.** Build ✓ (17 pages); Playwright
       22/22 at 1440×900 + 390×844 + reduced-motion (rows scroll, hover pauses +
       reveals the label, reduced-motion → hand-scrollable, no console errors).
       **~24 unused gal-NN.jpg remain** in `public/images/gallery/` if Ava wants
@@ -126,8 +128,11 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         being `4/3` cover-cropped into a 220 px tile (254×190 with the carved
         lettering clipped); it now renders whole at 786×524. Build ✓ (17 pages),
         204/204 asset refs resolve, Playwright **68/68** at 1440×900 + 390×844.
-        ⚠️ A parallel session independently wrote the same rule as
-        `--single`; **de-duplicate when its work lands.**
+        ✅ Re-verified after the other terminals finished: the duplicate
+        `--single` rule a parallel session had written is gone (mine, `--one`,
+        survived), nothing of this work was reverted by the merge, and a pass over
+        **all 10** Communities modals went **220/220** at both viewports with
+        293/293 asset refs resolving.
       - **Chick-fil-A Community Scholars — ✅ DONE, built + validated
         (2026-08-06 pt.8).** Chip now shows `◈ 15` and opens a modal with a blurb
         (verified against chick-fil-a.com/community-scholars: 13 scholars/yr,
