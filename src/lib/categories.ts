@@ -68,6 +68,7 @@ const TAG_CATEGORIES: Record<string, Category[]> = {
 
   // — design —
   Design: ['Design'],
+  'Game Design': ['Design'],
   Architecture: ['Design'],
   'Adobe Illustrator': ['Design'],
   UX: ['Design', 'Software'],

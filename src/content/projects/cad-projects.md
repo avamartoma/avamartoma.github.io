@@ -2,7 +2,7 @@
 title: "CAD & Woodworking Studies"
 blurb: "A run of Fusion 360, laser-cut and hand-finished builds from a design studio — a client-briefed makeup & jewelry organizer, a parametric pencil box, a 360°-swivel phone stand, an articulating LED lamp, and a wavy-fronted marquetry drawer box."
 description: "A collection of design-and-fabrication studies in Fusion 360, laser cutting, 3D printing, pyrography and veneer: a client-briefed makeup & jewelry organizer with hand-painted panels and 3D-printed inserts, a parametric pencil box, a 360°-swivel phone stand, an articulating LED lamp, and a wavy-fronted two-drawer marquetry box."
-date: 2023-05-01
+date: 2023-05-04
 tags: ["Fusion 360", "CAD", "Laser Cutting", "3D Printing", "Pyrography", "Woodworking"]
 accent: "#ff5cc4"
 accentAlt: "#a855f7"

@@ -1012,7 +1012,10 @@ const communities: Community[] = [
     color: var(--ink-soft);
     line-height: 1.55;
     margin-bottom: 1.4rem;
-    max-width: 60ch;
+    /* Span the full dialog width. `none` is required to beat the global
+       `p { max-width: 62ch }` rule, which would otherwise clamp the blurb
+       short of the modal's edge. */
+    max-width: none;
   }
   .comm__dialog-photos {
     display: grid;
