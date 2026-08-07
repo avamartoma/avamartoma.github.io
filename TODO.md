@@ -1,142 +1,90 @@
 # ✅ TODO — personal-website
 
-Ordered by priority. Completed items are archived in
-[`decisions-log.md`](./decisions-log.md).
+Ordered by priority. **This file tracks OPEN work only.**
+
+## How to maintain this file (for future agents)
+
+- **Open work only.** When a task (or a sub-item) is finished, do **not** leave
+  it here marked `[x]`. Move it to [`decisions-log.md`](./decisions-log.md) so
+  this file stays a short, honest list of what's actually left.
+- **How to move a completed item:**
+  1. Add a dated `- [x]` entry to `decisions-log.md` — newest work under a
+     `## <date> — <summary>` heading (or under the matching topic section) —
+     capturing the outcome and any decision/rationale, verbatim enough to be
+     useful later.
+  2. Delete that item's body from this file.
+  3. If only *part* of an item is done, move the done part to the log and leave
+     a **slim stub** here with just the remaining work.
+- **Decisions count as "done."** A settled choice (even "not doing X") belongs in
+  the log, not here.
+- **Don't renumber existing items** — HANDOVER and other notes reference them by
+  number. Give genuinely new work the next free number (currently **#26+**), or a
+  letter suffix on a parent (e.g. `8a`).
+- Deeper narrative / session history lives in [`HANDOVER.md`](./HANDOVER.md);
+  completed work + the reasoning behind it lives in `decisions-log.md`.
 
 ---
 
 ## 🟢 Now / next
 
-- [~] **1. Add project photos.** *(In progress — 2026-08-06 pt.7.)*
-      **⚠️ Processed assets are sitting in `public/` waiting to be wired in — see
-      the red block at the top of `HANDOVER.md` for the full table and the
-      one-set-per-chat plan (a chat can only include ~100 images).** Waiting:
-      flower press (16), clock (1). ✅ **LinkedIn Possibilities in Tech (25)**
-      and **Coca-Cola (11 + 1 clip)** wired in + committed 2026-08-06 (`5bc8c9b`).
-      ✅ Done this session: **Marquetry Lap Desk** (15 photos) and
-      **Architecture / "The Grove"** (14 + carousel + clip). Photos now on:
-      Amazon Path, LinkedIn (video + shots), Henna Luminary, CAD & Woodworking
-      Studies, and RC car (22, in a carousel), plus **Wooden Car** and **CAD
-      Bridge** (from Ava's ME-class docs, 2026-08-06). **Remaining:**
-      **`architecture` is now a full case study** ("The Grove", 14 photos +
-      carousel + build clip, 2026-08-06). **Marquetry Clock + Flower Press now
-      have photos too (2026-08-06):** the Koi clock uses its single `clock-01`
-      shot, and the Flower Press is a full case study (8 inline + 6 carousel +
-      build clip). **CAD & Woodworking Studies — ✅ its 67-photo reshoot + clip
-      wired in (2026-08-06):** turned out to be just the pencil box + makeup
-      organizer (both already on the page), now each in a carousel of Ava's own
-      photos; the wavy-front marquetry box got its own section. Still on
-      generative artwork only:
-      `penn-electric-racing`. Drop images in `public/images/projects/<slug>/` and reference inline
-      in the body (Markdown `![alt](/images/projects/<slug>/x.jpg)`), or use a
-      `<div class="carousel"
-      data-carousel>…</div>` block for a slideshow (see `rc-car.md`).
-
-- [ ] **3. Fill in real details for a few entries.**
-  - **LinkedIn Hackathon** — add a demo/live link if there is one.
+- [ ] **3. Fill in a few real details / confirm estimates.** *(Done parts —
+      Amazon Kuiper bullets, Wharton naming — are archived in the log; these
+      remain:)*
+  - **LinkedIn Hackathon** — add a demo/live link if one exists.
   - Confirm estimated dates: **CAD Bridge**, **CAD & Woodworking Studies**, and
-    the marquetry pieces. *(Flower Press dated 2025-05-15 from the promposal sign
-    timestamp 2025/05/18; Koi Clock still an estimate at 2024-11-01.)*
+    **Koi Clock** (still an estimate at 2024-11-01). Cross-check the Wix posts,
+    which carry better dates (overlaps #24 "Dates and copy").
 
-- [~] **3c. Communities + Experience click-through content (2026-08-06).**
-      Click-into infrastructure now exists for both sections; content is being
-      added program by program:
-      - **✅ FOUR modals live + validated (2026-08-06 pt.6):** **T-Mobile
-        Changemaker Challenge** (`◈ 12`), **Taco Bell Ambition Accelerator**
-        (`◈ 12` — 10 photos + **2 video clips**), **MITES** (`◈ 12`), and
-        **Calvin Coolidge Senator** (`◈ 9`). Every item has specific alt text and
-        a caption. Playwright **186/186** at 1440×900 + 390×844.
-      - **Pattern to copy for the next program:** the `photos` field became one
-        ordered **`media`** array in `src/pages/index.astro` — an entry with a
-        `poster` renders as a `<video>`, everything else as an `<img>`, so clips
-        and stills interleave into a narrative. Process raws first with
-        `node scripts/process-community-media.mjs <slug> <prefix>`, then list
-        them. Any chip with `media` automatically becomes a modal button.
-      - **✅ LinkedIn Possibilities in Tech + Coca-Cola Scholars — DONE, built +
-        validated (2026-08-06, `5bc8c9b`).** LinkedIn shows `◈ 25` (25 photos,
-        narrative order, hackathon `lpit-17` as the climax); Coca-Cola shows
-        `◈ 12` (11 photos + 1 banquet-stage clip). Alt text + captions written
-        from the photos; program facts verified against the LinkedIn and
-        Coca-Cola Scholars Foundation sites. 80/80 Playwright at 1440×900 + 390×844.
-      - [ ] **`afe-02.jpg` needs a caption + wiring (2026-08-06 pt.8).** A second
-        Amazon Future Engineer photo arrived and was processed, but the modal
-        still lists only `afe-01.jpg`. Someone has to view `afe-02.jpg`, write
-        its alt text and caption, and add it to that programme's `media` array
-        in `src/pages/index.astro`.
-      - **Remaining chips with no media yet (2):** NCWIT Aspirations in Computing
-        and Davidson Young Scholars. Both have scaffolded folders under
-        `public/images/communities/<slug>/`. (Amazon Future Engineer got its
-        modal in `fcc2f9b`.)
-      - **Phi Gamma Nu + Penn M&T — ✅ DONE, built + validated (2026-08-06
-        pt.8b).** **Phi Gamma Nu** shows `◈ 17`: all 17 photos published with
-        individual alt text and captions, ordered as a narrative (bid night →
-        Titans family reveal → initiation with roses → the ~50-person chapter
-        photo → chapter life). The blurb is read off the photos — a slide reading
-        “PGN | Delta Lambda Chapter” lists the class of **15** with Ava among
-        them — not from the web. `pgn-11.jpg` **was stored rotated 90°** and was
-        fixed. **Penn M&T** shows `◈ 1`: kept as a modal rather than an inert
-        chip because the single photo is strong and legible (the cohort on the
-        carved Wharton School steps) and the blurb explains what M&T is, which
-        is what the education card's "School of Engineering & Wharton" refers to
-        (verified against fisher.wharton.upenn.edu: 50–55 admitted a year). That
-        required a **`comm__dialog-photos--one`** CSS modifier — a lone item was
-        being `4/3` cover-cropped into a 220 px tile (254×190 with the carved
-        lettering clipped); it now renders whole at 786×524. Build ✓ (17 pages),
-        204/204 asset refs resolve, Playwright **68/68** at 1440×900 + 390×844.
-        ✅ Re-verified after the other terminals finished: the duplicate
-        `--single` rule a parallel session had written is gone (mine, `--one`,
-        survived), nothing of this work was reverted by the merge, and a pass over
-        **all 10** Communities modals went **220/220** at both viewports with
-        293/293 asset refs resolving.
-      - **Chick-fil-A Community Scholars — ✅ DONE, built + validated
-        (2026-08-06 pt.8).** Chip now shows `◈ 15` and opens a modal with a blurb
-        (verified against chick-fil-a.com/community-scholars: 13 scholars/yr,
-        $25K each, 1-year leadership + mentorship program; Ava is a 2025
-        recipient per the $25,000 / 02-28-2025 check in the photos) plus 15
-        captioned photos telling the story: the check reveal with the Cow mascot
-        and confetti, the Support Center Backstage Tour, a Bracken's Kitchen
-        service shift, a food-facility plant tour, and a Walt Disney Studios day.
-        **13 of the 28 processed shots were dropped** (personal/scenery: Disney
-        selfies, cotton candy, In-N-Out, castle/Cars-Land scenery, redundant
-        group shots) and deleted from `public/`; raws are in git history if
-        wanted back. `npm run build` ✓ (17 pages), Playwright **34/34** at
-        1440×900 + 390×844.
-      - **Photos deliberately NOT published (Ava's call to reverse):** 9 MITES,
-        1 Coolidge and 1 architecture processed shot were dropped rather than
-        shipped — mostly informal night shots of other participants. The raws
-        are permanently in commit `0f9c4c4`, so any can be re-processed on ask.
-      - **Experience modals** already open (native `<dialog>`) and render bullets;
-        add **photos** per role via the optional `images:[{src,alt}]` field in
-        `Experience.astro` (drop files in `public/images/experience/<slug>/`).
-      - **T-Mobile Changemaker Challenge — ✅ DONE, built + validated
-        (2026-08-06).** The homepage chip shows a `◈ 12` badge and opens a native        `<dialog>` with a KIDSMATES/$15,000 grant blurb plus 12 captioned photos
-        from `public/images/communities/t-mobile-changemaker/`. Photos were
-        resized to ≤1500 px; photo 02's orientation was corrected. Ava asked to
-        drop the "At the Space Needle" shot, so `changemaker-06.jpg` was pulled
-        out of `public/` — filenames run `01..13` **minus 06**; don't renumber.
-        `npm run build` passes (17 pages, no errors) and a Playwright pass at
-        **1440×900 + 390×844** went **38/38**: 12 photos decode, 12 captions,
-        content scrolls, and ×, backdrop-click, and Escape all close the modal.
-        No console errors. The raw files under `src/pages/communities/` are
-        staged for deletion. One HEIC was never converted (local Sharp lacks HEVC
-        decoding) and isn't needed.
-      - **Photo folders scaffolded (2026-08-06):** `public/images/communities/`
-        now has a slugified, `.gitkeep`-ed folder per community, so adding a
-        program is just "drop photos in the folder + list them in `index.astro`".
+- [ ] **3c. Remaining Communities chips.** *(All 10 built modals are done +
+      archived; only these are left:)*
+  - [ ] **`afe-02.jpg` needs a caption + wiring.** A 2nd Amazon Future Engineer
+    photo was processed, but the modal still lists only `afe-01.jpg`. View
+    `afe-02.jpg`, write alt text + a caption, and add it to that programme's
+    `media` array in `src/pages/index.astro`.
+  - [ ] **NCWIT Aspirations in Computing** and **Davidson Young Scholars** —
+    chips exist with scaffolded `public/images/communities/<slug>/` folders but
+    no media yet.
 
-- [ ] **3d. Resume/LinkedIn reconciliation (flagged 2026-08-06).** The LinkedIn
-      export on hand is only a *Basic* profile (headline only), so a full diff
-      needs Ava's actual resume. Open items spotted:
-      - **Publications were removed** from the homepage — real credentials (JAMA
-        Network 2024 measles outbreak, 2× AAP *Pediatrics in Review* graphics,
-        *Prison Legal News*, *Rise News*, + the in-progress Duke CFD paper).
-        Decide: re-add in a subtler "Writing & Research" form, fold into project
-        pages, or leave off intentionally.
-      - **Award framing lost** when honors → Communities tags (dropped "MITES
-        Director's Award", "NCWIT — NJ Affiliate Winner", "T-Mobile — Grand
-        Prize"). Fine if intentional.
-      - **Skills gaps** in the Hero chips: **KiCad** (RC car) and **Flask**
-        (Amazon role) aren't listed; add if desired.
+- [ ] **3d. Resume/LinkedIn reconciliation (needs Ava's full resume).** The
+      export on hand is only a *Basic* profile (headline only). Open items:
+  - **Publications were removed** from the homepage (JAMA Network 2024 measles
+    outbreak, 2× AAP *Pediatrics in Review* graphics, *Prison Legal News*,
+    *Rise News*, + the in-progress Duke CFD paper). Decide: re-add in a subtler
+    "Writing & Research" form, fold into project pages, or leave off.
+  - **Award framing lost** when honors → Communities tags (dropped "MITES
+    Director's Award", "NCWIT — NJ Affiliate Winner", "T-Mobile — Grand Prize").
+    Fine if intentional.
+  - **Skills gaps** in the Hero chips: **KiCad** (RC car) and **Flask** (Amazon
+    role) aren't listed; add if desired.
+
+- [ ] **24. Wix portfolio — remaining copy/date pass.** *(Stranded, CAD Bridge
+      FEA, and KidsMates are done + archived; this is what's left:)* Ava notes
+      the Wix posts (`avarmartoma.wixstudio.com/portfolio`) carry **better dates
+      and wording** than several entries here — use them to correct project dates
+      (many are still estimates, see #3) and tighten copy.
+
+- [ ] **24a. Accuracy pass over every project and community.** *(Ava, 2026-08-06
+      pt.8.)* A lot of content landed fast across several parallel sessions —
+      13+ project pages and 10 Communities modals, much of it written from photos.
+      Go through **all of them** and confirm each is accurate and reads the way
+      she wants:
+      - Titles, dates, collaborator credits and any claimed result/award.
+      - Photo captions and alt text actually match the image (two mislabelled CAD
+        files were caught this way once already, and one photo's orientation was
+        wrong).
+      - Programme facts in the Communities blurbs — verify against the programme's
+        own site rather than inferring from the photos, as was done for the
+        Coolidge Senators blurb.
+      - Anything written by an agent from photos alone, which is most of the
+        recent project copy, should be read once by Ava.
+      - Flag anything that should be cut rather than corrected.
+
+- [ ] **26. Penn Electric Racing photos.** *(Carried out of the completed #1
+      photo pass — every other project now has real photos; PER is the last one
+      still on generative artwork.)* Drop images in
+      `public/images/projects/penn-electric-racing/` and reference them inline in
+      the body (`![alt](/images/projects/penn-electric-racing/x.jpg)`), or use a
+      `<div class="carousel" data-carousel>…</div>` block (see `rc-car.md`).
 
 ---
 
@@ -269,73 +217,7 @@ Ordered by priority. Completed items are archived in
       rough.
       **Open decision before starting:** Worker OAuth vs. paste-a-PAT for v1.
 
-- [ ] **25. ⚠️ Stop committing raw camera originals + decide repo visibility
-      (audited 2026-08-06; full detail in HANDOVER §6).**
-      The repo is public, so **every committed raw is world-readable forever** —
-      deleting it in a later commit does NOT remove it from history. Audit result:
-      the **published** images are clean (no EXIF, ≤1500 px — Sharp strips it),
-      but ~15 **raws in history** carry GPS. All coordinates resolve to program
-      venues the content already names (T-Mobile HQ Bellevue, Taco Bell HQ Irvine,
-      Coolidge site Plymouth Notch VT, MIT campus) — **no home address** — so
-      history rewriting was judged **not worth it**. `.HEIC`/`.mov` remain
-      unverified.
-      - [ ] **25a. Add gitignore rules so raws stop accumulating.** Ignore
-            camera-pattern files under `public/images/**` (`IMG_*`, `DSC_*`,
-            `*_Original*`, `*.HEIC`, `*.heic`, `*.mov`, `100_*`) or better, keep
-            originals in a gitignored `raw/` folder outside `public/`. Commit only
-            the processed, EXIF-stripped derivatives. ⚠️ Note a parallel session
-            has been committing raws for MITES / architecture / Coolidge / Taco
-            Bell — this keeps growing until the habit changes.
-      - [ ] **25b. Decide public vs private.** Private needs **GitHub Pro** for
-            Pages (~$4/mo; **free via Student Developer Pack**, but the site
-            **goes dark if student status lapses**) — or **$0** by moving to
-            Cloudflare Pages / Netlify / Vercel (all deploy from private repos on
-            free tiers; DNS is already at Cloudflare and `netlify.toml` exists;
-            ~30–60 min). Private does **not** hide the site itself and does
-            **not** retract anything already public.
-      - [ ] **25c. Optional: verify the HEIC/MOV files** for GPS with a tool that
-            can decode them (`exiftool`) — the audit couldn't read those.
-
-- [ ] **24. Fold in the Wix portfolio content** — *re-raised by Ava 2026-08-06
-      pt.8: she can still see things on the Wix site that aren't on this one.*
-      Sources: `avarmartoma.wixstudio.com/portfolio` and the sub-page
-      **`avarmartoma.wixstudio.com/portfolio/innovator`**. Status checked
-      2026-08-06 pt.8 — two of the four are still outstanding:
-
-      - [ ] **Stranded — A Board Game** → **still missing, add as a NEW project.**
-        TSA competition: 1st at FL states, 5th nationally. Photos available on the
-        Wix post: the board, the risky/chance card decks, the volcano dice
-        centerpiece. ⚠️ Skip the team-group photos (minors' faces).
-      - [ ] **CAD Bridge FEA detail** → **still outstanding.** `cad-bridge.md`
-        describes FEA in general terms but not the Wix post's **5-version**
-        breakdown: per-version mass + safety factor, sliding-vs-bonded contacts,
-        slice-plane analysis, caliper-measured MDF thickness. The real **FEA
-        stress-plot images** are also still missing (the folder has only sketch /
-        fusion / iterations / built).
-      - [ ] **KidsMates writing** (~16 Chronicle posts + Miami Herald / Forbes
-        features / Taco Bell coverage) → **Ava's preference (2026-08-06 pt.8):
-        either leave it out, or distil it down to a few lines on the existing
-        KidsMates Experience card** — NOT a separate "Writing" section and not in
-        the project catalogue. Pick the two or three strongest credits.
-      - [ ] **Dates and copy.** Ava notes the Wix posts carry **better dates and
-        wording** than some entries here. Several project dates in this repo are
-        still estimates (see item 3). Use the Wix posts to correct them.
-
-- [ ] **24a. Accuracy pass over every project and community.** *(Ava, 2026-08-06
-      pt.8.)* A lot of content landed fast across several parallel sessions —
-      13+ project pages and 10 Communities modals, much of it written from photos.
-      Go through **all of them** and confirm each is accurate and reads the way
-      she wants:
-      - Titles, dates, collaborator credits and any claimed result/award.
-      - Photo captions and alt text actually match the image (two mislabelled CAD
-        files were caught this way once already, and one photo's orientation was
-        wrong).
-      - Programme facts in the Communities blurbs — verify against the programme's
-        own site rather than inferring from the photos, as was done for the
-        Coolidge Senators blurb.
-      - Anything written by an agent from photos alone, which is most of the
-        recent project copy, should be read once by Ava.
-      - Flag anything that should be cut rather than corrected.
+---
 
 ## 🔵 Later / infrastructure
 

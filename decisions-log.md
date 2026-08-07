@@ -7,6 +7,69 @@ narrative lives in [`HANDOVER.md`](./HANDOVER.md).
 
 ---
 
+## 2026-08-07 — Wix content, raw-history purge, homepage polish
+
+- [x] **1. ✅ Add project photos — COMPLETE.** Every project page now carries
+      real photos (LinkedIn, Coca-Cola, Marquetry Lap Desk, Architecture / "The
+      Grove", Henna Luminary, CAD & Woodworking Studies, RC car carousel, Wooden
+      Car, CAD Bridge, Marquetry Clock, Flower Press, Stranded). The only page
+      left on generative artwork is **Penn Electric Racing**, carried forward as
+      open item **#26**. Full per-project history is in the older log entries +
+      HANDOVER §6.
+
+- [x] **24. ✅ Wix portfolio content folded in — Stranded, CAD Bridge FEA,
+      KidsMates.**
+      - **Stranded — A Board Game:** new project `stranded.md` (TSA competition,
+        1st at FL states / 5th nationally). Downloaded the Wix photos, viewed
+        each, wrote alt text, and wired in the box lid, the open-box components
+        (volcano dice centerpiece, gem pouches), and the Risk/Chance card decks.
+        Team/group photos (minors' faces) deliberately skipped.
+      - **CAD Bridge FEA:** `cad-bridge.md` now has the 5-version breakdown
+        (per-version mass + min. safety factor, sliding-vs-bonded contacts,
+        Slice-Plane analysis, caliper-measured 0.1230″ MDF) with the real FEA
+        stress-plot images wired into each version bullet (`fea-v2…v5`,
+        `fea-v4-slice`, `fea-final`). The 5 plots are ~596 px — the max Wix
+        stored. ⚠️ The previous session misfiled these as sidebar thumbnails;
+        they are the actual per-version plots (min SF 2.198 → 0.91 → 1.267 →
+        0.698, final 1.741).
+      - **KidsMates writing:** distilled to a line on the existing KidsMates
+        Experience card (Ava's preference — not a separate Writing section).
+      - *Still open (tracked under #24 / #3 / #24a):* correcting estimated dates
+        + copy from the Wix posts, and the full accuracy pass.
+
+- [x] **25. ✅ Stopped committing raw originals + purged history (repo stays
+      public).**
+      - **25a — gitignore + workflow:** `.gitignore` now blocks camera-pattern
+        files under `public/images/**` (`IMG_*`, `DSC*`, `*_Original*`,
+        `*.HEIC/heif`, `*.mov`, `*.tif/tiff`, `100_*`, `DCIM*`) and adds a
+        gitignored `/raw/` folder (tracked `raw/README.md` documents the
+        raw → `process-community-media.mjs` → commit-derivatives-only flow).
+        Added a **location guard** to that script: it fails if any produced
+        `.jpg` carries EXIF GPS or any `.mp4` a QuickTime/ISO-6709 location atom
+        (unit-validated with corrected `Exif\0\0`-offset parsing).
+      - **25c — verification:** decoded all 40 HEIC/HEIF/MOV blobs in history
+        with `pillow-heif`/`piexif`. The earlier "no home address" finding was
+        **wrong** (that audit couldn't read HEIC/MOV): `gallery/IMG_0536.HEIC`
+        and `marquetry-flower-press/IMG_8973.MOV` geolocated to a **residential
+        address (Lawrence Township, NJ)**. All 7 published `.mp4`s were clean.
+      - **Rewrite executed (Ava-authorized):** `git-filter-repo` stripped **all
+        raw originals** from every commit. Backup mirror kept at
+        `~/rwa-backup-20260807-070457.git` (pre-rewrite tip `7a52cc19`). HEAD
+        tree verified byte-identical, force-pushed `main` `7a52cc19` → `3c6ea93`,
+        `.git` 1.9 GB → 209 MB, 0 raws remain in history.
+      - **Caveat:** a rewrite does NOT retract already-public copies
+        (forks/clones/GitHub cache). Fork count checked = **0**. GitHub Support
+        can purge cached old blob SHAs if ever needed.
+      - **25b — Decision: staying public for now** (per Ava). Revisit the
+        private-repo move (Cloudflare/Netlify/Vercel free tier, or GitHub Pro)
+        later if desired.
+
+- [x] **✅ Homepage: removed the hero "scroll" cue (2026-08-07).** Deleted the
+      animated scroll indicator (markup + CSS + `@keyframes drop`) from
+      `Hero.astro`, per Ava.
+
+---
+
 ## Infrastructure & delivery
 
 - [x] **0. ✅ Enforce HTTPS enabled (2026-07-04).** DNS verified, GitHub issued
