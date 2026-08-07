@@ -237,16 +237,27 @@ npm run dev                  # → http://localhost:4321/  (Ctrl+C to stop)
 >   timeline roles plus `penn/` and `lawrenceville/`. Each `.gitkeep` names its
 >   role and carries the exact `images: [{ src, alt }]` snippet.
 >
-> **Unresolved — Spotify "Lately" shows only one song.** The deployed Worker
-> returns `recent: []`, so the frontend has nothing else to render (verified
-> live). `getRecentlyPlayed()` does `if (!res.ok) return []`, swallowing the
-> error. Two candidates, untested: a **missing `user-read-recently-played`
-> scope** on the refresh token (separate from the currently-playing scope, which
-> works — this fits the symptom exactly), or the blocklist filtering the list
-> empty. ⚠️ `worker/src/index.js` has ~38 lines of **uncommitted** local changes
-> that predate this session — find out what they were for before touching it.
-> Diagnosing properly needs the Worker's real HTTP status from Spotify, i.e.
-> temporary logging + a redeploy.
+> **Spotify "Lately" — RESOLVED, no further work planned (decided 2026-08-06).**
+> The one-song symptom was a Spotify **429 rate limit** on `recently-played`,
+> not a missing scope. Root cause: the endpoint was called on every request with
+> no caching, so heavy page reloads (a dev session hammering the page) burst past
+> Spotify's limit and earned a ~16h penalty. Already fixed and deployed: the
+> Worker now edge-caches `recently-played` (120s), so Spotify sees at most one
+> call every 2 min regardless of traffic — the 429 won't recur under normal use.
+> A self-built play history (KV key `play_history`) exists as a fallback while
+> rate-limited.
+>
+> **Decision: we are NOT adding the Cloudflare Cron Trigger / extra self-history
+> resilience.** Reasoning: the 429 was set to expire ~13:42 Fri 7 Aug 2026, after
+> which Spotify's own recently-played list (which tracks server-side 24/7,
+> regardless of whether the site is open) becomes authoritative again and has no
+> gaps. The cron only mattered in the narrow case of "rate-limited AND self-history
+> must be complete while the site is closed" — a scenario that resolves itself once
+> the penalty clears and the cache prevents recurrence. Not worth the complexity.
+>
+> Optional one-time confirmation: after ~13:42 on 7 Aug, hit
+> `…/now-playing?debug=1` and check `recentSource` reads `spotify`/`edge-cache`
+> (not `self-history`). That's the "back to normal" signal. No code change needed.
 >
 > ### What is DONE and committed (nothing to redo)
 >

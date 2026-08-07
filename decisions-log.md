@@ -1,0 +1,214 @@
+# 🗂️ Decisions & Completed Work Log — personal-website
+
+Archive of **completed** TODO items and the decisions behind them. Moved out of
+[`TODO.md`](./TODO.md) on 2026-08-06 to keep that file focused on open work.
+Nothing here is outstanding — it's kept verbatim for context and history. Deeper
+narrative lives in [`HANDOVER.md`](./HANDOVER.md).
+
+---
+
+## Infrastructure & delivery
+
+- [x] **0. ✅ Enforce HTTPS enabled (2026-07-04).** DNS verified, GitHub issued
+      the TLS cert, Enforce HTTPS on; https://avamartoma.com serves over HTTPS.
+
+- [x] **10. Custom domain — `avamartoma.com`** (bought via Cloudflare Registrar,
+      2026-07-04). `astro.config.mjs` `site` + `public/CNAME` set; DNS (4× A grey +
+      www CNAME) added; GitHub Pages custom domain + Enforce HTTPS on. **Live at
+      https://avamartoma.com** (www → apex + http → https redirects verified).
+
+- [x] **2. ✅ Real resume/contact delivery live (Web3Forms, 2026-07-04).** Access
+      key registered to `hello@avamartoma.com` (→ forwards to Gmail) and set in all
+      three forms (`Footer.astro`, `ResumeModal.astro`, `resume.astro`). Contact +
+      both resume forms tested working on the live site. Distinct subject lines
+      per form; submitter's email is the reply-to.
+
+- [x] **3b. ✅ Indexed by Google (2026-07-08).** On-site SEO done + `avamartoma.com`
+      verified in **Google Search Console** (Domain property, DNS TXT) and
+      `sitemap-index.xml` submitted → status **Success**. Now waiting on Google to
+      crawl/index (days). Bing import optional/not done yet.
+
+---
+
+## Content & pages
+
+- [x] **1a. ✅ Captioned the scraped photos (2026-08-05).** Viewed every RC-car
+      carousel photo (build-02..22), CAD-studies, and Luminary shot (resized to
+      ≤1500px per HANDOVER §6) and wrote accurate captions. Fixed two
+      mislabeled CAD files (the "led-lamp" images were phone dimension sketches
+      → renamed + moved to the Phone Stand section) and fetched the real
+      finished **LED lamp** photo from lvilledesign.org. Corrected the Luminary
+      "final" shots (they're process shots, not a finished lit lantern).
+
+- [x] **1b. ✅ Gallery page (`/gallery`) — 60 REAL PHOTOS WIRED (2026-08-06 pt.9).**
+      Viewed all `gal-01..60`, wrote a hover label + accurate alt text + a
+      destination for each, and wired the **36 strongest** into the 5 marquee
+      rows alongside the 4 Wix covers (**40 items total**). Dropped 24
+      (near-duplicate graduation/group shots, a few dark or ambiguous frames).
+      Destinations worked out from photo contents: **P** (`architecture`,
+      `cad-projects` covers + `afe-hackathon` = gal-49 "the Spheres"), **COMM**
+      (Changemaker cover, MITES gal-08, LinkedIn gal-18, Chick-fil-A
+      gal-41/42/52/53, Amazon Future Engineer gal-48), **EXP** (10 squash +
+      professional-headshot frames), **HOME** (19 personal: ski, climb, bake,
+      travel, concerts, beaches, family, etc.). Used the 6 certain md5 links
+      (gal-18/41/42/49/52/53). **gal-14 & gal-17 were initially left out** — the
+      `HANDOVER` md5 note ties them to Phi Gamma Nu, but their visible content is
+      generic on its own (cabin s'mores / a dance-show cheer) and the PGN chip was
+      inert, so labelling them a program wasn't defensible then.
+      **✅ NOW WIRED IN (2026-08-06, at Ava's request) — all 8 certain md5 links are
+      used and 38 photos are in the wall.** The PGN chip is a live modal publishing
+      both photos, so the link holds: `gal-17` → row 1, label "Phi Gamma Nu";
+      `gal-14` → row 5, label "Chapter retreat"; both → `COMM`. Rows 1 and 5 were
+      the only ones with a single community photo, so every row now has two. md5
+      identity re-checked before wiring. Verified **54/54** Playwright at 1440×900 +
+      390×844 + reduced-motion (all 84 rendered images decode with real alt text,
+      both new photos present twice for the loop, hrefs → `#recognition`, labels
+      correct, hover pauses the row and reveals the label, no console errors or
+      failed requests).
+      ⚠️ Doing that check surfaced a trap now recorded in HANDOVER §6: on
+      `/gallery`, **`locator.hover()`/`.click()` hang** because the rows animate
+      forever — use `page.mouse.move()` to coordinates measured *after* scrolling
+      the row into view. Build ✓ (17 pages); the earlier Playwright
+      22/22 at 1440×900 + 390×844 + reduced-motion still holds (rows scroll, hover pauses +
+      reveals the label, reduced-motion → hand-scrollable, no console errors).
+      **~22 unused gal-NN.jpg remain** in `public/images/gallery/` if Ava wants
+      to swap any in later.
+
+- [x] **1c. ✅ Gallery page — placeholders replaced (done in 1b, 2026-08-06).**
+      Rows of photos auto-scroll in alternating directions; each links to a
+      project / experience / community / personal destination. The seeded Holi
+      placeholders are gone — all cells are now real photos. Personal photos
+      could later re-point at a dedicated `/living` page (#8b).
+
+- [x] **Amazon (Kuiper) experience** — ✅ real bullets added from resume
+      (2026-07-13): Flask dashboard across 94 built / ~200 planned antenna sites +
+      on-site Texas install with Intellian. Placeholder gone. *(was a sub-item of
+      TODO #3.)*
+
+- [x] **Wharton naming fixed** — Penn card now says School of Engineering &
+      Wharton. *(was a sub-item of TODO #3d.)*
+
+- [x] **OSU / Dr. Emily Dringenberg** (BERG Lab, Jun–Jul 2023) → ✅ **DONE**,
+      it is in the Experience timeline as "OSU Belief in Engineering Groups Lab
+      — Research Intern". *(was a sub-item of TODO #24, Wix reconciliation.)*
+
+---
+
+## Communities modals (completed; TODO #3c remains open for the un-done chips)
+
+These programme modals are DONE, built, and validated. The parent TODO item
+(3c) stays open only for `afe-02.jpg` wiring and the two remaining chips
+(NCWIT Aspirations, Davidson Young Scholars).
+
+- **✅ FOUR modals live + validated (2026-08-06 pt.6):** **T-Mobile Changemaker
+  Challenge** (`◈ 12`), **Taco Bell Ambition Accelerator** (`◈ 12` — 10 photos +
+  **2 video clips**), **MITES** (`◈ 12`), and **Calvin Coolidge Senator** (`◈ 9`).
+  Every item has specific alt text and a caption. Playwright **186/186** at
+  1440×900 + 390×844.
+
+- **✅ LinkedIn Possibilities in Tech + Coca-Cola Scholars — DONE, built +
+  validated (2026-08-06, `5bc8c9b`).** LinkedIn shows `◈ 25` (25 photos,
+  narrative order, hackathon `lpit-17` as the climax); Coca-Cola shows `◈ 12`
+  (11 photos + 1 banquet-stage clip). Alt text + captions written from the
+  photos; program facts verified against the LinkedIn and Coca-Cola Scholars
+  Foundation sites. 80/80 Playwright at 1440×900 + 390×844.
+
+- **✅ Phi Gamma Nu + Penn M&T — DONE, built + validated (2026-08-06 pt.8b).**
+  **Phi Gamma Nu** shows `◈ 17`: all 17 photos published with individual alt text
+  and captions, ordered as a narrative (bid night → Titans family reveal →
+  initiation with roses → the ~50-person chapter photo → chapter life). The blurb
+  is read off the photos — a slide reading “PGN | Delta Lambda Chapter” lists the
+  class of **15** with Ava among them — not from the web. `pgn-11.jpg` **was
+  stored rotated 90°** and was fixed. **Penn M&T** shows `◈ 1`: kept as a modal
+  rather than an inert chip because the single photo is strong and legible (the
+  cohort on the carved Wharton School steps) and the blurb explains what M&T is,
+  which is what the education card's "School of Engineering & Wharton" refers to
+  (verified against fisher.wharton.upenn.edu: 50–55 admitted a year). That
+  required a **`comm__dialog-photos--one`** CSS modifier — a lone item was being
+  `4/3` cover-cropped into a 220 px tile (254×190 with the carved lettering
+  clipped); it now renders whole at 786×524. Build ✓ (17 pages), 204/204 asset
+  refs resolve, Playwright **68/68** at 1440×900 + 390×844. ✅ Re-verified after
+  the other terminals finished: the duplicate `--single` rule a parallel session
+  had written is gone (mine, `--one`, survived), nothing of this work was reverted
+  by the merge, and a pass over **all 10** Communities modals went **220/220** at
+  both viewports with 293/293 asset refs resolving.
+
+- **✅ Chick-fil-A Community Scholars — DONE, built + validated (2026-08-06
+  pt.8).** Chip now shows `◈ 15` and opens a modal with a blurb (verified against
+  chick-fil-a.com/community-scholars: 13 scholars/yr, $25K each, 1-year
+  leadership + mentorship program; Ava is a 2025 recipient per the $25,000 /
+  02-28-2025 check in the photos) plus 15 captioned photos telling the story: the
+  check reveal with the Cow mascot and confetti, the Support Center Backstage
+  Tour, a Bracken's Kitchen service shift, a food-facility plant tour, and a Walt
+  Disney Studios day. **13 of the 28 processed shots were dropped**
+  (personal/scenery: Disney selfies, cotton candy, In-N-Out, castle/Cars-Land
+  scenery, redundant group shots) and deleted from `public/`; raws are in git
+  history if wanted back. `npm run build` ✓ (17 pages), Playwright **34/34** at
+  1440×900 + 390×844.
+
+- **✅ T-Mobile Changemaker Challenge — DONE, built + validated (2026-08-06).**
+  The homepage chip shows a `◈ 12` badge and opens a native `<dialog>` with a
+  KIDSMATES/$15,000 grant blurb plus 12 captioned photos from
+  `public/images/communities/t-mobile-changemaker/`. Photos were resized to
+  ≤1500 px; photo 02's orientation was corrected. Ava asked to drop the "At the
+  Space Needle" shot, so `changemaker-06.jpg` was pulled out of `public/` —
+  filenames run `01..13` **minus 06**; don't renumber. `npm run build` passes
+  (17 pages, no errors) and a Playwright pass at **1440×900 + 390×844** went
+  **38/38**: 12 photos decode, 12 captions, content scrolls, and ×,
+  backdrop-click, and Escape all close the modal. No console errors.
+
+- **Photos deliberately NOT published (Ava's call to reverse):** 9 MITES, 1
+  Coolidge and 1 architecture processed shot were dropped rather than shipped —
+  mostly informal night shots of other participants. The raws are permanently in
+  commit `0f9c4c4`, so any can be re-processed on ask.
+
+---
+
+## Spotify "Lately" 🎧
+
+- [x] **10. ✅ Spotify "Lately" 🎧 — LIVE (2026-07-10, Path A).** Cloudflare Worker
+      (`worker/`) deployed at `https://avamartoma-now-playing.avamartoma.workers.dev`
+      (secrets — client id/secret + refresh token — stored as Wrangler secrets;
+      account subdomain `avamartoma`). `NowPlaying.astro` shows the **current track
+      (with equalizer) + recent tracks**, and falls back to the **last 5 played**
+      when nothing's on. Endpoint hardcoded as the default in `NowPlaying.astro`
+      (still overridable via `PUBLIC_SPOTIFY_ENDPOINT`). GitHub half of "Lately"
+      (`GitHubActivity.astro`) also DONE + live.
+
+- **Decision (2026-08-06): NOT adding a Cloudflare Cron Trigger / extra
+  self-history resilience.** A one-song symptom turned out to be a Spotify **429
+  rate limit** on `recently-played` (from calling it uncached on every request;
+  likely tripped by a dev session hammering the page). Fixed by edge-caching
+  `recently-played` (120s) so Spotify sees ≤1 call / 2 min regardless of traffic;
+  a KV `play_history` self-history serves as a fallback while rate-limited. The
+  cron only mattered in the narrow "rate-limited AND self-history must stay
+  complete while the site is closed" case, which resolves itself once the 429
+  clears (~13:42 Fri 7 Aug 2026) — after which Spotify's own server-side list is
+  authoritative again. Not worth the complexity. Full detail in `HANDOVER.md`.
+
+---
+
+## Original foundational build (the old "✔️ Done" section)
+
+- [x] Scaffold Astro site + artsy-engineer design system; Holi palette
+- [x] Interactive hero (Holi color-powder cursor dots), custom cursor, grain
+- [x] **Live at root** https://avamartoma.github.io/ (GitHub Pages, auto-deploy)
+- [x] Bubbly overlapping one-line name + headshot **sticker** in a two-column hero
+- [x] Hero carries the "about" (tagline, bio, Tools I reach for, credential)
+- [x] **10 real projects** added (samples hidden as drafts)
+- [x] Work: homepage selection + `/work` page with multi-select tag filter
+- [x] Full "Month Day, Year" dates on cards + detail pages
+- [x] **Experience** horizontal-scroll timeline (12 roles incl. Kesem) + Education boxes
+- [x] **Honors** + **Publications** sections
+- [x] Resume popup + footer contact form (Web3Forms, pending key); LinkedIn linked
+- [x] Email kept private; LinkedIn data export gitignored
+- [x] **Custom domain live** — https://avamartoma.com (Cloudflare Registrar +
+      GitHub Pages, HTTPS enforced, www→apex redirect)
+- [x] **Email receiving** — `hello@avamartoma.com` + catch-all → Gmail (Cloudflare
+      Email Routing)
+- [x] **Forms deliver** — Web3Forms key live in all three forms (→ hello@)
+- [x] **Resume-request cooldown** — 2-day soft-lock on the popover + `/resume`
+      (shared `resumeLastSubmit` localStorage key); "You already submitted!" note
+- [x] **On-site SEO** — homepage title `Ava Martoma`, Person + WebSite JSON-LD,
+      `@astrojs/sitemap` (`/sitemap-index.xml`), `robots.txt`, RSS (`/rss.xml`),
+      richer OG/Twitter meta (indexing via Search Console still TODO — see 3b)

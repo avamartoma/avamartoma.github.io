@@ -1,13 +1,11 @@
 # ✅ TODO — personal-website
 
-Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
+Ordered by priority. Completed items are archived in
+[`decisions-log.md`](./decisions-log.md).
 
 ---
 
 ## 🟢 Now / next
-
-- [x] **0. ✅ Enforce HTTPS enabled (2026-07-04).** DNS verified, GitHub issued
-      the TLS cert, Enforce HTTPS on; https://avamartoma.com serves over HTTPS.
 
 - [~] **1. Add project photos.** *(In progress — 2026-08-06 pt.7.)*
       **⚠️ Processed assets are sitting in `public/` waiting to be wired in — see
@@ -33,64 +31,8 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       in the body (Markdown `![alt](/images/projects/<slug>/x.jpg)`), or use a
       `<div class="carousel"
       data-carousel>…</div>` block for a slideshow (see `rc-car.md`).
-  - [x] **1a. ✅ Captioned the scraped photos (2026-08-05).** Viewed every RC-car
-        carousel photo (build-02..22), CAD-studies, and Luminary shot (resized to
-        ≤1500px per HANDOVER §6) and wrote accurate captions. Fixed two
-        mislabeled CAD files (the "led-lamp" images were phone dimension sketches
-        → renamed + moved to the Phone Stand section) and fetched the real
-        finished **LED lamp** photo from lvilledesign.org. Corrected the Luminary
-        "final" shots (they're process shots, not a finished lit lantern).
-
-- [x] **1b. ✅ Gallery page (`/gallery`) — 60 REAL PHOTOS WIRED (2026-08-06 pt.9).**
-      Viewed all `gal-01..60`, wrote a hover label + accurate alt text + a
-      destination for each, and wired the **36 strongest** into the 5 marquee
-      rows alongside the 4 Wix covers (**40 items total**). Dropped 24
-      (near-duplicate graduation/group shots, a few dark or ambiguous frames).
-      Destinations worked out from photo contents: **P** (`architecture`,
-      `cad-projects` covers + `afe-hackathon` = gal-49 "the Spheres"), **COMM**
-      (Changemaker cover, MITES gal-08, LinkedIn gal-18, Chick-fil-A
-      gal-41/42/52/53, Amazon Future Engineer gal-48), **EXP** (10 squash +
-      professional-headshot frames), **HOME** (19 personal: ski, climb, bake,
-      travel, concerts, beaches, family, etc.). Used the 6 certain md5 links
-      (gal-18/41/42/49/52/53). **gal-14 & gal-17 were initially left out** — the
-      `HANDOVER` md5 note ties them to Phi Gamma Nu, but their visible content is
-      generic on its own (cabin s'mores / a dance-show cheer) and the PGN chip was
-      inert, so labelling them a program wasn't defensible then.
-      **✅ NOW WIRED IN (2026-08-06, at Ava's request) — all 8 certain md5 links are
-      used and 38 photos are in the wall.** The PGN chip is a live modal publishing
-      both photos, so the link holds: `gal-17` → row 1, label "Phi Gamma Nu";
-      `gal-14` → row 5, label "Chapter retreat"; both → `COMM`. Rows 1 and 5 were
-      the only ones with a single community photo, so every row now has two. md5
-      identity re-checked before wiring. Verified **54/54** Playwright at 1440×900 +
-      390×844 + reduced-motion (all 84 rendered images decode with real alt text,
-      both new photos present twice for the loop, hrefs → `#recognition`, labels
-      correct, hover pauses the row and reveals the label, no console errors or
-      failed requests).
-      ⚠️ Doing that check surfaced a trap now recorded in HANDOVER §6: on
-      `/gallery`, **`locator.hover()`/`.click()` hang** because the rows animate
-      forever — use `page.mouse.move()` to coordinates measured *after* scrolling
-      the row into view. Build ✓ (17 pages); the earlier Playwright
-      22/22 at 1440×900 + 390×844 + reduced-motion still holds (rows scroll, hover pauses +
-      reveals the label, reduced-motion → hand-scrollable, no console errors).
-      **~22 unused gal-NN.jpg remain** in `public/images/gallery/` if Ava wants
-      to swap any in later.
-
-- [x] **1c. ✅ Gallery page — placeholders replaced (done in 1b, 2026-08-06).**
-      Rows of photos auto-scroll in alternating directions; each links to a
-      project / experience / community / personal destination. The seeded Holi
-      placeholders are gone — all cells are now real photos. Personal photos
-      could later re-point at a dedicated `/living` page (#8b).
-
-- [x] **2. ✅ Real resume/contact delivery live (Web3Forms, 2026-07-04).** Access
-      key registered to `hello@avamartoma.com` (→ forwards to Gmail) and set in all
-      three forms (`Footer.astro`, `ResumeModal.astro`, `resume.astro`). Contact +
-      both resume forms tested working on the live site. Distinct subject lines
-      per form; submitter's email is the reply-to.
 
 - [ ] **3. Fill in real details for a few entries.**
-  - [x] **Amazon (Kuiper)** experience — ✅ real bullets added from resume
-    (2026-07-13): Flask dashboard across 94 built / ~200 planned antenna sites +
-    on-site Texas install with Intellian. Placeholder gone.
   - **LinkedIn Hackathon** — add a demo/live link if there is one.
   - Confirm estimated dates: **CAD Bridge**, **CAD & Woodworking Studies**, and
     the marquetry pieces. *(Flower Press dated 2025-05-15 from the promposal sign
@@ -195,12 +137,6 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         Prize"). Fine if intentional.
       - **Skills gaps** in the Hero chips: **KiCad** (RC car) and **Flask**
         (Amazon role) aren't listed; add if desired.
-      - ✅ Wharton naming fixed (Penn card now says School of Engineering & Wharton).
-
-- [x] **3b. ✅ Indexed by Google (2026-07-08).** On-site SEO done + `avamartoma.com`
-      verified in **Google Search Console** (Domain property, DNS TXT) and
-      `sitemap-index.xml` submitted → status **Success**. Now waiting on Google to
-      crawl/index (days). Bing import optional/not done yet.
 
 ---
 
@@ -238,14 +174,6 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       woodworking) were removed with the About section; fold into the iFAQ or
       elsewhere if wanted.
 
-- [x] **10. ✅ Spotify "Lately" 🎧 — LIVE (2026-07-10, Path A).** Cloudflare Worker
-      (`worker/`) deployed at `https://avamartoma-now-playing.avamartoma.workers.dev`
-      (secrets — client id/secret + refresh token — stored as Wrangler secrets;
-      account subdomain `avamartoma`). `NowPlaying.astro` shows the **current track
-      (with equalizer) + recent tracks**, and falls back to the **last 5 played**
-      when nothing's on. Endpoint hardcoded as the default in `NowPlaying.astro`
-      (still overridable via `PUBLIC_SPOTIFY_ENDPOINT`). GitHub half of "Lately"
-      (`GitHubActivity.astro`) also DONE + live.
 - [ ] **11. "Clubs & activities at Penn" strip** — showcase the things you do at
       Penn: Women's Club Squash (Co-Captain), Penn Electric Racing, Kesem, etc.
       Could be a small tag/badge row, a mini-card strip, or folded into the
@@ -384,9 +312,6 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         slice-plane analysis, caliper-measured MDF thickness. The real **FEA
         stress-plot images** are also still missing (the folder has only sketch /
         fusion / iterations / built).
-      - [x] **OSU / Dr. Emily Dringenberg** (BERG Lab, Jun–Jul 2023) → ✅ **DONE**,
-        it is in the Experience timeline as "OSU Belief in Engineering Groups Lab
-        — Research Intern".
       - [ ] **KidsMates writing** (~16 Chronicle posts + Miami Herald / Forbes
         features / Taco Bell coverage) → **Ava's preference (2026-08-06 pt.8):
         either leave it out, or distil it down to a few lines on the existing
@@ -413,11 +338,6 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
       - Flag anything that should be cut rather than corrected.
 
 ## 🔵 Later / infrastructure
-
-- [x] **10. Custom domain — `avamartoma.com`** (bought via Cloudflare Registrar,
-      2026-07-04). `astro.config.mjs` `site` + `public/CNAME` set; DNS (4× A grey +
-      www CNAME) added; GitHub Pages custom domain + Enforce HTTPS on. **Live at
-      https://avamartoma.com** (www → apex + http → https redirects verified).
 
 - [ ] **10a. Email SENDING — send-as `hello@avamartoma.com` via free SMTP relay.**
       ✅ RECEIVING done: Cloudflare Email Routing live — `hello@avamartoma.com`
@@ -483,30 +403,3 @@ Ordered by priority. (Deeper context lives in [`HANDOVER.md`](./HANDOVER.md).)
         (keeps `.md` simple — avoids needing MDX). Pilot on ONE project first.
       - **Caveats:** mobile perf (provide a static fallback image); gate behind
         `prefers-reduced-motion`.
-
----
-
-## ✔️ Done
-
-- [x] Scaffold Astro site + artsy-engineer design system; Holi palette
-- [x] Interactive hero (Holi color-powder cursor dots), custom cursor, grain
-- [x] **Live at root** https://avamartoma.github.io/ (GitHub Pages, auto-deploy)
-- [x] Bubbly overlapping one-line name + headshot **sticker** in a two-column hero
-- [x] Hero carries the "about" (tagline, bio, Tools I reach for, credential)
-- [x] **10 real projects** added (samples hidden as drafts)
-- [x] Work: homepage selection + `/work` page with multi-select tag filter
-- [x] Full "Month Day, Year" dates on cards + detail pages
-- [x] **Experience** horizontal-scroll timeline (12 roles incl. Kesem) + Education boxes
-- [x] **Honors** + **Publications** sections
-- [x] Resume popup + footer contact form (Web3Forms, pending key); LinkedIn linked
-- [x] Email kept private; LinkedIn data export gitignored
-- [x] **Custom domain live** — https://avamartoma.com (Cloudflare Registrar +
-      GitHub Pages, HTTPS enforced, www→apex redirect)
-- [x] **Email receiving** — `hello@avamartoma.com` + catch-all → Gmail (Cloudflare
-      Email Routing)
-- [x] **Forms deliver** — Web3Forms key live in all three forms (→ hello@)
-- [x] **Resume-request cooldown** — 2-day soft-lock on the popover + `/resume`
-      (shared `resumeLastSubmit` localStorage key); "You already submitted!" note
-- [x] **On-site SEO** — homepage title `Ava Martoma`, Person + WebSite JSON-LD,
-      `@astrojs/sitemap` (`/sitemap-index.xml`), `robots.txt`, RSS (`/rss.xml`),
-      richer OG/Twitter meta (indexing via Search Console still TODO — see 3b)
