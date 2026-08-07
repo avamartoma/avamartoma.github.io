@@ -302,6 +302,10 @@ flatItems.forEach((item, idx) => mobileRows[idx % MOBILE_ROW_COUNT].items.push(i
     opacity: 1;
     transform: none;
   }
+  /* Touch (no-hover) devices: one tap reveals the caption and pauses that row
+     (classes added by the script below); a second tap follows the link. */
+  .g-item.is-tapped:has(img) .g-item__cap { opacity: 1; transform: none; }
+  .marquee.is-tap-paused .marquee__track { animation-play-state: paused; }
 
   /* Mobile: keep the full-width, left/right alternating auto-scroll marquee, but
      swap in the more-rows mobile grouping and size photos so ~2-3 show at once
@@ -311,7 +315,7 @@ flatItems.forEach((item, idx) => mobileRows[idx % MOBILE_ROW_COUNT].items.push(i
   @media (max-width: 860px) {
     .marquee-rows--desktop { display: none; }
     .marquee-rows--mobile { display: flex; }
-    .g-item { --row-h: clamp(118px, 33vw, 155px); }
+    .g-item { --row-h: clamp(118px, 33vw, 155px); touch-action: manipulation; }
   }
 
   /* Motion off: no auto-scroll — let people scroll each row by hand instead. */
@@ -321,3 +325,45 @@ flatItems.forEach((item, idx) => mobileRows[idx % MOBILE_ROW_COUNT].items.push(i
     /* the duplicated set is redundant without motion, but harmless */
   }
 </style>
+
+<script>
+  // Touch behaviour for the gallery. On no-hover (touch) devices there's no
+  // hover to reveal the caption and a link would fire on the first tap — so:
+  //   1st tap on a photo  → reveal its caption + pause that row (no navigation)
+  //   2nd tap on the same photo (within ~3s) → follow its link, if it has one
+  // Desktop (hover) is untouched: captions show on hover, one click navigates.
+  if (window.matchMedia('(hover: none)').matches) {
+    const gallery = document.querySelector('.gallery');
+    if (gallery) {
+      let revealTimer: ReturnType<typeof setTimeout> | undefined;
+
+      const clearShown = () => {
+        gallery.querySelectorAll('.g-item.is-tapped').forEach((el) => el.classList.remove('is-tapped'));
+        gallery.querySelectorAll('.marquee.is-tap-paused').forEach((el) => el.classList.remove('is-tap-paused'));
+      };
+
+      gallery.addEventListener('click', (e) => {
+        const item = (e.target as HTMLElement).closest('.g-item');
+        // tap on empty space → dismiss any revealed caption
+        if (!item) { clearTimeout(revealTimer); clearShown(); return; }
+
+        // second tap on an already-revealed photo → let the click through so an
+        // <a> navigates natively (a non-link tile just closes the caption).
+        if (item.classList.contains('is-tapped')) {
+          clearTimeout(revealTimer);
+          if (item.tagName !== 'A') clearShown();
+          return; // no preventDefault → link follows
+        }
+
+        // first tap → reveal caption, pause the row, block navigation
+        e.preventDefault();
+        clearShown();
+        item.classList.add('is-tapped');
+        item.closest('.marquee')?.classList.add('is-tap-paused');
+        clearTimeout(revealTimer);
+        // auto-dismiss so a much-later tap starts fresh (isn't read as the 2nd tap)
+        revealTimer = setTimeout(clearShown, 3000);
+      });
+    }
+  }
+</script>
