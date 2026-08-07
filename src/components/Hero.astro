@@ -7,8 +7,9 @@ interface Props {
 }
 const { count } = Astro.props;
 
-// Split the name into letters so they can overlap and each carry a color.
-const nameLetters = [...'ava martoma'];
+// The name is two words so they can sit on their own lines (tilted, on mobile)
+// while still rendering per-letter for the overlapping bubbly color effect.
+const nameWords = ['ava', 'martoma'];
 const palette = ['var(--signal)', 'var(--signal-2)', 'var(--signal-3)', 'var(--signal-4)', 'var(--signal-5)'];
 
 const stack = [
@@ -22,26 +23,47 @@ const stack = [
   <canvas class="hero__canvas" aria-hidden="true"></canvas>
 
   <div class="wrap hero__inner">
-    <div class="hero__text">
-      <p class="hero__eyebrow" data-reveal>
-        Hardware Engineer @ Amazon Leo · UPenn M&amp;T: MechE × Wharton
-      </p>
+    <p class="hero__eyebrow" data-reveal>
+      Hardware Engineer @ Amazon Leo · UPenn M&amp;T: MechE × Wharton
+    </p>
 
-      <h1 class="hero__name" data-reveal data-reveal-delay="60ms" aria-label="ava martoma">
-        {nameLetters.map((ch, i) => (
-          ch === ' '
-            ? <span class="hero__space" aria-hidden="true"> </span>
-            : <span class="hero__ltr" aria-hidden="true" style={`color:${palette[i % palette.length]}`}>{ch}</span>
-        ))}
-      </h1>
+    <!-- Headshot sticker. Sits to the RIGHT of the text on desktop, and BESIDE
+         the name on mobile (see grid-template-areas below). -->
+    <figure class="hero__photo" data-reveal data-reveal-delay="200ms">
+      <Image
+        src={headshot}
+        alt="Ava Martoma"
+        width={520}
+        height={802}
+        widths={[320, 520]}
+        sizes="(max-width: 860px) 40vw, 340px"
+        quality={90}
+        format="png"
+        loading="eager"
+      />
+    </figure>
 
+    <h1 class="hero__name" data-reveal data-reveal-delay="60ms" aria-label="ava martoma">
+      {nameWords.map((word, wi) => {
+        const offset = nameWords.slice(0, wi).reduce((n, w) => n + w.length, 0);
+        return (
+          <span class={`hero__word hero__word--${wi === 0 ? 'a' : 'b'}`} aria-hidden="true">
+            {[...word].map((ch, j) => (
+              <span class="hero__ltr" style={`color:${palette[(offset + j) % palette.length]}`}>{ch}</span>
+            ))}
+          </span>
+        );
+      })}
+    </h1>
+
+    <div class="hero__body">
       <p class="hero__tagline" data-reveal data-reveal-delay="140ms">
         Half designer, half engineer, <span class="hero__accent">fully curious.</span>
       </p>
 
       <p class="hero__lede" data-reveal data-reveal-delay="200ms">
         Hi! I'm a mechanical engineering &amp; business student at Penn. I love
-        all things makerspace and hands-on — and above all, I love to learn.
+        all things makerspace and hands-on&nbsp;:) Scroll to learn more about me!
       </p>
 
       <div class="hero__tools" data-reveal data-reveal-delay="240ms">
@@ -56,21 +78,6 @@ const stack = [
         <a href="#experience" class="btn">Experience</a>
       </div>
     </div>
-
-    <!-- Headshot sticker (top-right). Swap src for the cutout PNG when ready. -->
-    <figure class="hero__photo" data-reveal data-reveal-delay="200ms">
-      <Image
-        src={headshot}
-        alt="Ava Martoma"
-        width={520}
-        height={802}
-        widths={[320, 520]}
-        sizes="(max-width: 860px) 55vw, 340px"
-        quality={90}
-        format="png"
-        loading="eager"
-      />
-    </figure>
   </div>
 </section>
 
@@ -94,10 +101,20 @@ const stack = [
     z-index: 1;
     padding-block: 2.5rem 4rem;
     display: grid;
+    /* Desktop: text stack on the left, photo on the right (spanning + centered).
+       Areas let the SAME markup rearrange for mobile without reordering the DOM. */
     grid-template-columns: 1.35fr 0.65fr;
-    gap: clamp(1.5rem, 4vw, 3.5rem);
+    grid-template-areas:
+      "eye   photo"
+      "name  photo"
+      "body  photo";
+    column-gap: clamp(1.5rem, 4vw, 3.5rem);
     align-items: center;
   }
+  .hero__eyebrow { grid-area: eye; }
+  .hero__name    { grid-area: name; }
+  .hero__body    { grid-area: body; }
+  .hero__photo   { grid-area: photo; }
   .hero__eyebrow {
     font-family: var(--font-mono);
     font-size: 0.82rem;
@@ -110,11 +127,13 @@ const stack = [
     .hero__eyebrow { white-space: normal; }
   }
 
-  /* Big goofy bubbly name — letters overlap, each carved out with a bg outline */
+  /* Big goofy bubbly name — two words, each tilted opposite for a playful look;
+     within a word the letters overlap and each is carved out with a bg outline. */
   .hero__name {
     display: flex;
-    flex-wrap: nowrap;
-    white-space: nowrap;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    column-gap: 0.28em;
     font-family: var(--font-bubble);
     font-weight: 700;
     line-height: 0.95;
@@ -125,6 +144,15 @@ const stack = [
     transition: transform 0.35s var(--ease);
   }
   .hero__name:hover { transform: rotate(-1deg) translateY(-3px); }
+  .hero__word {
+    display: inline-flex;
+    transition: transform 0.3s var(--ease);
+  }
+  /* Desktop: the name sits flat on one line. The playful opposite tilts (and the
+     two-line stack) are applied ONLY in the mobile layout below — the mobile site
+     is the "in progress" version getting the funky treatment. */
+  .hero__word--a { transform-origin: center; }
+  .hero__word--b { transform-origin: center; }
   .hero__ltr {
     display: inline-block;
     margin-left: -0.06em;          /* pull letters together so they overlap */
@@ -136,7 +164,6 @@ const stack = [
   }
   .hero__ltr:first-child { margin-left: 0; }
   .hero__name:hover .hero__ltr { transform: translateY(-2px); }
-  .hero__space { width: 0.32em; }
 
   .hero__photo {
     position: relative;
@@ -175,7 +202,7 @@ const stack = [
     color: var(--ink-soft);
     font-size: clamp(1rem, 1.6vw, 1.15rem);
     margin-bottom: 2.25rem;
-    max-width: 52ch;
+    max-width: 56ch;
   }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
 
@@ -200,18 +227,37 @@ const stack = [
   }
   .hero__chips li:hover { border-color: var(--signal); color: var(--signal); }
 
-  /* Stack the hero on narrow screens: photo above the text */
+  /* Mobile: photo sits BESIDE the name (top row), with the eyebrow and the rest
+     of the copy stacked full-width underneath. */
   @media (max-width: 860px) {
     .hero__inner {
-      grid-template-columns: 1fr;
-      padding-block: 5rem 4rem;
+      grid-template-columns: auto 1fr;
+      grid-template-areas:
+        "photo name"
+        "eye   eye"
+        "body  body";
+      column-gap: clamp(0.9rem, 4vw, 1.5rem);
+      row-gap: 0.5rem;
+      align-items: center;
+      padding-block: 3.5rem 3rem;
     }
     .hero__photo {
-      grid-row: 1;
-      justify-self: start;
-      max-width: 190px;
-      margin-bottom: 0.5rem;
+      justify-self: center;
+      align-self: center;
+      max-width: clamp(120px, 34vw, 168px);
+      margin: 0;
     }
+    /* stack the two words on their own lines, tilted harder for effect */
+    .hero__name {
+      flex-direction: column;
+      align-items: center;   /* centers the shorter "ava" over the wider "martoma" */
+      row-gap: 0.05em;
+      margin-bottom: 0;
+      font-size: clamp(2.3rem, 13vw, 4rem);
+    }
+    .hero__word--a { transform: rotate(-5deg); transform-origin: center; }
+    .hero__word--b { transform: rotate(4deg); transform-origin: center; }
+    .hero__eyebrow { white-space: normal; margin-top: 1.4rem; margin-bottom: 0; }
   }
 </style>
 

@@ -9,6 +9,11 @@ import GitHubActivity from '../components/GitHubActivity.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 
+// Stable, URL-safe id for a community, derived from its name. Used so the
+// gallery can deep-link straight to a community's modal (/#community-<slug>).
+const slugify = (s: string) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
 // Load projects, drop drafts, newest first.
 const projects = (await getCollection('projects'))
   .filter((p) => !p.data.draft)
@@ -43,19 +48,19 @@ const communities: Community[] = [
   {
     name: 'Amazon Future Engineer',
     blurb:
-      "Amazon Future Engineer is Amazon's computer-science education and scholarship program. As part of it my cohort interned at Amazon together — the same group behind the Amazon Path hackathon (one of my projects). This is us on a rooftop at sunset.",
+      `Amazon Future Engineer Scholarship is Amazon's computer-science education and scholarship program. Being a part of this cohort has allowed me to meet so many interesting people, and I'm grateful for the opportunities it has given me. Through this program, I was able to participate and place in the Amazon AFE Hackathon. <a class="comm__dialog-link" href="${base}projects/afe-hackathon/">Learn more about my project here</a>. Shoutout to Betty Beniamm and Emma Hanan, as well as everyone who makes the program happen!`,
     media: [
       {
         src: '/images/communities/amazon-future-engineer/afe-01.jpg',
         alt: 'About a dozen Amazon Future Engineer scholars crowded together on a rooftop at sunset, arms around each other, a city skyline and orange sky behind them.',
-        caption: 'The AFE cohort at sunset',
+        caption: 'AFE-organized BBQ at sunset',
       },
     ],
   },
   {
     name: 'LinkedIn Possibilities in Tech',
     blurb:
-      'The LinkedIn Possibilities in Tech Scholarship backs future tech talent from backgrounds underrepresented in the industry — multi-year funding plus mentorship, college-navigation support, and technical training. Being a scholar also meant a few days on LinkedIn’s California campus: a product-design hackathon reimagining LinkedIn for Gen-Z and Gen-Alpha users, engineering sessions, and a cohort I clicked with over karaoke, Topgolf, and s’mores by the fire.',
+      `<p>The LinkedIn Possibilities in Tech (PIT) Scholarship has been a defining part of my journey. PIT supports students from underrepresented backgrounds in tech by providing multi-year funding, mentorship, college-navigation support, and technical training. Beyond the professional development, it's the tight-knit community that makes this program so incredibly impactful.</p><p>During our first PIT Intensive at LinkedIn's Mountain View campus in June 2025, I quickly bonded with my cohort and gained invaluable wisdom from the upperclassmen mentors. (And yes, the highlight of that trip was definitely Top Golf!)</p><p>Returning a year later for the June 2026 Sophomore Summer Intensive felt like a reunion. I had the amazing opportunity to collaborate with and learn directly from my peers during our hackathon. <a class="comm__dialog-link" href="${base}projects/linkedin-hackathon/">Check out my LinkedIn Discover project</a> to see what we built… and a huge shoutout to Pablo Najera, Tori Goyette, and Jocelyn Kuo for making LinkedIn PIT a reality!</p>`,
     media: [
       {
         src: '/images/communities/linkedin-possibilities-in-tech/lpit-19.jpg',
@@ -181,6 +186,7 @@ const communities: Community[] = [
         src: '/images/communities/linkedin-possibilities-in-tech/lpit-08.jpg',
         alt: 'A studio headshot of Ava in a white dress against a grey backdrop, smiling with one hand on her hip.',
         caption: 'Headshot day',
+        objectPosition: 'center top',
       },
     ],
   },
@@ -755,7 +761,7 @@ const communities: Community[] = [
       <dialog> gives us Escape-to-close, backdrop, and focus handling free. */}
   {communities.map((c, i) =>
     c.media && c.media.length > 0 ? (
-      <dialog class="comm__dialog" id={`comm-dialog-${i}`} aria-label={`${c.name} — photos`}>
+      <dialog class="comm__dialog" id={`comm-dialog-${i}`} data-comm-slug={slugify(c.name)} aria-label={`${c.name} — photos`}>
         {/* The close button is a direct child of the dialog, NOT of the
             scrolling inner div — it is positioned against the dialog, and
             nesting it inside the scroll container makes hit-testing and
@@ -763,7 +769,7 @@ const communities: Community[] = [
         <button class="comm__dialog-close" type="button" aria-label="Close" data-comm-close>×</button>
         <div class="comm__dialog-inner">
           <h3 class="comm__dialog-title">{c.name}</h3>
-          {c.blurb && <p class="comm__dialog-blurb">{c.blurb}</p>}
+          {c.blurb && <div class="comm__dialog-blurb" set:html={c.blurb} />}
           <div
             class:list={[
               'comm__dialog-photos',
@@ -790,7 +796,7 @@ const communities: Community[] = [
                     <a href={m.src}>Download the video</a>
                   </video>
                 ) : (
-                  <img src={m.src} alt={m.alt} loading="lazy" />
+                  <img src={m.src} alt={m.alt} loading="lazy" style={m.objectPosition ? `object-position:${m.objectPosition}` : undefined} />
                 )}
                 {m.caption && <figcaption>{m.caption}</figcaption>}
               </figure>
@@ -1017,6 +1023,22 @@ const communities: Community[] = [
        short of the modal's edge. */
     max-width: none;
   }
+  /* Multi-paragraph blurbs: the paragraphs and link are injected via set:html,
+     so they don't carry Astro's scope attribute — target them with :global()
+     (scoped under the blurb container) or the rules silently won't match. */
+  .comm__dialog-blurb :global(p) {
+    margin: 0 0 1em;
+    max-width: none;
+  }
+  .comm__dialog-blurb :global(p:last-child) { margin-bottom: 0; }
+  .comm__dialog-blurb :global(.comm__dialog-link) {
+    color: var(--signal);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 700;
+    transition: color 0.2s var(--ease);
+  }
+  .comm__dialog-blurb :global(.comm__dialog-link:hover) { color: var(--signal-2); }
   .comm__dialog-photos {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
@@ -1079,4 +1101,20 @@ const communities: Community[] = [
       dialog.querySelectorAll('video').forEach((v) => v.pause());
     });
   });
+
+  // Deep-link support: the gallery links to /#community-<slug>. On load (and on
+  // any in-page hash change) scroll to the Communities section and open that
+  // community's modal. Falls back to just scrolling if the slug has no modal.
+  function openCommunityFromHash() {
+    const m = location.hash.match(/^#community-(.+)$/);
+    if (!m) return;
+    const slug = decodeURIComponent(m[1]);
+    const dialog = document.querySelector<HTMLDialogElement>(
+      `.comm__dialog[data-comm-slug="${slug}"]`,
+    );
+    document.getElementById('recognition')?.scrollIntoView({ block: 'start' });
+    if (dialog && !dialog.open) dialog.showModal();
+  }
+  openCommunityFromHash();
+  window.addEventListener('hashchange', openCommunityFromHash);
 </script>

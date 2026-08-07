@@ -108,7 +108,7 @@ const structuredData = [
 
     <div class="site-banner" role="status">
       <span class="site-banner__dot" aria-hidden="true"></span>
-      Website in progress — stay tuned for updates
+      <span>Website in progress — stay tuned for updates</span>
     </div>
 
     <main>
@@ -181,26 +181,48 @@ const structuredData = [
         const slides = track ? Array.from(track.children) : [];
         if (!track || slides.length === 0) return;
         let idx = 0;
-        const dotsWrap = car.querySelector('.carousel__dots');
+        const multi = slides.length > 1;
+        // Dots container — create it if the markup didn't include one.
+        let dotsWrap = car.querySelector('.carousel__dots');
+        if (!dotsWrap && multi) {
+          dotsWrap = document.createElement('div');
+          dotsWrap.className = 'carousel__dots';
+          car.appendChild(dotsWrap);
+        }
         const counter = car.querySelector('.carousel__count');
-        const dots = slides.map((_, i) => {
+        const dots = multi ? slides.map((_, i) => {
           const b = document.createElement('button');
+          b.type = 'button';
           b.className = 'carousel__dot' + (i === 0 ? ' is-active' : '');
           b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
           b.addEventListener('click', () => go(i));
           if (dotsWrap) dotsWrap.appendChild(b);
           return b;
-        });
+        }) : [];
         function go(n) {
           idx = (n + slides.length) % slides.length;
           (track as HTMLElement).style.transform = 'translateX(-' + idx * 100 + '%)';
           dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
           if (counter) counter.textContent = (idx + 1) + ' / ' + slides.length;
         }
-        const prev = car.querySelector('.carousel__btn--prev');
-        const next = car.querySelector('.carousel__btn--next');
-        if (prev) prev.addEventListener('click', () => go(idx - 1));
-        if (next) next.addEventListener('click', () => go(idx + 1));
+        // Prev/next arrows — create them if the markup didn't include them.
+        if (multi) {
+          const mkBtn = (dir) => {
+            const sel = '.carousel__btn--' + dir;
+            let b = car.querySelector(sel) as HTMLButtonElement | null;
+            if (!b) {
+              b = document.createElement('button');
+              b.type = 'button';
+              b.className = 'carousel__btn carousel__btn--' + dir;
+              b.setAttribute('aria-label', dir === 'prev' ? 'Previous slide' : 'Next slide');
+              b.textContent = dir === 'prev' ? '\u2190' : '\u2192';
+              car.appendChild(b);
+            }
+            return b;
+          };
+          mkBtn('prev').addEventListener('click', () => go(idx - 1));
+          mkBtn('next').addEventListener('click', () => go(idx + 1));
+        }
         if (counter) counter.textContent = '1 / ' + slides.length;
       });
     </script>

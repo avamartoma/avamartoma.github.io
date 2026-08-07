@@ -56,6 +56,9 @@ images, blockquotes are all styled.
   gradient from your `accent`/`accentAlt` colors.
 - **With a cover image?** Drop the file in `public/images/projects/<slug>/` and
   reference it as `/images/projects/<slug>/filename.jpg`.
+- **Multiple photos?** Group them into a swipeable carousel with a
+  `<div class="carousel" data-carousel>…<img>…</div>` block (prev/next arrows and
+  dots are generated automatically). See `src/content/projects/marquetry-desk.md`.
 
 Save the file, and it appears in the grid automatically. Frontmatter is
 validated at build time (see `src/content.config.ts`) — a typo'd field will
@@ -67,17 +70,32 @@ fail the build with a clear message.
 
 ```
 src/
-  components/    Nav, Footer, Hero (interactive canvas), ProjectCard
+  components/    Nav, Footer, Hero (bio + interactive canvas), Experience,
+                 NowPlaying, GitHubActivity, ProjectRow, ProjectCard, ResumeModal
   content/
     projects/    ← your project Markdown lives here
+  lib/
+    categories.ts            maps project tags → discipline filters on /work
   layouts/       Layout.astro (fonts, custom cursor, scroll reveals)
   pages/
-    index.astro              homepage (hero + work grid + about)
+    index.astro              homepage (hero + work + lately + experience + communities)
+    work.astro               full project catalogue with tag filters
+    gallery.astro            image gallery
+    resume.astro             resume page
     projects/[...slug].astro project detail page
+    rss.xml.js               RSS feed
     404.astro                playful not-found page
   styles/global.css          design system (palette, type, grain, cursor)
 public/          static assets (favicon, images)
 ```
+
+### Where the site copy lives
+
+- **Bio / intro** (eyebrow, tagline, lede, tools list) — `src/components/Hero.astro`
+- **Projects** — one Markdown file each in `src/content/projects/`
+- **Communities** — the `communities` array in the frontmatter of
+  `src/pages/index.astro` (name + blurb + optional photo/video media)
+- **Experience timeline** — `src/components/Experience.astro`
 
 ### The "artsy-engineer" touches
 

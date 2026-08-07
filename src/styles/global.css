@@ -42,7 +42,7 @@
 /* ---- Reset -------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; overflow-x: clip; }
 
 body {
   background: var(--bg);
@@ -51,7 +51,11 @@ body {
   font-size: 16px;
   line-height: 1.6;
   min-height: 100vh;
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) contains any stray horizontal overflow — the black
+     bar seen when zooming out — WITHOUT turning body into a scroll container,
+     which would break the sticky nav. Applied to <html> too as a belt-and-braces. */
+  overflow-x: clip;
+  max-width: 100%;
   position: relative;
 }
 
@@ -110,15 +114,17 @@ p { max-width: 62ch; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6em;
+  gap: 0.55em;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  /* scales with viewport width so the whole line of copy stays on ONE line,
+     down to small phones */
+  font-size: clamp(0.5rem, 2.7vw, 0.72rem);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--bg);
   background: linear-gradient(90deg, var(--signal), var(--signal-2), var(--signal-3));
   padding: 0.55em 1rem;
-  text-align: center;
+  white-space: nowrap;
 }
 .site-banner__dot {
   width: 7px;
@@ -140,7 +146,11 @@ p { max-width: 62ch; }
   padding-inline: clamp(1.25rem, 5vw, 3rem);
 }
 
-.section { padding-block: clamp(4rem, 12vh, 9rem); }
+/* Vertical rhythm between sections. The gap between two stacked sections is
+   TWICE this (bottom padding of one + top padding of the next), so keep it
+   modest — the old clamp(4rem,12vh,9rem) left a lot of dead black space,
+   especially on phones. */
+.section { padding-block: clamp(2rem, 6vh, 6rem); }
 
 /* Anchored sections (#work, #about, #contact, #top) should land below the
    sticky nav (~68px tall) instead of hiding beneath it. */

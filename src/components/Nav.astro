@@ -1,9 +1,11 @@
 ---
 const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/'; // always ends in one slash
 const links = [
+  { href: base, label: 'Home' },
   { href: `${base}#work`, label: 'Work' },
-  { href: `${base}gallery/`, label: 'Gallery' },
   { href: `${base}#experience`, label: 'Experience' },
+  { href: `${base}#recognition`, label: 'Communities' },
+  { href: `${base}gallery/`, label: 'Gallery' },
   { href: `${base}resume/`, label: 'Resume', modal: true },
   { href: `${base}#contact`, label: 'Contact' },
 ];
@@ -31,7 +33,18 @@ const links = [
       <span class="nav__name">ava<em>martoma</em></span>
     </a>
 
-    <nav class="nav__links" aria-label="Primary">
+    <button
+      class="nav__toggle"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+      data-nav-toggle
+    >
+      <span class="nav__bars" aria-hidden="true"></span>
+    </button>
+
+    <nav id="primary-nav" class="nav__links" aria-label="Primary">
       {links.map((l) => (
         <a href={l.href} class="nav__link" data-open-resume={l.modal ? '' : undefined}>
           <span class="nav__idx">/</span>{l.label}
@@ -85,7 +98,125 @@ const links = [
   .nav__link:hover { color: var(--ink); }
   .nav__idx { color: var(--signal); margin-right: 0.35em; }
 
-  @media (max-width: 560px) {
+  /* Hamburger toggle — hidden on desktop, shown on mobile. */
+  .nav__toggle {
+    display: none;
+    position: relative;
+    width: 2.6rem;
+    height: 2.6rem;
+    margin: -0.4rem -0.4rem -0.4rem 0; /* enlarge tap target without shifting layout */
+    border: 0;
+    background: none;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  /* Middle bar + ::before/::after = a 3-line hamburger that morphs to an X. */
+  .nav__bars,
+  .nav__bars::before,
+  .nav__bars::after {
+    position: absolute;
+    left: 50%;
+    width: 1.35rem;
+    height: 2px;
+    margin-left: -0.675rem;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.28s var(--ease), opacity 0.2s var(--ease);
+  }
+  .nav__bars { top: 50%; transform: translateY(-1px); }
+  .nav__bars::before { content: ''; top: -6px; }
+  .nav__bars::after { content: ''; top: 6px; }
+  .nav.is-open .nav__bars { transform: rotate(45deg); }
+  .nav.is-open .nav__bars::before { transform: translateY(6px) rotate(-90deg); }
+  .nav.is-open .nav__bars::after { opacity: 0; }
+
+  @media (max-width: 860px) {
     .nav__name { display: none; }
+    .nav__toggle { display: inline-flex; align-items: center; justify-content: center; }
+
+    /* Links become a full-width dropdown panel below the bar. Stacked
+       vertically so all five fit comfortably on a narrow screen. */
+    .nav__links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      padding: 0.5rem clamp(1.25rem, 5vw, 3rem) 1rem;
+      background: color-mix(in srgb, var(--bg) 94%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      /* collapsed by default; JS toggles .is-open on .nav */
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.22s var(--ease), transform 0.22s var(--ease);
+    }
+    .nav.is-open .nav__links {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    .nav__link {
+      padding: 0.85rem 0;
+      font-size: 0.95rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    }
+    .nav__link:last-child { border-bottom: 0; }
+    /* While the inline Resume form is open, drop the Resume link's own divider so
+       the line falls under the FORM instead — grouping the form with Resume
+       rather than Contact. */
+    .nav__link.resume-open { border-bottom-color: transparent; }
+  }
+
+  /* If motion is reduced, don't animate the panel in/out. */
+  @media (prefers-reduced-motion: reduce) {
+    .nav__links, .nav__bars, .nav__bars::before, .nav__bars::after { transition: none; }
   }
 </style>
+
+<script>
+  // Mobile menu toggle. Progressive enhancement: without JS the panel stays in
+  // its default (collapsed) state, but every link is a real anchor so the site
+  // is still navigable via the logo/home routes.
+  const header = document.querySelector<HTMLElement>('.nav');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const panel = document.getElementById('primary-nav');
+
+  if (header && toggle && panel) {
+    const setOpen = (open: boolean) => {
+      header.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      // Let the resume popover (and anything else) collapse when the menu closes.
+      if (!open) document.dispatchEvent(new CustomEvent('nav:close'));
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(!header.classList.contains('is-open'));
+    });
+
+    // Close after choosing a destination — EXCEPT the Resume link, which opens
+    // an inline email popover (handled by ResumeModal) and should leave the menu
+    // open so you can toggle it and still see the other links.
+    panel.querySelectorAll('a').forEach((a) => {
+      if (a.hasAttribute('data-open-resume')) return;
+      a.addEventListener('click', () => setOpen(false));
+    });
+
+    // Escape closes and returns focus to the toggle.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && header.classList.contains('is-open')) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    // If the viewport grows back to desktop, make sure we're not left in the
+    // open-panel state (the panel is display-flex row on desktop).
+    const mq = window.matchMedia('(min-width: 861px)');
+    mq.addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+  }
+</script>

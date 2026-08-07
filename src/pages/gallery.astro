@@ -4,13 +4,14 @@ import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 
 // ---------------------------------------------------------------------------
-// Gallery items. Each photo links somewhere: a project, an experience, a
-// community, or a personal page.
+// Gallery items. A photo links to only one of three things: a PROJECT, a
+// COMMUNITY modal, or NOTHING (NONE / HOME) — no arbitrary destinations.
 //
 //   photo('/images/gallery/file.jpg', 'alt text', href, 'Label')
 //
 // Rows alternate scroll direction (row 1 →, row 2 ←, …). Hover a photo to
-// pause the row and reveal its label. `href` uses the helpers below.
+// pause the row. Photos that link show their `Label` as a caption on hover;
+// non-clickable photos are shown without a caption (they're self-explanatory).
 //
 // To add more: drop gal-NN.jpg in public/images/gallery/, LOOK at it, then add
 // a photo(...) entry to a row with a short label + accurate alt + a destination.
@@ -24,11 +25,16 @@ const photo = (src: string, alt: string, href: string, label: string): Item => (
   kind: 'photo', src, alt, href, label,
 });
 
-// Destinations reused below.
+// Destinations. A gallery photo may link to only three things: a PROJECT, a
+// COMMUNITY modal, or NOTHING. Anything without a project/community home is
+// left non-clickable (NONE) rather than pointing somewhere arbitrary.
 const P = (slug: string) => `${base}projects/${slug}/`;
-const EXP = `${base}#experience`;
-const COMM = `${base}#recognition`; // the Communities section (chips open modals)
-const HOME = base; // personal / about — until a dedicated /living page exists
+// A community photo deep-links to that community's modal on the homepage
+// (handled by the hash listener in index.astro), not just the section.
+const COMM = (slug: string) => `${base}#community-${slug}`;
+// No destination → rendered as a non-clickable tile (and without a caption).
+const NONE = '';
+const HOME = NONE;
 
 // ---------------------------------------------------------------------------
 // All 60 processed gal-NN.jpg were viewed and captioned; 38 of the strongest
@@ -62,12 +68,12 @@ const rows: { dir: 'left' | 'right'; items: Item[] }[] = [
   {
     dir: 'left', items: [
       photo('/images/gallery/cover-architecture.jpg', 'Ava presenting her architecture site-analysis project', P('architecture'), 'Architecture'),
-      photo('/images/gallery/gal-01.jpg', 'Ava holding a squash trophy on a glass court', EXP, 'Squash trophy'),
+      photo('/images/gallery/gal-01.jpg', 'Ava holding a squash trophy on a glass court', NONE, 'Squash trophy'),
       photo('/images/gallery/gal-02.jpg', 'Ava and a friend showing off watercolor paintings at an outdoor paint session', HOME, 'Watercolors'),
-      photo('/images/gallery/gal-08.jpg', 'Ava with the MITES cohort on the steps at MIT', COMM, 'MITES'),
-      photo('/images/gallery/gal-17.jpg', 'Ava and her Phi Gamma Nu chapter on the floor of a wood-panelled hall holding hand-made posters cheering for members performing in a dance showcase', COMM, 'Phi Gamma Nu'),
+      photo('/images/gallery/gal-08.jpg', 'Ava with the MITES cohort on the steps at MIT', COMM('mites'), 'MITES'),
+      photo('/images/gallery/gal-17.jpg', 'Ava and her Phi Gamma Nu chapter on the floor of a wood-panelled hall holding hand-made posters cheering for members performing in a dance showcase', COMM('phi-gamma-nu'), 'Phi Gamma Nu'),
       photo('/images/gallery/gal-21.jpg', 'Ava skiing at the top of a run above a frozen lake', HOME, 'Skiing'),
-      photo('/images/gallery/gal-38.jpg', 'Ava with her Penn squash teammates under the Penn "P"', EXP, 'Penn squash'),
+      photo('/images/gallery/gal-38.jpg', 'Ava with her Penn squash teammates under the Penn "P"', NONE, 'Penn squash'),
       photo('/images/gallery/gal-49.jpg', 'Ava and fellow Amazon interns at the Spheres', P('afe-hackathon'), 'Amazon Path'),
       photo('/images/gallery/gal-33.jpg', 'Ava with friends on the beach at golden hour', HOME, 'Beach friends'),
     ],
@@ -75,23 +81,23 @@ const rows: { dir: 'left' | 'right'; items: Item[] }[] = [
   {
     dir: 'right', items: [
       photo('/images/gallery/cover-woodshop.jpg', 'Ava at the drill press in the wood shop', P('cad-projects'), 'Wood shop'),
-      photo('/images/gallery/gal-41.jpg', 'Chick-fil-A Community Scholars celebrating a $25,000 award with the Chick-fil-A cow and confetti', COMM, 'Chick-fil-A Scholars'),
+      photo('/images/gallery/gal-41.jpg', 'Chick-fil-A Community Scholars celebrating a $25,000 award with the Chick-fil-A cow and confetti', COMM('chick-fil-a-community-scholars'), 'Chick-fil-A Scholars'),
       photo('/images/gallery/gal-19.jpg', 'Ava bouldering on an indoor climbing wall', HOME, 'Bouldering'),
-      photo('/images/gallery/gal-27.jpg', 'Ava mid-swing during a squash match', EXP, 'On court'),
+      photo('/images/gallery/gal-27.jpg', 'Ava mid-swing during a squash match', NONE, 'On court'),
       photo('/images/gallery/gal-11.jpg', 'Ava and friends on a rooftop overlooking the São Paulo skyline', HOME, 'São Paulo'),
-      photo('/images/gallery/gal-18.jpg', 'Studio portrait of Ava, taken for LinkedIn Possibilities in Tech', COMM, 'LinkedIn PiT'),
-      photo('/images/gallery/gal-59.jpg', 'Ava at a squash tournament venue', EXP, 'Tournament'),
+      photo('/images/gallery/gal-18.jpg', 'Studio portrait of Ava, taken for LinkedIn Possibilities in Tech', COMM('linkedin-possibilities-in-tech'), 'LinkedIn PiT'),
+      photo('/images/gallery/gal-59.jpg', 'Ava at a squash tournament venue', NONE, 'Tournament'),
       photo('/images/gallery/gal-20.jpg', 'A strawberry layer cake Ava baked', HOME, 'Baking'),
     ],
   },
   {
     dir: 'left', items: [
-      photo('/images/gallery/cover-changemaker.jpg', 'Ava at the T-Mobile Changemaker Challenge', COMM, 'Changemaker'),
-      photo('/images/gallery/gal-09.jpg', 'Studio squash portrait of Ava with her racket', EXP, 'Squash'),
+      photo('/images/gallery/cover-changemaker.jpg', 'Ava at the T-Mobile Changemaker Challenge', COMM('t-mobile-changemaker-challenge'), 'Changemaker'),
+      photo('/images/gallery/gal-09.jpg', 'Studio squash portrait of Ava with her racket', NONE, 'Squash'),
       photo('/images/gallery/gal-04.jpg', 'Ava and a friend at a Joy Crookes concert', HOME, 'Concert'),
-      photo('/images/gallery/gal-52.jpg', 'Ava holding an Oscar statuette at the Walt Disney Archives during the Chick-fil-A scholars trip', COMM, 'Disney Archives'),
+      photo('/images/gallery/gal-52.jpg', 'Ava holding an Oscar statuette at the Walt Disney Archives during the Chick-fil-A scholars trip', COMM('chick-fil-a-community-scholars'), 'Disney Archives'),
       photo('/images/gallery/gal-30.jpg', 'Ava on the Penn campus steps under magnolia blossoms', HOME, 'Penn in spring'),
-      photo('/images/gallery/gal-57.jpg', 'Overhead view of Ava\'s squash team lining up before a match at Penn', EXP, 'Match day'),
+      photo('/images/gallery/gal-57.jpg', 'Overhead view of Ava\'s squash team lining up before a match at Penn', NONE, 'Match day'),
       photo('/images/gallery/gal-31.jpg', 'Ava at a hands-on "project DIY" craft table', HOME, 'Project DIY'),
       photo('/images/gallery/gal-40.jpg', 'Ava and a friend with a snowman on the Penn quad', HOME, 'Snow day'),
     ],
@@ -99,29 +105,42 @@ const rows: { dir: 'left' | 'right'; items: Item[] }[] = [
   {
     dir: 'right', items: [
       photo('/images/gallery/cover-beach.jpg', 'Ava on the beach at sunset', HOME, 'Off the clock'),
-      photo('/images/gallery/gal-23.jpg', 'Ava and squash teammates holding handmade senior-day posters', EXP, 'Senior day'),
-      photo('/images/gallery/gal-42.jpg', 'Ava and fellow scholars at the Chick-fil-A Backstage Tour', COMM, 'CFA Backstage'),
+      photo('/images/gallery/gal-23.jpg', 'Ava and squash teammates holding handmade senior-day posters', NONE, 'Senior day'),
+      photo('/images/gallery/gal-42.jpg', 'Ava and fellow scholars at the Chick-fil-A Backstage Tour', COMM('chick-fil-a-community-scholars'), 'CFA Backstage'),
       photo('/images/gallery/gal-06.jpg', 'Ava lining up a shot on a pool table in a white dress', HOME, 'Pool'),
-      photo('/images/gallery/gal-39.jpg', 'Ava shaking hands after a squash match', EXP, 'Match point'),
+      photo('/images/gallery/gal-39.jpg', 'Ava shaking hands after a squash match', NONE, 'Match point'),
       photo('/images/gallery/gal-25.jpg', 'Ava under a blooming crape myrtle in summer', HOME, 'Summer bloom'),
       photo('/images/gallery/gal-47.jpg', 'Paddleboarding on a lake at dusk in Seattle', HOME, 'Paddleboard'),
-      photo('/images/gallery/gal-53.jpg', 'Chick-fil-A Community Scholars on a trip to Cars Land', COMM, 'CFA Scholars'),
+      photo('/images/gallery/gal-53.jpg', 'Chick-fil-A Community Scholars on a trip to Cars Land', COMM('chick-fil-a-community-scholars'), 'CFA Scholars'),
     ],
   },
   {
     dir: 'left', items: [
       photo('/images/gallery/gal-07.jpg', 'Ava with a group of Penn friends', HOME, 'Penn friends'),
-      photo('/images/gallery/gal-58.jpg', 'Ava\'s Penn squash team celebrating in a high-five line', EXP, 'Team spirit'),
-      photo('/images/gallery/gal-48.jpg', 'Ava hiking a foggy trail in an Amazon Future Engineer hoodie', COMM, 'Amazon Future Engineer'),
-      photo('/images/gallery/gal-14.jpg', 'Ava and her Phi Gamma Nu chapter holding marshmallow skewers outside a string-lit A-frame house at night, a fire pit burning to one side', COMM, 'Chapter retreat'),
+      photo('/images/gallery/gal-58.jpg', 'Ava\'s Penn squash team celebrating in a high-five line', NONE, 'Team spirit'),
+      photo('/images/gallery/gal-48.jpg', 'Ava hiking a foggy trail in an Amazon Future Engineer hoodie', COMM('amazon-future-engineer'), 'Amazon Future Engineer'),
+      photo('/images/gallery/gal-14.jpg', 'Ava and her Phi Gamma Nu chapter holding marshmallow skewers outside a string-lit A-frame house at night, a fire pit burning to one side', COMM('phi-gamma-nu'), 'Chapter retreat'),
       photo('/images/gallery/gal-29.jpg', 'Ava and friends at the start of a road race', HOME, 'Race day'),
-      photo('/images/gallery/gal-32.jpg', 'Ava in a blazer for a professional headshot on campus', EXP, 'Suited up'),
+      photo('/images/gallery/gal-32.jpg', 'Ava in a blazer for a professional headshot on campus', NONE, 'Suited up'),
       photo('/images/gallery/gal-37.jpg', 'Ava and a friend on the beach at sunset', HOME, 'Sunset beach'),
       photo('/images/gallery/gal-54.jpg', 'Ava tasting fresh whipped cream in a pastry class', HOME, 'Pastry class'),
-      photo('/images/gallery/gal-35.jpg', 'Ava with family at a birthday dinner', HOME, 'Family'),
     ],
   },
 ];
+
+// Mobile gets MORE, shorter rows built from the SAME photos. A phone viewport is
+// narrow, so even a 5-ish-photo row is wider than the screen and still scrolls
+// seamlessly — letting us show many more alternating rows than the 5 desktop
+// ones. Round-robin distribution keeps the rows balanced (differ by ≤1) so no
+// row is left too short to fill the screen. Rendered in a separate container
+// that's swapped in via CSS at the mobile breakpoint (desktop is untouched).
+const MOBILE_ROW_COUNT = 10;
+const flatItems = rows.flatMap((r) => r.items);
+const mobileRows: { dir: 'left' | 'right'; items: Item[] }[] = Array.from(
+  { length: MOBILE_ROW_COUNT },
+  (_, i) => ({ dir: i % 2 === 0 ? 'left' : 'right', items: [] as Item[] }),
+);
+flatItems.forEach((item, idx) => mobileRows[idx % MOBILE_ROW_COUNT].items.push(item));
 ---
 
 <Layout
@@ -134,32 +153,46 @@ const rows: { dir: 'left' | 'right'; items: Item[] }[] = [
         <h1>Gallery</h1>
         <p class="label">
           A wall of moments — projects, work, and life. Hover to pause a row;
-          click any photo to jump to its story.
+          some photos link through to a project or community.
         </p>
       </header>
     </div>
 
-    <!-- Full-bleed marquee rows; each row scrolls on its own, alternating -->
-    <div class="marquee-rows" data-reveal>
-      {rows.map((row) => (
-        <div class="marquee" data-dir={row.dir} style={`--dur:${MARQUEE_DURATION}`}>
-          <ul class="marquee__track">
-            {[...row.items, ...row.items].map((item, i) => (
-              <li class="marquee__cell" aria-hidden={i >= row.items.length ? 'true' : undefined}>
-                <a
-                  class="g-item"
-                  href={item.href}
-                  tabindex={i >= row.items.length ? -1 : undefined}
-                >
-                  <img src={`${base.replace(/\/$/, '')}${item.src}`} alt={item.alt} loading="lazy" />
-                  <span class="g-item__cap">{item.label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
+    <!-- Full-bleed marquee rows; each row scrolls on its own, alternating.
+         Two groupings from the same photos: the 5-row desktop layout and a
+         more-rows mobile layout — swapped via CSS at the mobile breakpoint. -->
+    {[
+      { cls: 'marquee-rows--desktop', data: rows },
+      { cls: 'marquee-rows--mobile', data: mobileRows },
+    ].map((group) => (
+      <div class:list={['marquee-rows', group.cls]} data-reveal>
+        {group.data.map((row) => (
+          <div class="marquee" data-dir={row.dir} style={`--dur:${MARQUEE_DURATION}`}>
+            <ul class="marquee__track">
+              {[...row.items, ...row.items].map((item, i) => (
+                <li class="marquee__cell" aria-hidden={i >= row.items.length ? 'true' : undefined}>
+                  {item.href ? (
+                    <a
+                      class="g-item"
+                      href={item.href}
+                      tabindex={i >= row.items.length ? -1 : undefined}
+                    >
+                      <img src={`${base.replace(/\/$/, '')}${item.src}`} alt={item.alt} loading="lazy" />
+                      <span class="g-item__cap">{item.label}</span>
+                    </a>
+                  ) : (
+                    <div class="g-item g-item--static">
+                      <img src={`${base.replace(/\/$/, '')}${item.src}`} alt={item.alt} loading="lazy" />
+                      <span class="g-item__cap">{item.label}</span>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    ))}
   </section>
 </Layout>
 
@@ -234,6 +267,11 @@ const rows: { dir: 'left' | 'right'; items: Item[] }[] = [
     outline: none;
   }
 
+  /* Static tiles (photos with no destination) aren't links: no cursor change,
+     no hover-lift. The caption still reveals on hover for context. */
+  .g-item--static { cursor: default; }
+  .g-item--static:hover { transform: none; box-shadow: none; }
+
   /* label chip — hidden until hover/focus for a cleaner wall */
   .g-item__cap {
     position: absolute;
@@ -263,6 +301,17 @@ const rows: { dir: 'left' | 'right'; items: Item[] }[] = [
   .g-item:has(img):focus-visible .g-item__cap {
     opacity: 1;
     transform: none;
+  }
+
+  /* Mobile: keep the full-width, left/right alternating auto-scroll marquee, but
+     swap in the more-rows mobile grouping and size photos so ~2-3 show at once
+     (the rest scroll into view). Desktop layout is untouched. */
+  .marquee-rows--mobile { display: none; }
+
+  @media (max-width: 860px) {
+    .marquee-rows--desktop { display: none; }
+    .marquee-rows--mobile { display: flex; }
+    .g-item { --row-h: clamp(118px, 33vw, 155px); }
   }
 
   /* Motion off: no auto-scroll — let people scroll each row by hand instead. */

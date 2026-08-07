@@ -12,10 +12,128 @@
 | **Branch** | `main` — every `git push` auto-deploys via GitHub Actions (~1–2 min) |
 | **Stack** | Astro 5.18.2 (static, root, no `base`), vanilla JS/CSS, no runtime deps; build-time integrations: `@astrojs/sitemap`, `@astrojs/rss` |
 | **Local dev** | `cd ~/personal-website && npm run dev` → http://localhost:4321/ |
-| **Last updated** | 2026-08-06 |
+| **Last updated** | 2026-08-07 (pt.2 — mobile-responsive overhaul + PER page done) |
 
 > Note: the local folder is still `~/personal-website` even though the GitHub
 > repo was renamed to `avamartoma.github.io`. That's fine.
+
+---
+
+> **Session 2026-08-07 (pt.2) — MOBILE-RESPONSIVE OVERHAUL + PER page finished +
+> docs.** All changes below are **uncommitted working-tree edits** (build ✓ each
+> time; nothing committed or pushed this session).
+>
+> - **PER project page — ✅ DONE (closes TODO #26).** The 6 aero photos are on
+>   `/projects/penn-electric-racing/`: 4 SolidWorks production drawings (front-wing
+>   outer flap rear/front, side-wing end rib, AISI-4130 waterjet tab) in a
+>   `data-carousel` under Overview, and 2 composite hand-layup photos (carbon-fiber
+>   drape + vacuum bag) as inline images in the "Composite airfoils" section.
+>   Copied full-res to `public/images/projects/penn-electric-racing/per-01..06.jpg`,
+>   set frontmatter `cover: per-05.jpg` (the carbon-fiber layup), and **deleted the
+>   temp `public/images/_per-candidates/`**. Downscale-≤1500px-before-viewing rule
+>   held.
+> - **Carousel controls were invisible everywhere — ✅ FIXED** (`Layout.astro`).
+>   The JS only wired prev/next arrows + dots *if they already existed in the DOM*,
+>   but no project markup includes them, so every carousel showed only slide 1. The
+>   JS now **creates** the arrows + dots itself for each `[data-carousel]` with >1
+>   slide (real `<button>`s, aria-labels). Fixes PER, marquetry-desk, cad-projects,
+>   rc-car, architecture, luminary, flower-press at once — no per-page markup.
+> - **Mobile nav → hamburger** (`Nav.astro`). Below **860px** the links collapse
+>   into a toggle that opens a full-width dropdown panel (all links stacked). Added
+>   **Home** and **Communities** (`#recognition`) links (now 7 total: Home · Work ·
+>   Experience · Communities · Gallery · Resume · Contact). Accessible
+>   (`aria-expanded`/`aria-controls`, Escape, close-on-link, resize reset). Closing
+>   the menu dispatches a `nav:close` event.
+> - **Resume popover → inline dropdown inside the mobile menu** (`ResumeModal.astro`).
+>   On mobile the "Drop your email" box is relocated (JS `insertAdjacentElement`)
+>   to sit **inside the nav menu right after the Resume link** and rendered inline
+>   (`.rm--in-menu`, `position: static`, no card/box/shadow) instead of a floating
+>   popover. It **toggles** (2nd Resume tap closes), the menu **stays open** when
+>   Resume is tapped (excluded from close-on-link), it **collapses on `nav:close`**,
+>   and while open the Resume link's divider is hidden and the divider moves under
+>   the box (`.nav__link.resume-open`) so the box reads as part of Resume. **Desktop
+>   is unchanged** — still the floating anchored popover.
+> - **Hero: photo beside the name on mobile** (`Hero.astro`). Rebuilt `.hero__inner`
+>   with `grid-template-areas` (4 children: eyebrow / photo / name / body). **Desktop
+>   layout unchanged** (text left, photo right, spanning+centered). Mobile (≤860):
+>   photo sits **beside** the name; name split into two words **`ava` / `martoma`**
+>   on separate lines, **tilted in opposite directions** (mobile-only) and
+>   center-aligned so "ava" sits centered over "martoma". Removed the old
+>   `white-space: nowrap` (also helped overflow).
+> - **Black bar on zoom-out — ✅ FIXED** (`global.css`). `overflow-x: hidden` →
+>   **`overflow-x: clip`** on `html`+`body` (clip contains stray horizontal overflow
+>   without creating a scroll container that would break the sticky nav).
+> - **Section spacing tightened** (`global.css`). `.section` padding
+>   `clamp(4rem,12vh,9rem)` → **`clamp(2rem,6vh,6rem)`** (the gap between sections is
+>   double this, so it was up to 8rem on mobile / 18rem on desktop).
+> - **Gallery: more rows on mobile, same alternating scroll** (`gallery.astro`).
+>   Desktop keeps the original 5 rows (untouched, in a `marquee-rows--desktop`
+>   container). A `marquee-rows--mobile` container (shown only ≤860) renders **10
+>   rows** derived from the same photos by round-robin (`mobileRows`), ~4-5 each, so
+>   the scroll is visible; photos sized `--row-h: clamp(118px,33vw,155px)` (~2-3 on
+>   screen at once). **You only edit the desktop `rows` array — mobile auto-derives.**
+> - **Banner** (`Layout.astro`/`global.css`). One centered line with the em dash
+>   ("Website in progress — stay tuned for updates"), `white-space: nowrap` + a
+>   viewport-scaled font so it fits one line on phones; shows on desktop and mobile.
+> - **Removed gallery photo `gal-35`** ("Family") — entry removed from `rows` **and**
+>   the file deleted from `public/images/gallery/`.
+> - **Docs:** created **`CONTENT-GUIDE.md`** (a git-ignored, local-only cheatsheet
+>   mapping every content type → file). Cleaned **`.gitignore`**: removed stale
+>   entries for files that no longer exist (`whiskers.md`, `REV 12 Aero Notes.pdf`,
+>   `hackmit.md`, `hackharvard.md`).
+> - **Verified live:** the Spotify "Lately" worker is healthy — `…/now-playing?debug=1`
+>   returns `recentSource: "spotify"`, `recentError: null` (the 429 penalty has
+>   cleared; TODO/§6 note confirmed).
+>
+> ⚠️ **Breakpoint note:** hero, banner, gallery-swap and the nav hamburger all use
+> **860px** as the "mobile" boundary. Mobile-only funky bits (name tilt, inline
+> resume box) live inside `@media (max-width: 860px)`.
+
+---
+
+> **Session 2026-08-07 — gallery/community polish + PER project page (in progress).**
+> Uncommitted working-tree changes (build ✓, not yet committed/pushed):
+> - **Gallery (`src/pages/gallery.astro`).** Photos now link to only three things —
+>   a **project**, a **community**, or **nothing**. Removed the old `EXP`
+>   (`#experience`) destination; squash/experience shots (incl. "Suited up") are
+>   now non-clickable. No-source ("HOME") photos render as a non-anchor `<div
+>   class="g-item g-item--static">` (no pointer cursor, no hover-lift). **All
+>   photos keep a caption** (user reverted an earlier "drop captions on
+>   self-evident photos" idea). `gal-35` stays. Community photos now **deep-link to
+>   the specific community modal** via `#community-<slug>` (see below), not just
+>   the `#recognition` section.
+> - **Community modals (`src/pages/index.astro`).** Blurbs now render via
+>   `set:html` inside a `<div class="comm__dialog-blurb">` so they support
+>   **multiple `<p>` paragraphs** and inline links. Rewrote the **LinkedIn PIT**
+>   blurb (3 paras) with a bold link to `/projects/linkedin-hackathon/`, and the
+>   **AFE** blurb links "Learn more about my project here" → `/projects/afe-hackathon/`.
+>   Added a `slugify()` helper + `data-comm-slug` on each `<dialog>`, and a hash
+>   listener (`#community-<slug>`) that scrolls to the section and `showModal()`s
+>   the matching community — this is what the gallery deep-links hit.
+>   ⚠️ Paragraph/link CSS **must** be `:global()` (`.comm__dialog-blurb :global(p)`,
+>   `:global(.comm__dialog-link)`) because `set:html` content doesn't carry Astro's
+>   scope attribute — non-global selectors silently won't match.
+> - **Nav (`src/components/Nav.astro`).** Reordered to Work → Experience →
+>   **Gallery** → Resume → Contact.
+> - **README.md.** Refreshed the stale "Project structure" block + added a "Where
+>   the site copy lives" list (bio → `Hero.astro`, communities → `index.astro`
+>   array, etc.).
+> - **Hero (`src/components/Hero.astro`).** Widened `.hero__lede` to `58ch` and
+>   glued "hands-on&nbsp;:)" so the smiley stays on the same line.
+>
+> **PER project page — ✅ DONE in the pt.2 session block above (2026-08-07).** The
+> original plan (kept for context): put my Penn Electric Racing **aero-subteam** photos on `/projects/penn-electric-racing/`
+> (NOT the gallery). My portfolio PDF (`AvaMartoma_MEAM2010_Portfolio`) was
+> downloaded; its **"PER Things"** section is **pages 1–2** = the 6 aero photos.
+> They're extracted to `/tmp/per_imgs/` (`p01_001*`, `p01_002*`, `p02_003*`,
+> `p02_004*`, `p02_005*`, `p02_006*`) and copied to
+> `public/images/_per-candidates/per-candidate-1..6.jpg` (temp — **delete before
+> finishing**).
+> 🩹 **Gotcha that blocked me:** some source images are **2048px** tall and the
+> LLM image API rejects multi-image requests with any side >2000px — and once an
+> oversized image is in the chat history, *every* later image request fails. Fix:
+> **downscale to ≤1500px (PIL) before viewing**, and if the error persists start a
+> fresh session. Remaining steps are enumerated in **TODO #26**.
 
 ---
 
@@ -754,7 +872,9 @@ src/
   layouts/Layout.astro        <head>, fonts, cursor, reveal JS, in-progress banner,
                               Nav, ResumeModal
   components/
-    Nav.astro                 AA/M gradient logo + wordmark; links + Resume(modal)
+    Nav.astro                 AA/M gradient logo + wordmark; links (Home · Work ·
+                              Experience · Communities · Gallery · Resume · Contact);
+                              collapses to a hamburger dropdown ≤860px
     Footer.astro              #contact — Web3Forms contact form + LinkedIn/GitHub/Email
     Hero.astro                two-column: credential eyebrow, overlapping bubble name,
                               "Half designer…" tagline, bio, Tools chips, CTAs,

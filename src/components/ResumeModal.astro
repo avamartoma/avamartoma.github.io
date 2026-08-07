@@ -62,6 +62,32 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
     overflow: hidden;
   }
   .rm[hidden] { display: none; }
+
+  /* Mobile: the popover lives inside the open nav menu and renders INLINE (part
+     of the menu flow, pushing the links below it down) rather than as a floating
+     box. Targeted by its own class (`.rm--in-menu`, added in JS) so Astro's
+     component style scoping matches it — a `#primary-nav .rm` selector would not,
+     since #primary-nav belongs to another component. */
+  @media (max-width: 860px) {
+    .rm.rm--in-menu {
+      position: static;
+      width: auto;
+      margin: 0;
+      padding: 0 0 0.85rem;
+      background: none;
+      border: 0;
+      /* the menu divider now sits UNDER the open box, so the box reads as part
+         of the Resume item rather than Contact (the Resume link's own divider is
+         hidden while open — see Nav.astro). Only visible when open (not hidden). */
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+      border-radius: 0;
+      box-shadow: none;
+      overflow: visible;
+      z-index: auto;
+    }
+    /* drop the decorative gradient bar that sat on top of the card */
+    .rm.rm--in-menu::before { display: none; }
+  }
   .rm::before {
     content: '';
     position: absolute;
@@ -134,6 +160,19 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
     const input = pop.querySelector<HTMLInputElement>('.rm__input');
     let isOpen = false;
 
+    // Relocate the popover to live INSIDE the nav menu, right after the Resume
+    // link, and tag it so the mobile styles can target it directly (a
+    // cross-component `#primary-nav .rm` selector would be broken by Astro's
+    // style scoping). On desktop it still opens as a floating (fixed) popover.
+    const navResumeLink = document.querySelector<HTMLElement>('#primary-nav [data-open-resume]');
+    if (navResumeLink) {
+      navResumeLink.insertAdjacentElement('afterend', pop);
+      pop.classList.add('rm--in-menu');
+    }
+    // Collapse the popover whenever the menu closes, so reopening the menu
+    // always starts with it collapsed.
+    document.addEventListener('nav:close', () => { if (isOpen) close(); });
+
     // Anchor the popover just under the element that opened it (right-aligned).
     const place = (anchor: HTMLElement) => {
       const r = anchor.getBoundingClientRect();
@@ -147,6 +186,9 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
 
     const open = (e: Event) => {
       e.preventDefault();
+      // Toggle: clicking the Resume trigger again closes the popover (so on
+      // mobile you can open the email box and dismiss it without leaving the menu).
+      if (isOpen) { close(); return; }
       const anchor = e.currentTarget as HTMLElement;
       // reset views each time, then pick form vs. cooldown note
       const cooling_ = inCooldown();
@@ -157,6 +199,7 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
       place(anchor);
       pop.classList.add('is-open');
       isOpen = true;
+      navResumeLink?.classList.add('resume-open');
       // focus the field on the next frame (after it's visible)
       if (!cooling_) requestAnimationFrame(() => input?.focus());
     };
@@ -165,6 +208,7 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
       pop.hidden = true;
       pop.classList.remove('is-open');
       isOpen = false;
+      navResumeLink?.classList.remove('resume-open');
     };
 
     document

@@ -59,13 +59,8 @@ public/images/**/*_Original*
 verify-*.mjs
 diag.mjs
 
-# Personal research scratch (not part of the site)
-whiskers.md
-REV 12 Aero Notes.pdf
-
-# Hackathon application drafts (personal, not part of the site)
-hackmit.md
-hackharvard.md
+# Local-only content-editing cheatsheet (personal reference, not part of the site)
+CONTENT-GUIDE.md
 
 # Wrangler local cache + miniflare state (regenerated on every wrangler run)
 worker/.wrangler/

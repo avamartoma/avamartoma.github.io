@@ -79,13 +79,6 @@ Ordered by priority. **This file tracks OPEN work only.**
         recent project copy, should be read once by Ava.
       - Flag anything that should be cut rather than corrected.
 
-- [ ] **26. Penn Electric Racing photos.** *(Carried out of the completed #1
-      photo pass — every other project now has real photos; PER is the last one
-      still on generative artwork.)* Drop images in
-      `public/images/projects/penn-electric-racing/` and reference them inline in
-      the body (`![alt](/images/projects/penn-electric-racing/x.jpg)`), or use a
-      `<div class="carousel" data-carousel>…</div>` block (see `rc-car.md`).
-
 ---
 
 ## 🟡 Personality & polish

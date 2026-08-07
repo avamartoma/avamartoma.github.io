@@ -7,6 +7,68 @@ narrative lives in [`HANDOVER.md`](./HANDOVER.md).
 
 ---
 
+## 2026-08-07 (pt.2) — Mobile-responsive overhaul + PER page + carousel fix
+
+- [x] **26. ✅ Penn Electric Racing photos — DONE.** The 6 aero-subteam photos are
+      on `/projects/penn-electric-racing/` (project page, not the gallery): 4
+      SolidWorks production drawings (front-wing outer flap rear/front, side-wing
+      end rib, AISI-4130 waterjet tab) in a `data-carousel` under Overview, and 2
+      composite hand-layup photos (carbon-fiber drape + vacuum bag) as inline
+      images in "Composite airfoils". Copied full-res to
+      `public/images/projects/penn-electric-racing/per-01..06.jpg`, set frontmatter
+      `cover: per-05.jpg`, deleted the temp `public/images/_per-candidates/`. This
+      was the last project on generative artwork — **every project now has real
+      photos.**
+
+- [x] **✅ Carousel controls fixed site-wide** (`Layout.astro`). The JS wired
+      prev/next + dots only if they already existed in the DOM, but no project
+      markup includes them, so every `data-carousel` showed only slide 1. The JS
+      now **creates** the arrows + dots for any carousel with >1 slide (real
+      `<button>`s + aria-labels). Fixes PER, marquetry-desk, cad-projects, rc-car,
+      architecture, luminary, flower-press — no per-page markup needed.
+
+- [x] **✅ Mobile-responsive overhaul (breakpoint 860px throughout).**
+      - **Nav** (`Nav.astro`): links collapse to a hamburger dropdown ≤860px
+        (accessible: `aria-expanded`/`aria-controls`, Escape, close-on-link, resize
+        reset; dispatches `nav:close`). Added **Home** and **Communities**
+        (`#recognition`) links → 7 total.
+      - **Resume popover** (`ResumeModal.astro`): on mobile it's relocated inside
+        the nav menu after the Resume link and rendered **inline** (`.rm--in-menu`,
+        no card/box), **toggles** on repeat taps, keeps the menu open, collapses on
+        `nav:close`, and moves the menu divider under the box (`.nav__link.resume-open`)
+        so it reads as part of Resume. Desktop still floats (unchanged).
+      - **Hero** (`Hero.astro`): `.hero__inner` rebuilt with `grid-template-areas`
+        (eyebrow/photo/name/body). Desktop unchanged; mobile puts the photo **beside**
+        the name, with `ava`/`martoma` on two lines tilted opposite (mobile-only),
+        center-aligned. Removed `white-space: nowrap`.
+      - **Horizontal-overflow "black bar" on zoom-out** (`global.css`):
+        `overflow-x: hidden` → **`overflow-x: clip`** on `html`+`body` (doesn't break
+        the sticky nav).
+      - **Section spacing** (`global.css`): `.section` padding
+        `clamp(4rem,12vh,9rem)` → `clamp(2rem,6vh,6rem)`.
+      - **Gallery** (`gallery.astro`): desktop keeps its 5 rows (in a
+        `marquee-rows--desktop` container, untouched); a `marquee-rows--mobile`
+        container (≤860 only) renders **10 round-robin rows** (`mobileRows`, ~4-5
+        photos each) at `--row-h: clamp(118px,33vw,155px)` (~2-3 visible, scroll
+        still obvious). Editors only touch the desktop `rows` array — mobile derives.
+      - **Banner** (`Layout.astro`/`global.css`): one centered line, em dash kept,
+        `white-space: nowrap` + viewport-scaled font so it fits one line on phones;
+        shows on desktop and mobile.
+
+- [x] **✅ Removed gallery photo `gal-35`** ("Family") — entry removed from the
+      `rows` array **and** the file deleted from `public/images/gallery/`.
+
+- [x] **✅ Docs + gitignore hygiene.** Created `CONTENT-GUIDE.md` (git-ignored,
+      local-only cheatsheet mapping each content type → file/path). Removed stale
+      `.gitignore` entries for files that no longer exist (`whiskers.md`,
+      `REV 12 Aero Notes.pdf`, `hackmit.md`, `hackharvard.md`).
+
+- [x] **✅ Spotify "Lately" confirmed back to normal.** `…/now-playing?debug=1`
+      returns `recentSource: "spotify"`, `recentError: null` — the 429 penalty has
+      cleared (the optional post-13:42 check from the §2 note).
+
+---
+
 ## 2026-08-07 — Wix content, raw-history purge, homepage polish
 
 - [x] **1. ✅ Add project photos — COMPLETE.** Every project page now carries
