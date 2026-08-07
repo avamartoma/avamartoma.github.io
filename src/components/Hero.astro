@@ -72,11 +72,6 @@ const stack = [
       />
     </figure>
   </div>
-
-  <div class="hero__scroll label" aria-hidden="true">
-    <span>scroll</span>
-    <span class="hero__scroll-line"></span>
-  </div>
 </section>
 
 <style>
@@ -204,30 +199,6 @@ const stack = [
     transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
   }
   .hero__chips li:hover { border-color: var(--signal); color: var(--signal); }
-
-  .hero__scroll {
-    position: absolute;
-    bottom: 1.75rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6rem;
-    z-index: 1;
-  }
-  .hero__scroll-line {
-    width: 1px;
-    height: 42px;
-    background: linear-gradient(var(--muted), transparent);
-    animation: drop 2s var(--ease) infinite;
-  }
-  @keyframes drop {
-    0% { transform: scaleY(0); transform-origin: top; }
-    40% { transform: scaleY(1); transform-origin: top; }
-    60% { transform: scaleY(1); transform-origin: bottom; }
-    100% { transform: scaleY(0); transform-origin: bottom; }
-  }
 
   /* Stack the hero on narrow screens: photo above the text */
   @media (max-width: 860px) {
