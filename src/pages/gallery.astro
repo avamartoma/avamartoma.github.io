@@ -177,12 +177,12 @@ flatItems.forEach((item, idx) => mobileRows[idx % MOBILE_ROW_COUNT].items.push(i
                       href={item.href}
                       tabindex={i >= row.items.length ? -1 : undefined}
                     >
-                      <img src={`${base.replace(/\/$/, '')}${item.src}`} alt={item.alt} loading="lazy" />
+                      <img src={`${base.replace(/\/$/, '')}${item.src}`} alt={item.alt} loading="eager" />
                       <span class="g-item__cap">{item.label}</span>
                     </a>
                   ) : (
                     <div class="g-item g-item--static">
-                      <img src={`${base.replace(/\/$/, '')}${item.src}`} alt={item.alt} loading="lazy" />
+                      <img src={`${base.replace(/\/$/, '')}${item.src}`} alt={item.alt} loading="eager" />
                       <span class="g-item__cap">{item.label}</span>
                     </div>
                   )}
