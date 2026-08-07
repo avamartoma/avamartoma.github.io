@@ -22,31 +22,38 @@ pnpm-debug.log*
 *.zip
 Basic_LinkedInDataExport*
 
-# RAW camera originals under public/ — blocking is DELIBERATELY DISABLED for now.
+# ── RAW camera originals: keep them OUT of git entirely ─────────────────────
 #
-# Ava is still importing photo batches and commits raws straight into
-# public/images/<...>/ from her laptop, so these rules would silently drop them.
-# Leave them commented until the import is finished.
-#
-# THEN do the cleanup pass (agreed 2026-08-06):
-#   1. uncomment the patterns below,
-#   2. rewrite history to strip the raw blobs (they are ~1.2 GB of the repo and,
-#      because this repo is public, stay readable forever otherwise — EXIF GPS
-#      included). This needs a force-push and invalidates other clones.
-#
-# Raws must still be processed into web assets before release, and the processed
-# files (<prefix>-01.jpg / <prefix>-video-01.mp4) never match these patterns:
+# This repo is PUBLIC, so any committed raw is world-readable forever — deleting
+# it in a later commit does NOT remove it from history (and raws carry EXIF GPS).
+# Workflow (enabled 2026-08-07): keep unprocessed originals in the gitignored
+# /raw/ folder below, and commit ONLY the processed, EXIF-stripped derivatives
+# that the build serves. Process raws into web assets with:
 #   node scripts/process-community-media.mjs <slug> <prefix> --from <raw dir>
+# The processed files (<prefix>-01.jpg / <prefix>-video-01.mp4) never match the
+# camera patterns below, so they are still committed normally.
 #
-# public/images/**/*.[Hh][Ee][Ii][Cc]
-# public/images/**/*.[Hh][Ee][Ii][Ff]
-# public/images/**/*.[Mm][Oo][Vv]
-# public/images/**/*.[Tt][Ii][Ff]
-# public/images/**/*.[Tt][Ii][Ff][Ff]
-# public/images/**/IMG_*
-# public/images/**/DSC_*
-# public/images/**/DCIM*
-# public/images/**/100_*
+# NOTE: .gitignore only stops NEW raws from being added; it does not touch the
+# ~324 raw blobs already in history (they bloat .git to ~1.7 GB and stay public).
+# Removing those requires a history rewrite + force-push — a separate, manual,
+# destructive step for Ava to run deliberately (see HANDOVER §6).
+
+# Camera-pattern originals anywhere under public/
+public/images/**/*.[Hh][Ee][Ii][Cc]
+public/images/**/*.[Hh][Ee][Ii][Ff]
+public/images/**/*.[Mm][Oo][Vv]
+public/images/**/*.[Tt][Ii][Ff]
+public/images/**/*.[Tt][Ii][Ff][Ff]
+public/images/**/IMG_*
+public/images/**/DSC*
+public/images/**/DCIM*
+public/images/**/100_*
+public/images/**/*_Original*
+
+# Unprocessed originals live here, outside public/ and out of git.
+# The README is kept so the folder's purpose is documented in the repo.
+/raw/*
+!/raw/README.md
 
 # Local-only verification harnesses (Playwright; needs `npm i --no-save playwright`)
 verify-*.mjs

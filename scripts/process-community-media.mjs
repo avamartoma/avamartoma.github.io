@@ -147,8 +147,65 @@ async function processImage(input, out) {
   }
 }
 
+// --------------------------------------------------------- location guard ----
+// Belt-and-suspenders: the pipeline already strips metadata (sharp drops it by
+// default; ffmpeg runs `-map_metadata -1`), but a raw's home/venue GPS must
+// NEVER reach a shipped file. After processing we re-open every output and hard
+// fail if any still carries EXIF GPS (JPEG) or a QuickTime location atom (MP4),
+// since this repo is public and committed files are world-readable forever.
+
+// Detect an EXIF GPS IFD (tag 0x8825) in sharp's raw EXIF buffer. sharp prefixes
+// the buffer with "Exif\0\0" before the TIFF header, so all IFD offsets are
+// relative to that TIFF start, not to byte 0.
+function jpegHasGps(exif) {
+  if (!exif || exif.length < 8) return false;
+  let base = 0;
+  if (exif.toString('ascii', 0, 6) === 'Exif\u0000\u0000') base = 6;
+  if (base + 8 > exif.length) return false;
+  const bo = exif.toString('ascii', base, base + 2);
+  const le = bo === 'II';
+  if (!le && bo !== 'MM') return false;
+  const u16 = (o) => (le ? exif.readUInt16LE(o) : exif.readUInt16BE(o));
+  const u32 = (o) => (le ? exif.readUInt32LE(o) : exif.readUInt32BE(o));
+  try {
+    const ifd0 = base + u32(base + 4);
+    const count = u16(ifd0);
+    for (let i = 0; i < count; i++) {
+      const entry = ifd0 + 2 + i * 12;
+      if (entry + 2 > exif.length) break;
+      if (u16(entry) === 0x8825) return true; // GPS Info IFD pointer
+    }
+  } catch {
+    /* truncated/odd EXIF — treat as no parseable GPS */
+  }
+  return false;
+}
+
+// QuickTime/ISO location markers in an MP4 container.
+const MP4_LOCATION = [
+  /com\.apple\.quicktime\.location/,
+  /\xa9xyz/,
+  /[+\-]\d{2,3}\.\d{3,}[+\-]\d{2,3}\.\d{3,}[+/]/, // ISO 6709 coordinate string
+];
+
+async function findLeakedLocation(files) {
+  const bad = [];
+  for (const f of files) {
+    if (!existsSync(f)) continue;
+    if (/\.jpg$/i.test(f)) {
+      const md = await sharp(f).metadata();
+      if (md.exif && jpegHasGps(md.exif)) bad.push(`${f} (EXIF GPS)`);
+    } else if (/\.mp4$/i.test(f)) {
+      const buf = readFileSync(f).toString('latin1');
+      if (MP4_LOCATION.some((re) => re.test(buf))) bad.push(`${f} (QuickTime location)`);
+    }
+  }
+  return bad;
+}
+
 let n = 0;
 const skipped = [];
+const produced = [];
 for (const file of images) {
   const input = join(srcDir, file);
   const next = String(n + 1).padStart(2, '0');
@@ -157,6 +214,7 @@ for (const file of images) {
     await processImage(input, out);
     const after = await sharp(out).metadata();
     n += 1;
+    produced.push(out);
     console.log(`${next}  ${file.padEnd(44)} -> ${after.width}x${after.height}  ${mb(out)}`);
   } catch (err) {
     skipped.push(file);
@@ -212,6 +270,7 @@ for (const file of videos) {
       { stdio: ['ignore', 'ignore', 'inherit'] },
     );
     v += 1;
+    produced.push(out, poster);
     console.log(
       `v${next} ${file.padEnd(44)} ${mb(input)} -> ${mb(out)}  (+poster ${mb(poster)})`,
     );
@@ -228,3 +287,17 @@ console.log(
 );
 if (skipped.length) console.log(`Skipped: ${skipped.join(', ')}`);
 console.log('Raw originals were left in place — remove them once the output looks right.');
+
+// Hard gate: never let a shipped asset carry location data.
+const leaked = await findLeakedLocation(produced);
+if (leaked.length) {
+  console.error(
+    `\n✗ LOCATION METADATA DETECTED in ${leaked.length} output(s) — NOT safe to commit:`,
+  );
+  for (const l of leaked) console.error(`    ${l}`);
+  console.error(
+    'Re-encode these before committing (the repo is public; committed GPS is permanent).',
+  );
+  process.exit(1);
+}
+console.log(`✓ Location check passed — ${produced.length} output(s) carry no GPS/location metadata.`);
