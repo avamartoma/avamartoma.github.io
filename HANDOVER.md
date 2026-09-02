@@ -12,16 +12,68 @@
 | **Branch** | `main` — every `git push` auto-deploys via GitHub Actions (~1–2 min) |
 | **Stack** | Astro 5.18.2 (static, root, no `base`), vanilla JS/CSS, no runtime deps; build-time integrations: `@astrojs/sitemap`, `@astrojs/rss` |
 | **Local dev** | `cd ~/personal-website && npm run dev` → http://localhost:4321/ |
-| **Last updated** | 2026-08-07 (pt.2 — mobile-responsive overhaul + PER page done) |
+| **Last updated** | 2026-09-01 (resume forms require a name; Kesem photos live) |
 
 > Note: the local folder is still `~/personal-website` even though the GitHub
 > repo was renamed to `avamartoma.github.io`. That's fine.
 
 ---
 
+> **Session 2026-09-01 — resume forms now ask for a name + Kesem photos on the
+> experience card.** Committed **and pushed** (Ava asked for the push explicitly
+> both times). Build ✓ before each commit.
+>
+> - **Both resume forms require a name** (`272138f`). The nav popup
+>   (`ResumeModal.astro`) only ever asked for an email; it now has a **required**
+>   name field stacked above the email row (name on its own line, email + the `→`
+>   arrow below, wrapped in a new `.rm__stack` grid). Heading is now *"Drop your
+>   name & email — I'll send it over."* The `/resume` page already had a name
+>   field but it was labelled **(optional)** — it's now `required`, the label tag
+>   is gone, and the lede says "name and email". The **Note** field on that page
+>   stays optional on purpose. Both post to Web3Forms' standard `name` key, so
+>   the sender's name lands in the email. ⚠️ The popup's focus-on-open code
+>   grabs the **first** `.rm__input`, which is now the name field — that's
+>   deliberate; don't "fix" it back to the email.
+> - **Kesem at Penn photo grid.** 9 photos processed with
+>   `scripts/process-community-media.mjs experience/kesem-at-penn kesem`
+>   (19 MB → 2.3 MB; EXIF stripped, ≤1500px, q82; the script's location check
+>   passed clean). Wired into the `images` array on the Kesem entry in
+>   `Experience.astro`, ordered as a narrative: counselors at The Hill → cabin →
+>   colour games → evening Camp Kesem sign → the full unit photo.
+>   Raw `IMG_*` originals were **moved to `raw/kesem-at-penn/`** (gitignored)
+>   rather than deleted — they were sitting in `public/`, where every build was
+>   copying 19 MB of untouched originals into `dist/`.
+> - ⚠️ **Camper photos — a decision, not an oversight.** 5 of the 9 frames show
+>   identifiable campers (`kesem-02/03/05/07/09`; `05` and `09` are full
+>   cabin/unit group shots). They were flagged and **initially held back**: Kesem
+>   serves kids affected by a parent's cancer, so an identifiable camper on a
+>   public site implies something private about that child's family, and they're
+>   minors. `272138f` shipped only the 4 counselor-only frames.
+>   **Ava then asked for all 9 to be published**, which is what's live now. Only
+>   Ava is named in any alt text. If this is ever revisited, note that the repo is
+>   public and **committed images stay in history** (§6) — unpublishing means
+>   removing them from the page, not from GitHub.
+> - ⚠️ **A parallel session pushed to `main` mid-session, again** (same class of
+>   collision as 2026-08-06 pt.8b). The first `git push` was **rejected**: origin
+>   had `d53912c` (eager-load marquee images so right-moving rows don't gap) and
+>   `2236b41` (gallery: tap to reveal caption, tap again to open link), both
+>   touching **only `src/pages/gallery.astro`** — no overlap with this session's
+>   files. Resolved with `git pull --rebase` (the local commit had never been
+>   pushed, so nothing published was rewritten), rebuilt to confirm the two sets
+>   coexist, then pushed. **The lesson from pt.8b still stands: check `git log`
+>   before and after committing, and use path-limited `git add`.**
+> - **`instructions.md` (repo root) is local-only and gitignored** — it's a
+>   handoff guide written for Ava's brother to give to *his* Claude (setting up
+>   Git, hosting, a domain, and options for a squash-recruiting site with a
+>   private video section). It is **not** part of this site; don't wire it in,
+>   don't publish it, don't treat it as documentation for this repo.
+
+---
+
 > **Session 2026-08-07 (pt.2) — MOBILE-RESPONSIVE OVERHAUL + PER page finished +
-> docs.** All changes below are **uncommitted working-tree edits** (build ✓ each
-> time; nothing committed or pushed this session).
+> docs.** ✅ All of this was later **committed and pushed** as `d646619`
+> ("feat: mobile-responsive overhaul, PER page, carousel fix") — the "uncommitted
+> working-tree edits" note that used to head this block is no longer true.
 >
 > - **PER project page — ✅ DONE (closes TODO #26).** The 6 aero photos are on
 >   `/projects/penn-electric-racing/`: 4 SolidWorks production drawings (front-wing

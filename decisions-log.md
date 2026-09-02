@@ -7,6 +7,60 @@ narrative lives in [`HANDOVER.md`](./HANDOVER.md).
 
 ---
 
+## 2026-09-01 — Resume forms require a name; Kesem photos published
+
+- [x] **✅ Both resume request forms now ask for a name.** The nav popup
+      (`ResumeModal.astro`) collected an email and nothing else, so requests
+      arrived anonymous. It now has a **required** name field above the email row
+      (new `.rm__stack` grid: name on its own line, email + `→` below), and the
+      heading reads *"Drop your name & email — I'll send it over."* The `/resume`
+      page already had a name field marked **(optional)** — now `required`, with
+      the "(optional)" tag dropped and the lede updated to match.
+      **Decision:** the **Note** field on `/resume` stays optional — it's a bonus
+      ("where did you find me / what are you hiring for?"), and requiring it would
+      only cost submissions. Both forms use Web3Forms' standard `name` key, so the
+      sender's name appears in the delivered email rather than just a reply-to.
+      Note the popup's focus-on-open targets the first `.rm__input`, which is now
+      the name field — intentional.
+
+- [x] **✅ Kesem at Penn photo grid — 9 photos live on the experience card.**
+      Processed with the standard recipe
+      (`node scripts/process-community-media.mjs experience/kesem-at-penn kesem`):
+      19 MB → 2.3 MB, EXIF stripped, ≤1500px, q82, and the script's location check
+      confirmed **no GPS on any output**. Wired into the `images` array on the
+      Kesem entry in `Experience.astro` as a narrative: counselors at The Hill →
+      cabin → colour games → the evening Camp Kesem sign → the full unit photo.
+
+- [x] **Decision: raw originals are moved, not deleted.** The `IMG_*` files had
+      been dropped straight into `public/images/experience/kesem-at-penn/`, where
+      (although gitignored, so never committable) **every build copied 19 MB of
+      untouched originals into `dist/`**. They were moved to `raw/kesem-at-penn/`
+      — the folder `.gitignore` already reserves for exactly this — rather than
+      deleted, since they may be the only copies.
+
+- [x] **Decision: publish all 9 Kesem frames, including the ones with campers.**
+      5 of the 9 (`kesem-02/03/05/07/09`; `05` and `09` are full cabin/unit group
+      shots) show identifiable campers. They were **flagged and held back** in the
+      first commit (`272138f` shipped only the 4 counselor-only frames): Kesem
+      serves children affected by a parent's cancer, so publishing an identifiable
+      camper on a public site implies something private about that child's family,
+      and the campers are minors. Precedent existed — `press-15` was dropped for
+      third-party faces. **Ava reviewed that and asked for all 9 to be published**,
+      so they are. Only Ava is named in any alt text, matching the MITES / Taco
+      Bell / Coca-Cola caption convention. ⚠️ Reminder for any future reversal:
+      the repo is public and **committed images persist in git history**, so
+      unpublishing means pulling them off the page, not off GitHub.
+
+- [x] **`instructions.md` is deliberately gitignored.** A handoff guide written
+      for Ava's brother to hand to *his* Claude — setting up Git and GitHub,
+      hosting options, buying and linking a domain, and options for a squash
+      recruiting site with a private video section. **Decision:** it's written as
+      a *guide with decision points and prompt inspiration, explicitly not a
+      clone of this site*, and it is **not part of this website** — hence the
+      `.gitignore` entry alongside `CONTENT-GUIDE.md`.
+
+---
+
 ## 2026-08-07 (pt.2) — Mobile-responsive overhaul + PER page + carousel fix
 
 - [x] **26. ✅ Penn Electric Racing photos — DONE.** The 6 aero-subteam photos are
