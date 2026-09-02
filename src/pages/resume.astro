@@ -19,8 +19,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
         Want my <span class="resume__hi">resume</span>?
       </h1>
       <p class="resume__lede" data-reveal data-reveal-delay="160ms">
-        Drop your email below and I'll send a copy your way. No newsletter, no
-        spam — just me, a PDF, and probably a friendly note.
+        Drop your name and email below and I'll send a copy your way. No
+        newsletter, no spam — just me, a PDF, and probably a friendly note.
       </p>
 
       <form
@@ -37,8 +37,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
         <input type="checkbox" name="botcheck" class="resume__hp" tabindex="-1" autocomplete="off" />
 
         <div class="field">
-          <label for="name">Name <span class="opt">(optional)</span></label>
-          <input type="text" id="name" name="name" autocomplete="name" placeholder="Jane Doe" />
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required autocomplete="name" placeholder="Jane Doe" />
         </div>
 
         <div class="field">

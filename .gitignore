@@ -62,5 +62,8 @@ diag.mjs
 # Local-only content-editing cheatsheet (personal reference, not part of the site)
 CONTENT-GUIDE.md
 
+# Local-only handoff doc (written for someone else's project, not part of this site)
+instructions.md
+
 # Wrangler local cache + miniflare state (regenerated on every wrangler run)
 worker/.wrangler/

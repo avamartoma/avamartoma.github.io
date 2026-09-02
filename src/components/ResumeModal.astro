@@ -21,21 +21,32 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
     <!-- Web3Forms honeypot: bots fill this, humans can't see it -->
     <input type="checkbox" name="botcheck" class="rm__hp" tabindex="-1" autocomplete="off" />
 
-    <h2 class="rm__title">Drop your email &amp; I'll send it to you.</h2>
+    <h2 class="rm__title">Drop your name &amp; email — I'll send it over.</h2>
 
-    <div class="rm__row">
+    <div class="rm__stack">
       <input
-        type="email"
-        name="email"
+        type="text"
+        name="name"
         required
-        autocomplete="email"
-        placeholder="you@email.com"
-        aria-label="Your email"
+        autocomplete="name"
+        placeholder="your name"
+        aria-label="Your name"
         class="rm__input"
       />
-      <button type="submit" class="rm__go" aria-label="Send request">
-        <span aria-hidden="true">→</span>
-      </button>
+      <div class="rm__row">
+        <input
+          type="email"
+          name="email"
+          required
+          autocomplete="email"
+          placeholder="you@email.com"
+          aria-label="Your email"
+          class="rm__input"
+        />
+        <button type="submit" class="rm__go" aria-label="Send request">
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
     </div>
   </form>
 
@@ -107,6 +118,8 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
     margin-bottom: 1rem;
   }
 
+  /* name on its own line, then email + the send arrow */
+  .rm__stack { display: grid; gap: 0.5rem; }
   .rm__row { display: flex; align-items: stretch; gap: 0.5rem; }
   .rm__input {
     flex: 1;
@@ -157,6 +170,7 @@ const WEB3FORMS_ACCESS_KEY = '9cffc9b5-1730-4671-846d-698314b5dcfb';
     const form = pop.querySelector<HTMLFormElement>('.rm__form');
     const done = pop.querySelector<HTMLElement>('[data-resume-done]');
     const cooling = pop.querySelector<HTMLElement>('[data-resume-cooldown]');
+    // first field in the form = name (email follows it), so this focuses name
     const input = pop.querySelector<HTMLInputElement>('.rm__input');
     let isOpen = false;
 
