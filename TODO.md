@@ -110,6 +110,64 @@ Ordered by priority. **This file tracks OPEN work only.**
       annotations + animation later. A more personal, non-work counterpart to
       the work grid.
 
+- [ ] **27. Hero eyes that track the cursor 👀 — blocked on Ava's portrait.**
+      *(Ava, 2026-09-28 — from an IG reel.)* Scoped only, **not built**, and
+      deliberately parked: it rides on **#8** (illustration pass) because Ava is
+      drawing the portrait herself. **Desktop-only** and *drawn portrait, not
+      the photo sticker* are both settled — rationale in the log. A fun side
+      project, not near-term work.
+
+  - **Blocking input — the drawing.** What the tracking needs back from it:
+    - Eyes drawn **without pupils or irises** — leave the whites empty. The
+      pupils are separate elements the script owns; that's the whole reason the
+      drawn route beats the photo one.
+    - Face pointing **roughly straight ahead**, so deflection reads
+      symmetrically across both eyes.
+    - Transparent **PNG at 2× the largest render** (620px display → export
+      ~1240px), or **SVG** if the tool exports clean paths. SVG is the better
+      target: pupils become real `<circle>`s in the same document, so they scale
+      and position exactly instead of being guessed at in percentages.
+    - Note the **eye-opening shape** (round vs almond vs half-lidded) — it sets
+      the travel clamp, and decides whether a clip is needed at all.
+
+  - **Tooling — open, and two separate questions.** Ava raised **Framer** and
+    **Google Labs**; neither is vetted yet. Don't conflate:
+    1. *Making the art.* Whatever's comfortable to draw in — Illustrator is
+       already in the Hero tool chips, and an AI-assisted tool is fair game
+       since the goal is Ava's own drawing, not a stock asset.
+    2. *Shipping the interaction.* This site is Astro + vanilla TS with **zero
+       runtime dependencies**, and the tracking is ~40 lines. Adopting a
+       design/publish tool for one hero effect is likely a bad trade — but it
+       could earn its keep as a **prototyping sandbox** to feel out the motion
+       before hand-writing it here. Decide after playing with it, not before.
+
+  - **Implementation framework** (holds regardless of host image):
+    - Overlay two `aria-hidden` pupil elements inside the `.hero__photo`
+      `<figure>` (`src/components/Hero.astro:32`), positioned in **percentages
+      of the figure** — never pixels; the sticker resizes across breakpoints.
+    - **Travel clamp** ~1% of image width (≈3px at the 310px desktop render).
+      Any more and the pupils slide off the eye — that's the line between
+      charming and unsettling.
+    - **Catchlight**: a small offset white dot moving *with* each pupil. Cheap,
+      and it's what sells it as an eye rather than a sticker.
+    - **Pointer plumbing.** The site already runs **two** `mousemove` listeners
+      — the custom cursor (`src/layouts/Layout.astro:132`) and the hero dot
+      field (`src/components/Hero.astro:339`). Don't add a third: piggyback on
+      the hero one, same file, zero new listeners. If **#8a** (hand-drawn
+      cursor) lands too, promote all three to one shared
+      `src/scripts/pointer.ts` — three listeners drifting apart is a real bug.
+    - **Motion math.** Vector from each pupil's `getBoundingClientRect()` centre
+      to the cursor; normalise, then scale by `min(dist / SATURATION, 1)` so a
+      far cursor gets full deflection and a near one eases off — that easing is
+      what reads as *focus* rather than *mechanism*. Write to `--px` / `--py`
+      custom properties and let CSS do the `translate`, keeping styling in the
+      stylesheet. Lerp inside the existing rAF loop; don't start a second one.
+    - **Fallbacks.** Gate on `(hover: hover) and (pointer: fine)` to match
+      `Layout.astro:124`, plus `prefers-reduced-motion`; both render the pupils
+      centred and static. Desktop-only means also dropping the overlay below the
+      **860px** breakpoint the hero already uses. Keep it inside the `<figure>`
+      so it can't outlive a failed image load. No change to the `alt` text.
+
 - [ ] **9. Restore leftover About bits (optional)** — the nonprofit/justice
       paragraph and off-the-clock interests (skiing, squash, golf, running,
       woodworking) were removed with the About section; fold into the iFAQ or

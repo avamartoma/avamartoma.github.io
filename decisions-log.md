@@ -7,6 +7,64 @@ narrative lives in [`HANDOVER.md`](./HANDOVER.md).
 
 ---
 
+## 2026-09-28 — Hero cursor-tracking eyes: scoped, and deferred to the illustration pass
+
+- [x] **Decision: the tracking eyes ride on a portrait Ava draws herself, not
+      the current photo sticker.** Sparked by an Instagram reel (an illustrated
+      portfolio hero whose eyes follow the pointer). The photo route was scoped
+      first and is workable, but it fights one problem the drawn route doesn't
+      have: **the real irises stay in the photo**, so a moving overlay reads as
+      two sets of eyes unless it fully covers them. A drawn portrait can have
+      eyes drawn *without* pupils, leaving the pupils as separate elements the
+      script owns — which is what the source reel actually did. Ava wants to
+      draw it herself rather than commission or generate it, so this is now
+      gated on **#8** (illustration pass) and parked as a side project rather
+      than near-term work. *(First-pass iris measurements for the photo route,
+      should it ever be revisited: centres near 49.4%/16.1% and 61.9%/16.3% of
+      the 972×1500 source, iris ≈2.5% of width.)*
+
+- [x] **Decision: desktop-only.** At the mobile render size the sticker is
+      `clamp(120px, 34vw, 168px)` wide, which puts the eyes at roughly **6px**
+      across — the effect can't read at that scale and the travel clamp would be
+      sub-pixel. Not worth the code or the payload on touch devices.
+
+- [x] **Decision: tooling is an open question, deliberately not settled now.**
+      Ava raised **Framer** and **Google Labs** as possibilities. Neither is
+      vetted. Kept as two separate questions in #27 — *making the art* vs
+      *shipping the interaction* — because the site is Astro + vanilla TS with
+      no runtime dependencies, and adopting a design tool for one hero effect is
+      a much bigger commitment than drawing in one.
+
+- [x] **✅ HackMIT project stub added** —
+      `src/content/projects/hackmit.md`, `draft: true`, with a scaffolded
+      `public/images/projects/hackmit/` (kept by a `.gitkeep` so the folder
+      survives a clone — the equivalent folder for #ballpoint-pen-cad is empty
+      and therefore untracked). Follows the ballpoint-pen-cad precedent: the
+      page exists to fill in later and stays out of the grid, home page, RSS,
+      and sitemap until `draft` is flipped. Build verified at 18 pages with no
+      `hackmit` string anywhere in `dist/`. Section headings mirror the two
+      existing hackathon write-ups (idea → what we built → my role → stack).
+      Accent pair `#ff5cc4` / `#5ce6a0`, the one palette combination not
+      already in use. Title and date are placeholders — the date is just the
+      day the stub was created.
+
+- [x] **Decision: private application drafts are ignored by FOLDER, not by
+      filename.** The uncommitted `.gitignore` change ignored `hackmit.md` and
+      `calhacks.md` by bare name to keep personal essays and financial-need
+      statements out of this **public** repo. Two problems: unanchored patterns
+      match **at any depth**, so the rule silently swallowed the new public
+      project page at `src/content/projects/hackmit.md` (it would have worked
+      locally, then vanished on a fresh clone); and filename-based privacy fails
+      open — name a future draft anything else and it's committable. Replaced
+      both lines with `/applications/`, and drafts now live in that folder.
+      Verified both directions: the project stub is no longer ignored, and
+      arbitrary filenames under `applications/` are. **No leak occurred** —
+      nothing matching `hackmit`/`calhacks` was ever committed on any branch,
+      and no draft files existed on disk yet; the rule was pre-emptive. The
+      folder holds a local-only README repeating this, which is itself ignored.
+
+---
+
 ## 2026-09-01 — Resume forms require a name; Kesem photos published
 
 - [x] **✅ Both resume request forms now ask for a name.** The nav popup
