@@ -65,5 +65,13 @@ CONTENT-GUIDE.md
 # Local-only handoff doc (written for someone else's project, not part of this site)
 instructions.md
 
+# Local-only application drafts (hackathons, scholarships, programmes). This
+# repo is PUBLIC — these hold personal essays, financial-need statements, and
+# unpublished answers. Ignore the FOLDER, not filenames: a draft then stays
+# private whatever it's called. Don't go back to bare filenames like
+# `hackmit.md` — unanchored, they match at any depth, and that rule silently
+# swallowed the public project page at src/content/projects/hackmit.md.
+/applications/
+
 # Wrangler local cache + miniflare state (regenerated on every wrangler run)
 worker/.wrangler/
