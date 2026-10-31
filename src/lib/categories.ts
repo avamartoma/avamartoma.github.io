@@ -45,6 +45,9 @@ const TAG_CATEGORIES: Record<string, Category[]> = {
   'PCB Design': ['Electrical'],
   KiCad: ['Electrical', 'CAD & Simulation'],
   Arduino: ['Electrical', 'Software'],
+  Hardware: ['Mechanical', 'Electrical'],
+  LiDAR: ['Electrical'],
+  'Bluetooth LE': ['Electrical', 'Software'],
 
   // — CAD —
   CAD: ['CAD & Simulation'],
@@ -83,6 +86,8 @@ const TAG_CATEGORIES: Record<string, Category[]> = {
   'Node.js': ['Software'],
   'Three.js': ['Software'],
   FastAPI: ['Software'],
+  Swift: ['Software'],
+  Convex: ['Software'],
   SQLite: ['Software'],
   WASM: ['Software'],
   WebGL: ['Software'],
