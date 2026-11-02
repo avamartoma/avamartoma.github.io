@@ -5,7 +5,8 @@ description: "OpenCloud is a CalHacks project: a shared sky of projects-as-cloud
 date: 2026-10-25
 tags: ["Hackathon", "TypeScript", "React", "Three.js", "Convex", "AI/LLM", "MCP"]
 repo: "https://github.com/avamartoma/calhacks-26"
-demo: "https://calhacks-26.vercel.app"
+demo: "https://www.open-cloud.us"
+cover: "/images/projects/calhacks/project-home.jpg"
 accent: "#7c5cff"
 accentAlt: "#ffd23f"
 featured: true
@@ -20,36 +21,81 @@ them still looks like a row of terminal tabs. You can't see who is doing what,
 which work is finished, or what a given agent actually changed.
 
 **OpenCloud gives that work a place.** A **workspace** is a sky, and each
-project in it is a **cloud**. Your own projects sit up front, and projects shared
-with you float further back. Zoom into one of your clouds and the screen fills
-with white and opens that project's **office**: a 3D floor of desks where
-agents running on **Codex**, **Claude**, or **Cursor** pick up tickets, hand
-off findings to each other, and post their progress, commands, and diffs where
-you can see them.
+project in it is a **cloud**. Zoom into a cloud and it opens that project's
+**office**: a 3D floor of desks where agents running on **Codex**, **Claude**, or
+**Cursor** pick up tickets, hand off work to each other, and post their
+progress, commands, and diffs where you can see them.
 
-![The OpenCloud office: an isometric floor of desks, glass meeting rooms, and a lounge. Agents show up here as small colored blobs at their desks.](/images/projects/calhacks/office.png)
+![A project's homepage in OpenCloud: the 3D office with its agents at their desks, the agents panel for connecting Codex, Claude, or Cursor, and a live preview of the site being built.](/images/projects/calhacks/project-home.jpg)
 
-## What we built
+## A walkthrough
 
-- **The sky.** A 2D canvas with parallax layers, painted for your local time of
-  day. Clouds are sized to their titles, you can drag them around like Finder
-  icons, and zooming in shows each project's description and agents, colored by
-  type. Search ranks projects, agents, and tickets by meaning.
-- **The office.** Every project gets a project manager that splits a request
-  into role tickets for the other agents. You can direct any agent, reply to it
-  and have it keep going, and open a diff of exactly what each run changed.
-  An agent saying it's done doesn't count as proof: tasks need acceptance checks
-  and recorded evidence before they're marked verified.
-- **It runs on the web.** At [calhacks-26.vercel.app](https://calhacks-26.vercel.app)
-  you sign in, add projects from a folder or straight from GitHub, connect your
-  own Codex, Claude, or Cursor key, and the agents run in a cloud sandbox for that
-  project, with a live preview of the site they're building.
-- **Sharing.** Share a project by link or email invite as a viewer or editor
-  (editors run agents on their own keys), or make it public so everyone signed in
-  sees it on their sky.
-- **ASI:One agents.** Four Fetch.ai agents (office, planner, watcher, and
-  reviewer) let you check status, turn ideas into Jira stories, and hand off
-  missions from a chat, without opening the app.
+### Getting in
+
+Opening [open-cloud.us](https://www.open-cloud.us) takes you to the sign-in
+page, where you can sign in with GitHub or Google, or create an account.
+
+![The OpenCloud sign-in page.](/images/projects/calhacks/signin.jpg)
+
+Once you're signed in, OpenCloud prompts you to add your public GitHub repos to
+your workspace. You pick which ones to share, and each becomes a cloud.
+
+![The "Add your GitHub repos" dialog, listing public repos to bring onto the sky.](/images/projects/calhacks/github-import.jpg)
+
+You can also create new workspaces with their own permissions to work with a
+group of people, which makes OpenCloud a good fit for companies and teams.
+
+![Creating a new workspace shared with teammates, with options for who can add projects and invite others.](/images/projects/calhacks/new-workspace.jpg)
+
+### The sky
+
+The sky view shows every project in your workspace, both the ones you own and
+the ones shared with you.
+
+![The sky view in daylight, with each project in the workspace drawn as a cloud.](/images/projects/calhacks/sky-day.jpg)
+
+The color of the sky changes with your time of day. The projects in this
+workspace all come from CalHacks participants.
+
+![The same sky at sunset, with the clouds of CalHacks participants' projects.](/images/projects/calhacks/sky-sunset.jpg)
+
+### The office
+
+Zooming into a project takes you to that project's (repo's) homepage, shown at
+the top of this page. From there you connect Codex, Claude, or Cursor and create
+agents to complete tasks.
+
+The project manager agent, **Gus**, splits your request into tickets and hands
+them to the other agents, and you can watch their work in real time. The office
+graphics were made in **Blender**.
+
+![Gus the project manager delegating tickets to Iris (reviewer) and Marge (builder) in the 3D office.](/images/projects/calhacks/office-agents.jpg)
+
+You can see in detail how each agent completes its task, down to the commands
+it ran, and you can clone an agent into another project you're working on.
+
+![Iris the reviewer's run, showing the commands she ran to check the website and the next ticket handed to her by Gus.](/images/projects/calhacks/agent-run.jpg)
+
+### Fetch.ai agents
+
+We also built specialized agents with **Fetch.ai** that improve the agent
+workflow by standardizing common organizational tasks. There are four: office,
+planner, watcher, and reviewer. They also answer on ASI:One, so you can check on
+a project from a chat without opening the app.
+
+![The Fetch.ai office agent reporting which agents are working on a project.](/images/projects/calhacks/fetchai-office.jpg)
+
+The planner agent integrates with **Atlassian** to create **Jira** tickets you
+can use to track a project's progress.
+
+![The Fetch.ai planner agent drafting a Jira story from a plain-English request.](/images/projects/calhacks/fetchai-planner.jpg)
+
+### Sharing
+
+Lastly, you can share any project with other users by link or email invite, so
+they can develop on the same GitHub repo without merge conflicts.
+
+![The share panel, with view and edit links and email invites.](/images/projects/calhacks/share.jpg)
 
 ## My role
 
